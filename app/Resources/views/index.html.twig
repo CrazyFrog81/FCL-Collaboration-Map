@@ -1,0 +1,26 @@
+{% block body %}
+
+  <ul>
+    {% for post in posts %}
+    <li> {{ post.id }} </li>
+    <li> {{ post.name }} </li>
+    <li> {{ post.research_group }} </li>
+    <li> {{ post.disciplinary_background }} </li>
+    <li> {{ post.work_location }} </li>
+    <li> {{ post.work_start_date }} </li>
+    <li> {{ post.working_duration_before_join }} </li>
+    <li> {{ post.academic_background }} </li>
+    <li> {{ post.mother_tongue }} </li>
+    <li> {{ post.gender }} </li>
+    <li> {{ post.age }} </li>
+    <li> {{ post.nationality }} </li>
+    <li> {{ post.collaboration_with }} </li>
+    <li> {{ post.project_name }} </li>
+    <li> {{ post.project_completion_date }} </li>
+    <li> {{ post.collaborated_before }} </li>
+    <li> {{ post.project_working_time }} </li>
+    <li> {{ post.expected_outcome }} </li>
+   {% endfor %}
+  </ul>
+
+{% endblock %}
