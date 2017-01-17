@@ -1,0 +1,36 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+* @ORM\Entity
+* @ORM\Table(name="nationality")
+*/
+class NationalityClass
+{
+    /**
+    * @ORM\Id
+    * @ORM\Column("integer")
+    * @ORM\GeneratedValue(strategy="AUTO")
+    */
+    protected $id;
+
+    /**
+    * @ORM\Column(type="string")
+    */
+    protected $nationality;
+
+    /**
+    * @ORM\Column(type="string")
+    */
+    protected $mother_tongue;
+
+    /**
+    * @ORM\OneToOne(targetEntity="Individual", inversedBy="nationality")
+    * @ORM\JoinColumn(name="individual_id", referencedColumnName="id")
+    */
+    protected $individual;
+}
+ ?>

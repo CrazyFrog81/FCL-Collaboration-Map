@@ -1,0 +1,36 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+* @ORM\Entity
+* @ORM\Table(name="work")
+*/
+class Work
+{
+  /**
+   * @ORM\Id
+   * @ORM\Column(type="integer")
+   * @ORM\GeneratedValue(strategy="AUTO")
+   */
+  protected $id;
+
+  /**
+   * @ORM\Column(type="string")
+   */
+  protected $research_group;
+
+  /**
+   * @ORM\Column(type="string")
+   */
+  protected $location;
+
+  /**
+  * @ORM\OneToOne(targetEntity="Individual", inversedBy="research_group")
+  * @ORM\JoinColumn(name="individual_id", referencedColumnName="id")
+  */
+  protected $individual;
+}
+ ?>

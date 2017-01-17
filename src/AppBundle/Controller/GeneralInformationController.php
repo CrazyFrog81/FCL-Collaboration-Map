@@ -4,35 +4,23 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Individual;
 use AppBundle\Entity\Work;
-use AppBundle\Entity\Project;
-use AppBundle\Entity\Partner;
-use AppBundle\Entity\ProjectOutcome;
-use AppBundle\Form\CollaborationInformationType;
+use AppBundle\Form\GeneralInformationType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Doctrine\Common\Collection\ArrayCollection;
 
-class CollaborationInformationController extends Controller
+class GeneralInformationController extends Controller
 {
   /**
-  * @Route("/form/collaboration", name="collaboration")
+  * @Route("/form/general", name="general")
   */
   public function newAction(Request $request)
   {
     $individual = new Individual();
 
-    $project = new Project();
-    $individual->getProjects()->add($project);
-
-    $partner = new Partner();
-    $individual->getPartners()->add($partner);
-
-    $project_outcome = new ProjectOutcome();
-    $project->getProjectOutcomes()->add($project_outcome);
-
-    $form = $this->createForm(CollaborationInformationType::class, $individual)
+    $form = $this->createForm(GeneralInformationType::class, $individual)
                 ->add('save', SubmitType::class, array('label' => 'Submit'));
 
     $form->handleRequest($request);
@@ -44,10 +32,10 @@ class CollaborationInformationController extends Controller
       $em->persist($individual);
       $em->flush();
 
-      return $this->redirectToRoute('collaboration');
+      return $this->redirectToRoute('general');
     }
 
-    return $this->render('collaboration.html.twig', array(
+    return $this->render('general.html.twig', array(
       'form' => $form->createView(),
     ));
   }

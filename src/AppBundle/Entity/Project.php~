@@ -1,0 +1,46 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+* @ORM\Entity
+* @ORM\Table(name="project")
+*/
+class Project
+{
+  /**
+  * @ORM\Id
+  * @ORM\Column(type="integer")
+  * @ORM\GeneratedValue(strategy="AUTO")
+  */
+  protected $id;
+
+  /**
+  * @ORM\Column(type="string")
+  */
+  protected $name;
+
+  /**
+  * @ORM\Column(type="string")
+  */
+  protected $completion_date;
+
+  /**
+  * @ORM\Column(type="string")
+  */
+  protected $working_time;
+
+  /**
+  * @ORM\ManyToOne(targetEntity="Individual", inversedBy="projects")
+  * @ORM\JoinColumn(name="individual_id", referencedColumnName="id")
+  */
+  protected $individual;
+
+  /**
+  * @ORM\OneToMany(targetEntity="ProjectOutcome", mappedBy="project")
+  */
+  protected $project_outcomes;
+}
+ ?>
