@@ -22,10 +22,10 @@ class Work
    */
   protected $research_group;
 
-  /**
-   * @ORM\Column(type="string")
-   */
-  protected $location;
+  // /**
+  //  * @ORM\Column(type="string")
+  //  */
+  // protected $location;
 
   /**
   * @ORM\OneToOne(targetEntity="Individual", inversedBy="research_group")
@@ -67,29 +67,29 @@ class Work
         return $this->research_group;
     }
 
-    /**
-     * Set location
-     *
-     * @param string $location
-     *
-     * @return Work
-     */
-    public function setLocation($location)
-    {
-        $this->location = $location;
-
-        return $this;
-    }
-
-    /**
-     * Get location
-     *
-     * @return string
-     */
-    public function getLocation()
-    {
-        return $this->location;
-    }
+    // /**
+    //  * Set location
+    //  *
+    //  * @param string $location
+    //  *
+    //  * @return Work
+    //  */
+    // public function setLocation($location)
+    // {
+    //     $this->location = $location;
+    //
+    //     return $this;
+    // }
+    //
+    // /**
+    //  * Get location
+    //  *
+    //  * @return string
+    //  */
+    // public function getLocation()
+    // {
+    //     return $this->location;
+    // }
 
     /**
      * Set individual
@@ -113,5 +113,9 @@ class Work
     public function getIndividual()
     {
         return $this->individual;
+    }
+
+    public function __toString(){
+      return $this->research_group;
     }
 }

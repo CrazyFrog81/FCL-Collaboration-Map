@@ -2,6 +2,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use AppBundle\Entity\Individual;
 
 /**
 * @ORM\Entity
@@ -22,7 +23,7 @@ class Disciplinary
   protected $disciplinary_background;
 
   /**
-  * @ORM\ManyToOne(targetEntity="Individual", inversedBy="disciplinaries")
+  * @ORM\ManyToOne(targetEntity="Individual", inversedBy="disciplinary_backgrounds")
   * @ORM\JoinColumn(name="individual_id", referencedColumnName="id")
   */
   protected $individual;
@@ -68,7 +69,7 @@ class Disciplinary
      *
      * @return Disciplinary
      */
-    public function setIndividual(\AppBundle\Entity\Individual $individual = null)
+    public function setIndividual(Individual $individual)
     {
         $this->individual = $individual;
 
@@ -83,5 +84,9 @@ class Disciplinary
     public function getIndividual()
     {
         return $this->individual;
+    }
+
+    public function __toString(){
+      return $this->getDisciplinaryBackground();
     }
 }

@@ -6,7 +6,6 @@ use AppBundle\Entity\Individual;
 use AppBundle\Entity\Work;
 use AppBundle\Entity\Project;
 use AppBundle\Entity\Partner;
-use AppBundle\Entity\ProjectOutcome;
 use AppBundle\Form\CollaborationInformationType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -24,13 +23,10 @@ class CollaborationInformationController extends Controller
     $individual = new Individual();
 
     $project = new Project();
-    $individual->getProjects()->add($project);
+    $individual->addProject($project);
 
     $partner = new Partner();
-    $individual->getPartners()->add($partner);
-
-    $project_outcome = new ProjectOutcome();
-    $project->getProjectOutcomes()->add($project_outcome);
+    $individual->addPartner($partner);
 
     $form = $this->createForm(CollaborationInformationType::class, $individual)
                 ->add('save', SubmitType::class, array('label' => 'Submit'));

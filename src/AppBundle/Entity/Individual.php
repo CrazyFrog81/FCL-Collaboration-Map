@@ -14,9 +14,9 @@ class Individual
   * @ORM\Id
   * @ORM\Column(type="integer")
   * @ORM\GeneratedValue(strategy="AUTO")
-  * One individual has many partners
-  * @ORM\OneToMany(targetEntity="individual", mappedBy="partners_id")
   */
+  //One individual has many partners
+  //ORM\OneToMany(targetEntity="individual", mappedBy="partners_id")
   protected $id;
 
   /**
@@ -25,7 +25,7 @@ class Individual
   protected $name;
 
   /**
-  * @ORM\Column(type="string")
+  * @ORM\Column(type="date")
   */
   protected $start_date;
 
@@ -45,51 +45,51 @@ class Individual
   protected $gender;
 
   /**
-  * @ORM\Column(type="integer")
+  * @ORM\Column(type="string")
   */
   protected $age;
 
   /**
-  * @ORM\OneToMany(targetEntity="Disciplinary", mappedBy="individual")
+  * @ORM\OneToMany(targetEntity="Disciplinary", mappedBy="individual", cascade={"persist"})
   */
   private $disciplinary_backgrounds;
 
   /**
-  * @ORM\OneToOne(targetEntity="NationalityClass", mappedBy="individual")
+  * @ORM\Column(type="string")
   */
   protected $nationality;
 
   /**
-  * @ORM\OneToOne(targetEntity="NationalityClass", mappedBy="individual")
+  * @ORM\Column(type="string", length=200)
   */
   protected $mother_tongue;
 
   /**
-  * @ORM\OneToOne(targetEntity="Work", mappedBy="individual")
+  * @ORM\OneToOne(targetEntity="Work", mappedBy="individual", cascade={"persist", "merge"})
   */
   protected $research_group;
 
   /**
-  * @ORM\OneToOne(targetEntity="Work", mappedBy="individual")
+  * @ORM\Column(type="string")
   */
   protected $location;
 
   /**
-  * @ORM\OneToMany(targetEntity="Partner", mappedBy="individual")
+  * @ORM\OneToMany(targetEntity="Partner", mappedBy="individual", cascade={"persist"})
   */
   protected $partners;
 
   /**
-  * @ORM\OneToMany(targetEntity="Project", mappedBy="individual")
+  * @ORM\OneToMany(targetEntity="Project", mappedBy="individual", cascade={"persist"})
   */
   protected $projects;
 
-  /**
-  * many partners to one individual
-  * @ORM\ManyToOne(targetEntity="individual", inversedBy="id")
-  * @ORM\JoinColumn(name="partners_id", referencedColumnName="id")
-  */
-  protected $partners_id;
+  // /**
+  // * many partners to one individual
+  // * @ORM\ManyToOne(targetEntity="individual", inversedBy="id")
+  // * @ORM\JoinColumn(name="partners_id", referencedColumnName="id")
+  // */
+  // protected $partners_id;
     /**
      * Constructor
      */
@@ -233,7 +233,7 @@ class Individual
     /**
      * Set age
      *
-     * @param integer $age
+     * @param string $age
      *
      * @return Individual
      */
@@ -247,35 +247,11 @@ class Individual
     /**
      * Get age
      *
-     * @return integer
+     * @return string
      */
     public function getAge()
     {
         return $this->age;
-    }
-
-    /**
-     * Add disciplinary
-     *
-     * @param \AppBundle\Entity\Disciplinary $disciplinary
-     *
-     * @return Individual
-     */
-    public function addDisciplinary(\AppBundle\Entity\Disciplinary $disciplinary)
-    {
-        $this->disciplinary_backgrounds[] = $disciplinary;
-
-        return $this;
-    }
-
-    /**
-     * Remove disciplinary
-     *
-     * @param \AppBundle\Entity\Disciplinary $disciplinary
-     */
-    public function removeDisciplinary(\AppBundle\Entity\Disciplinary $disciplinary)
-    {
-        $this->disciplinary_backgrounds->removeElement($disciplinary);
     }
 
     /**
@@ -289,54 +265,6 @@ class Individual
     }
 
     /**
-     * Set nationality
-     *
-     * @param \AppBundle\Entity\NationalityClass $nationality
-     *
-     * @return Individual
-     */
-    public function setNationality(\AppBundle\Entity\NationalityClass $nationality = null)
-    {
-        $this->nationality = $nationality;
-
-        return $this;
-    }
-
-    /**
-     * Get nationality
-     *
-     * @return \AppBundle\Entity\NationalityClass
-     */
-    public function getNationality()
-    {
-        return $this->nationality;
-    }
-
-    /**
-     * Set motherTongue
-     *
-     * @param \AppBundle\Entity\NationalityClass $mother_tongue
-     *
-     * @return Individual
-     */
-    public function setMotherTongue(\AppBundle\Entity\NationalityClass $mother_tongue = null)
-    {
-        $this->mother_tongue = $mother_tongue;
-
-        return $this;
-    }
-
-    /**
-     * Get motherTongue
-     *
-     * @return \AppBundle\Entity\NationalityClass
-     */
-    public function getMotherTongue()
-    {
-        return $this->mother_tongue;
-    }
-
-    /**
      * Set researchGroup
      *
      * @param \AppBundle\Entity\Work $researchGroup
@@ -346,6 +274,8 @@ class Individual
     public function setResearchGroup(\AppBundle\Entity\Work $researchGroup = null)
     {
         $this->research_group = $researchGroup;
+
+        $researchGroup->setIndividual($this);
 
         return $this;
     }
@@ -360,29 +290,29 @@ class Individual
         return $this->research_group;
     }
 
-    /**
-     * Set location
-     *
-     * @param \AppBundle\Entity\Work $location
-     *
-     * @return Individual
-     */
-    public function setLocation(\AppBundle\Entity\Work $location = null)
-    {
-        $this->location = $location;
-
-        return $this;
-    }
-
-    /**
-     * Get location
-     *
-     * @return \AppBundle\Entity\Work
-     */
-    public function getLocation()
-    {
-        return $this->location;
-    }
+    // /**
+    //  * Set location
+    //  *
+    //  * @param \AppBundle\Entity\Work $location
+    //  *
+    //  * @return Individual
+    //  */
+    // public function setLocation(\AppBundle\Entity\Work $location = null)
+    // {
+    //     $this->location = $location;
+    //
+    //     return $this;
+    // }
+    //
+    // /**
+    //  * Get location
+    //  *
+    //  * @return \AppBundle\Entity\Work
+    //  */
+    // public function getLocation()
+    // {
+    //     return $this->location;
+    // }
 
     /**
      * Add partner
@@ -391,11 +321,10 @@ class Individual
      *
      * @return Individual
      */
-    public function addPartner(\AppBundle\Entity\Partner $partner)
+    public function addPartner(Partner $partner)
     {
-        $this->partners[] = $partner;
-
-        return $this;
+        $partner->setIndividual($this);
+        $this->partners->add($partner);
     }
 
     /**
@@ -427,9 +356,9 @@ class Individual
      */
     public function addProject(\AppBundle\Entity\Project $project)
     {
-        $this->projects[] = $project;
+      $this->projects->add($project);
 
-        return $this;
+      $project->setIndividual($this);
     }
 
     /**
@@ -452,27 +381,127 @@ class Individual
         return $this->projects;
     }
 
+    // /**
+    //  * Set partnersId
+    //  *
+    //  * @param \AppBundle\Entity\individual $partnersId
+    //  *
+    //  * @return Individual
+    //  */
+    // public function setPartnersId(\AppBundle\Entity\individual $partnersId = null)
+    // {
+    //     $this->partners_id = $partnersId;
+    //
+    //     return $this;
+    // }
+    //
+    // /**
+    //  * Get partnersId
+    //  *
+    //  * @return \AppBundle\Entity\individual
+    //  */
+    // public function getPartnersId()
+    // {
+    //     return $this->partners_id;
+    // }
+
+    public function __toString()
+    {
+      return $this->getName();
+    }
+
     /**
-     * Set partnersId
+     * Set nationality
      *
-     * @param \AppBundle\Entity\individual $partnersId
+     * @param string $nationality
      *
      * @return Individual
      */
-    public function setPartnersId(\AppBundle\Entity\individual $partnersId = null)
+    public function setNationality($nationality)
     {
-        $this->partners_id = $partnersId;
+        $this->nationality = $nationality;
 
         return $this;
     }
 
     /**
-     * Get partnersId
+     * Get nationality
      *
-     * @return \AppBundle\Entity\individual
+     * @return string
      */
-    public function getPartnersId()
+    public function getNationality()
     {
-        return $this->partners_id;
+        return $this->nationality;
+    }
+
+    /**
+     * Set motherTongue
+     *
+     * @param string $motherTongue
+     *
+     * @return Individual
+     */
+    public function setMotherTongue($motherTongue)
+    {
+        $this->mother_tongue = $motherTongue;
+
+        return $this;
+    }
+
+    /**
+     * Get motherTongue
+     *
+     * @return string
+     */
+    public function getMotherTongue()
+    {
+        return $this->mother_tongue;
+    }
+
+    /**
+     * Add disciplinaryBackground
+     *
+     * @param \AppBundle\Entity\Disciplinary $disciplinaryBackground
+     *
+     * @return Individual
+     */
+    public function addDisciplinaryBackground(Disciplinary $disciplinaryBackground)
+    {
+        $this->disciplinary_backgrounds->add($disciplinaryBackground);
+        $disciplinaryBackground->setIndividual($this);
+    }
+
+    /**
+     * Remove disciplinaryBackground
+     *
+     * @param \AppBundle\Entity\Disciplinary $disciplinaryBackground
+     */
+    public function removeDisciplinaryBackground(\AppBundle\Entity\Disciplinary $disciplinaryBackground)
+    {
+        $this->disciplinary_backgrounds->removeElement($disciplinaryBackground);
+    }
+
+    /**
+     * Set location
+     *
+     * @param string $location
+     *
+     * @return Individual
+     */
+    public function setLocation($location)
+    {
+        $this->location = $location;
+
+        return $this;
+    }
+
+    /**
+     * Get location
+     *
+     * @return string
+     */
+    public function getLocation()
+    {
+        return $this->location;
     }
 }

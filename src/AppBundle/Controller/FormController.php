@@ -10,8 +10,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use AppBundle\Entity\Individual;
 use AppBundle\Entity\Project;
 use AppBundle\Entity\Partner;
-use AppBundle\Entity\ProjectOutcome;
 use AppBundle\Entity\Disciplinary;
+use AppBundle\Entity\Work;
 
 class FormController extends Controller
 {
@@ -21,17 +21,16 @@ class FormController extends Controller
 public function createFormAction() {
     $formData = new Individual(); // Your form data class. Has to be an object, won't work properly with an array.
 
+    $formData->setResearchGroup(new Work());
+
     $project = new Project();
-    $formData->getProjects()->add($project);
+    $formData->addProject($project);
 
     $partner = new Partner();
-    $formData->getPartners()->add($partner);
-
-    $project_outcome = new ProjectOutcome();
-    $project->getProjectOutcomes()->add($project_outcome);
+    $formData->addPartner($partner);
 
     $disciplinary = new Disciplinary();
-    $formData->getDisciplinaryBackgrounds()->add($disciplinary);
+    $formData->addDisciplinaryBackground($disciplinary);
 
     $flow = $this->get('form.flow.createForm'); // must match the flow's service id
     $flow->bind($formData);
@@ -52,7 +51,7 @@ public function createFormAction() {
 
             $flow->reset(); // remove step data from the session
 
-            return $this->redirect($this->generateUrl('general')); // redirect when done
+            return $this->redirect($this->generateUrl('form')); // redirect when done
         }
     }
 

@@ -23,12 +23,17 @@ class Project
   protected $name;
 
   /**
-  * @ORM\Column(type="string")
+  * @ORM\Column(type="date")
+  */
+  protected $start_date;
+
+  /**
+  * @ORM\Column(type="date")
   */
   protected $completion_date;
 
   /**
-  * @ORM\Column(type="string")
+  * @ORM\Column(type="integer")
   */
   protected $working_time;
 
@@ -39,16 +44,10 @@ class Project
   protected $individual;
 
   /**
-  * @ORM\OneToMany(targetEntity="ProjectOutcome", mappedBy="project")
+  * @ORM\Column(type="simple_array")
+  *
   */
   protected $project_outcomes;
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->project_outcomes = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Get id
@@ -111,7 +110,7 @@ class Project
     /**
      * Set workingTime
      *
-     * @param string $workingTime
+     * @param integer $workingTime
      *
      * @return Project
      */
@@ -125,7 +124,7 @@ class Project
     /**
      * Get workingTime
      *
-     * @return string
+     * @return integer
      */
     public function getWorkingTime()
     {
@@ -157,36 +156,55 @@ class Project
     }
 
     /**
-     * Add projectOutcome
+     * Set projectOutcomes
      *
-     * @param \AppBundle\Entity\ProjectOutcome $projectOutcome
+     * @param array $projectOutcomes
      *
      * @return Project
      */
-    public function addProjectOutcome(\AppBundle\Entity\ProjectOutcome $projectOutcome)
+    public function setProjectOutcomes($projectOutcomes)
     {
-        $this->project_outcomes[] = $projectOutcome;
+        $this->project_outcomes = $projectOutcomes;
 
         return $this;
     }
 
     /**
-     * Remove projectOutcome
-     *
-     * @param \AppBundle\Entity\ProjectOutcome $projectOutcome
-     */
-    public function removeProjectOutcome(\AppBundle\Entity\ProjectOutcome $projectOutcome)
-    {
-        $this->project_outcomes->removeElement($projectOutcome);
-    }
-
-    /**
      * Get projectOutcomes
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return array
      */
     public function getProjectOutcomes()
     {
         return $this->project_outcomes;
+    }
+
+    public function __toString()
+    {
+      return $this->name;
+    }
+
+    /**
+     * Set startDate
+     *
+     * @param \DateTime $startDate
+     *
+     * @return Project
+     */
+    public function setStartDate($startDate)
+    {
+        $this->start_date = $startDate;
+
+        return $this;
+    }
+
+    /**
+     * Get startDate
+     *
+     * @return \DateTime
+     */
+    public function getStartDate()
+    {
+        return $this->start_date;
     }
 }

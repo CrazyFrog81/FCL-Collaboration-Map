@@ -2,6 +2,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -13,9 +14,9 @@ class Individual
   * @ORM\Id
   * @ORM\Column(type="integer")
   * @ORM\GeneratedValue(strategy="AUTO")
-  * One individual has many partners
-  * @ORM\OneToMany(targetEntity="individual", mappedBy="partners_id")
   */
+  //One individual has many partners
+  //ORM\OneToMany(targetEntity="individual", mappedBy="partners_id")
   protected $id;
 
   /**
@@ -44,19 +45,24 @@ class Individual
   protected $gender;
 
   /**
-  * @ORM\Column(type="integer")
+  * @ORM\Column(type="string")
   */
   protected $age;
 
   /**
-  * @ORM\OneToMany(targetEntity="Disciplinary", mappedBy="individual")
+  * @ORM\OneToMany(targetEntity="Disciplinary", mappedBy="individual", cascade={"persist"})
   */
-  protected $disciplinary_backgrounds;
+  private $disciplinary_backgrounds;
 
   /**
-  * @ORM\OneToOne(targetEntity="Nationality", mappedBy="individual")
+  * @ORM\Column(type="string")
   */
   protected $nationality;
+
+  /**
+  * @ORM\Column(type="string")
+  */
+  protected $mother_tongue;
 
   /**
   * @ORM\OneToOne(targetEntity="Work", mappedBy="individual")
@@ -64,27 +70,32 @@ class Individual
   protected $research_group;
 
   /**
-  * @ORM\OneToMany(targetEntity="Partner", mappedBy="individual")
+  * @ORM\Column(type="string")
+  */
+  protected $location;
+
+  /**
+  * @ORM\OneToMany(targetEntity="Partner", mappedBy="individual", cascade={"persist"})
   */
   protected $partners;
 
   /**
-  * @ORM\OneToMany(targetEntity="Project", mappedBy="individual")
+  * @ORM\OneToMany(targetEntity="Project", mappedBy="individual", cascade={"persist"})
   */
   protected $projects;
 
-  /**
-  * many partners to one individual
-  * @ORM\ManyToOne(targetEntity="individual", inversedBy="id")
-  * @ORM\JoinColumn(name="partners_id", referencedColumnName="id")
-  */
-  protected $partners_id;
+  // /**
+  // * many partners to one individual
+  // * @ORM\ManyToOne(targetEntity="individual", inversedBy="id")
+  // * @ORM\JoinColumn(name="partners_id", referencedColumnName="id")
+  // */
+  // protected $partners_id;
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->disciplinaries = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->disciplinary_backgrounds = new \Doctrine\Common\Collections\ArrayCollection();
         $this->partners = new \Doctrine\Common\Collections\ArrayCollection();
         $this->projects = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -222,7 +233,7 @@ class Individual
     /**
      * Set age
      *
-     * @param integer $age
+     * @param string $age
      *
      * @return Individual
      */
@@ -236,7 +247,7 @@ class Individual
     /**
      * Get age
      *
-     * @return integer
+     * @return string
      */
     public function getAge()
     {
@@ -244,61 +255,13 @@ class Individual
     }
 
     /**
-     * Add disciplinary
-     *
-     * @param \AppBundle\Entity\Disciplinary $disciplinary
-     *
-     * @return Individual
-     */
-    public function addDisciplinary(\AppBundle\Entity\Disciplinary $disciplinary)
-    {
-        $this->disciplinary_backgrounds[] = $disciplinary_background;
-
-        return $this;
-    }
-
-    /**
-     * Remove disciplinary
-     *
-     * @param \AppBundle\Entity\Disciplinary $disciplinary
-     */
-    public function removeDisciplinary(\AppBundle\Entity\Disciplinary $disciplinary)
-    {
-        $this->disciplinary_backgrounds->removeElement($disciplinary_background);
-    }
-
-    /**
-     * Get disciplinaries
+     * Get disciplinaryBackgrounds
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getDisciplinaries()
+    public function getDisciplinaryBackgrounds()
     {
         return $this->disciplinary_backgrounds;
-    }
-
-    /**
-     * Set nationality
-     *
-     * @param \AppBundle\Entity\Nationality $nationality
-     *
-     * @return Individual
-     */
-    public function setNationality(\AppBundle\Entity\Nationality $nationality = null)
-    {
-        $this->nationality = $nationality;
-
-        return $this;
-    }
-
-    /**
-     * Get nationality
-     *
-     * @return \AppBundle\Entity\Nationality
-     */
-    public function getNationality()
-    {
-        return $this->nationality;
     }
 
     /**
@@ -311,6 +274,8 @@ class Individual
     public function setResearchGroup(\AppBundle\Entity\Work $researchGroup = null)
     {
         $this->research_group = $researchGroup;
+
+//        $researchGroup->setIndividual($this);
 
         return $this;
     }
@@ -325,6 +290,30 @@ class Individual
         return $this->research_group;
     }
 
+    // /**
+    //  * Set location
+    //  *
+    //  * @param \AppBundle\Entity\Work $location
+    //  *
+    //  * @return Individual
+    //  */
+    // public function setLocation(\AppBundle\Entity\Work $location = null)
+    // {
+    //     $this->location = $location;
+    //
+    //     return $this;
+    // }
+    //
+    // /**
+    //  * Get location
+    //  *
+    //  * @return \AppBundle\Entity\Work
+    //  */
+    // public function getLocation()
+    // {
+    //     return $this->location;
+    // }
+
     /**
      * Add partner
      *
@@ -335,6 +324,8 @@ class Individual
     public function addPartner(\AppBundle\Entity\Partner $partner)
     {
         $this->partners[] = $partner;
+
+        $partner->setIndividual($this);
 
         return $this;
     }
@@ -370,6 +361,8 @@ class Individual
     {
         $this->projects[] = $project;
 
+        $project->setIndividual($this);
+
         return $this;
     }
 
@@ -393,28 +386,81 @@ class Individual
         return $this->projects;
     }
 
+    // /**
+    //  * Set partnersId
+    //  *
+    //  * @param \AppBundle\Entity\individual $partnersId
+    //  *
+    //  * @return Individual
+    //  */
+    // public function setPartnersId(\AppBundle\Entity\individual $partnersId = null)
+    // {
+    //     $this->partners_id = $partnersId;
+    //
+    //     return $this;
+    // }
+    //
+    // /**
+    //  * Get partnersId
+    //  *
+    //  * @return \AppBundle\Entity\individual
+    //  */
+    // public function getPartnersId()
+    // {
+    //     return $this->partners_id;
+    // }
+
+    public function __toString()
+    {
+      return $this->getName();
+    }
+
     /**
-     * Set partnersId
+     * Set nationality
      *
-     * @param \AppBundle\Entity\individual $partnersId
+     * @param string $nationality
      *
      * @return Individual
      */
-    public function setPartnersId(\AppBundle\Entity\individual $partnersId = null)
+    public function setNationality($nationality)
     {
-        $this->partners_id = $partnersId;
+        $this->nationality = $nationality;
 
         return $this;
     }
 
     /**
-     * Get partnersId
+     * Get nationality
      *
-     * @return \AppBundle\Entity\individual
+     * @return string
      */
-    public function getPartnersId()
+    public function getNationality()
     {
-        return $this->partners_id;
+        return $this->nationality;
+    }
+
+    /**
+     * Set motherTongue
+     *
+     * @param string $motherTongue
+     *
+     * @return Individual
+     */
+    public function setMotherTongue($motherTongue)
+    {
+        $this->mother_tongue = $motherTongue;
+
+        return $this;
+    }
+
+    /**
+     * Get motherTongue
+     *
+     * @return string
+     */
+    public function getMotherTongue()
+    {
+        return $this->mother_tongue;
     }
 
     /**
@@ -428,6 +474,8 @@ class Individual
     {
         $this->disciplinary_backgrounds[] = $disciplinaryBackground;
 
+        $disciplinaryBackground->setIndividual($this);
+
         return $this;
     }
 
@@ -439,15 +487,5 @@ class Individual
     public function removeDisciplinaryBackground(\AppBundle\Entity\Disciplinary $disciplinaryBackground)
     {
         $this->disciplinary_backgrounds->removeElement($disciplinaryBackground);
-    }
-
-    /**
-     * Get disciplinaryBackgrounds
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getDisciplinaryBackgrounds()
-    {
-        return $this->disciplinary_backgrounds;
     }
 }

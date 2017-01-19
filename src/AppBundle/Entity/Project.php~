@@ -23,7 +23,12 @@ class Project
   protected $name;
 
   /**
-  * @ORM\Column(type="string")
+  * @ORM\Column(type="date")
+  */
+  protected $start_date;
+
+  /**
+  * @ORM\Column(type="date")
   */
   protected $completion_date;
 
@@ -39,8 +44,143 @@ class Project
   protected $individual;
 
   /**
-  * @ORM\OneToMany(targetEntity="ProjectOutcome", mappedBy="project")
+  * @ORM\Column(type="simple_array")
+  *
   */
   protected $project_outcomes;
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Project
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set completionDate
+     *
+     * @param string $completionDate
+     *
+     * @return Project
+     */
+    public function setCompletionDate($completionDate)
+    {
+        $this->completion_date = $completionDate;
+
+        return $this;
+    }
+
+    /**
+     * Get completionDate
+     *
+     * @return string
+     */
+    public function getCompletionDate()
+    {
+        return $this->completion_date;
+    }
+
+    /**
+     * Set workingTime
+     *
+     * @param string $workingTime
+     *
+     * @return Project
+     */
+    public function setWorkingTime($workingTime)
+    {
+        $this->working_time = $workingTime;
+
+        return $this;
+    }
+
+    /**
+     * Get workingTime
+     *
+     * @return string
+     */
+    public function getWorkingTime()
+    {
+        return $this->working_time;
+    }
+
+    /**
+     * Set individual
+     *
+     * @param \AppBundle\Entity\Individual $individual
+     *
+     * @return Project
+     */
+    public function setIndividual(\AppBundle\Entity\Individual $individual = null)
+    {
+        $this->individual = $individual;
+
+        return $this;
+    }
+
+    /**
+     * Get individual
+     *
+     * @return \AppBundle\Entity\Individual
+     */
+    public function getIndividual()
+    {
+        return $this->individual;
+    }
+
+    /**
+     * Set projectOutcomes
+     *
+     * @param array $projectOutcomes
+     *
+     * @return Project
+     */
+    public function setProjectOutcomes($projectOutcomes)
+    {
+        $this->project_outcomes = $projectOutcomes;
+
+        return $this;
+    }
+
+    /**
+     * Get projectOutcomes
+     *
+     * @return array
+     */
+    public function getProjectOutcomes()
+    {
+        return $this->project_outcomes;
+    }
+
+    public function __toString()
+    {
+      return $this->name;
+    }
 }
- ?>

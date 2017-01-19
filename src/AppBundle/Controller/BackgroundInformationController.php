@@ -24,7 +24,7 @@ class BackgroundInformationController extends Controller
     $individual = new Individual();
 
     $disciplinary = new Disciplinary();
-    $individual->getDisciplinaryBackgrounds()->add($disciplinary);
+    $individual->addDisciplinaryBackground($disciplinary);
 
     $form = $this->createForm(BackgroundInformationType::class, $individual)
     ->add('save', SubmitType::class, array('label' => 'Submit'));

@@ -20,10 +20,14 @@ class CollaborationInformationType extends AbstractType
       $builder
         ->add('partners', CollectionType::class, array(
           'entry_type' => PartnerType::class,
+          'by_reference' => false,
+          'allow_add' => true,
           'entry_options' => array('label' => false),
         ))
         ->add('projects', CollectionType::class, array(
           'entry_type' => ProjectType::class,
+          'by_reference' => false,
+          'allow_add' => true,
           'entry_options' => array('label' => false),
         ));
       }

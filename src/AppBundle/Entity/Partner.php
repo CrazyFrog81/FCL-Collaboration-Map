@@ -12,7 +12,7 @@ class Partner
 {
   /**
   * @ORM\Id
-  * @ORM\Column(type="string")
+  * @ORM\Column(type="integer")
   * @ORM\GeneratedValue(strategy="AUTO")
   */
   protected $id;
@@ -98,9 +98,9 @@ class Partner
      *
      * @return Partner
      */
-    public function setIndividual(\AppBundle\Entity\Individual $individual = null)
+    public function setIndividual(\AppBundle\Entity\Individual $individual)
     {
-        $this->individual = $individual;
+       $this->individual = $individual;
 
         return $this;
     }
@@ -113,5 +113,9 @@ class Partner
     public function getIndividual()
     {
         return $this->individual;
+    }
+
+    public function __toString(){
+      return $this->name;
     }
 }
