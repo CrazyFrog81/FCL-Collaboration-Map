@@ -3,12 +3,95 @@
     <head>
         <meta charset="UTF-8" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <title>{% block title %}Data Collection Form{% endblock %}</title>
+        {% block stylesheets %}
+        {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        <header class="col-md-12" style="border-bottom:thin solid black;">
+          <div style="font-size:150%; font-style:italic; font-weight:bold;">
+          </br>
+          Research Collaboration in FCL: </br>
+          Data Collection Form </br>
+        </div>
+        <div style="float:right;">
+          <img src="{{ asset('images/fcl.jpg') }}" alt="FCL" style="height:60%; width:auto; position:absolute; top:10px; right:10px;">
+        <span style="padding-right:30px;">
+          Developed by CIVAL
+        </span>
+        </div>
+        </header>
     </head>
     <body>
         {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        {% block javascripts %}
+        <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="{{ asset('js/main.js') }}"></script>
+        <script type="text/javascript">
+        var $collectionHolder;
+
+        // setup an "add a partner" link
+        var $addPartnerLink = $('<a href="#" class="add_partner_link" style="float:left;">Add a partner</a>');
+        var $newLinkSpan = $('<span></span>').append($addPartnerLink);
+
+        jQuery(document).ready(function() {
+            // Get the ul that holds the collection of tags
+            $collectionHolder = $('div.partners');
+
+            $collectionHolder.find('span').each(function() {
+                addPartnerFormDeleteLink($(this));
+            });
+
+            // add the "add a tag" anchor and li to the tags ul
+            $collectionHolder.append($newLinkSpan);
+
+            // count the current form inputs we have (e.g. 2), use that as the new
+            // index when inserting a new item (e.g. 2)
+            $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+            $addPartnerLink.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // add a new tag form (see next code block)
+                addPartnerForm($collectionHolder, $newLinkSpan);
+            });
+        });
+
+        function addPartnerForm($collectionHolder, $newLinkSpan) {
+            // Get the data-prototype explained earlier
+            var prototype = $collectionHolder.data('prototype');
+
+            // get the new index
+            var index = $collectionHolder.data('index');
+
+            // Replace '__name__' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            var newForm = prototype.replace(/__name__/g, index);
+
+            // increase the index with one for the next item
+            $collectionHolder.data('index', index + 1);
+
+            // Display the form in the page in an li, before the "Add a tag" link li
+            var $newFormSpan = $('<span></span>').append(newForm);
+            $newLinkSpan.before($newFormSpan);
+
+            // add a delete link to the new form
+            addPartnerFormDeleteLink($newFormSpan);
+        }
+
+        function addPartnerFormDeleteLink($partnerFormSpan) {
+            var $removeFormA = $('<a href="#" style="float:right;">Delete this partner</a></br>');
+            $partnerFormSpan.append($removeFormA);
+
+            $removeFormA.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // remove the li for the tag form
+                $partnerFormSpan.remove();
+            });
+        }
+        </script>
+        {% endblock %}
     </body>
 </html>

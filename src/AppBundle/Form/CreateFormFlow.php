@@ -12,6 +12,9 @@ class CreateFormFlow extends FormFlow {
     protected function loadStepsConfig() {
         return array(
             array(
+                'label' => 'Rationale of the project',
+            ),
+            array(
                 'label' => 'General Information',
                 'form_type' => 'AppBundle\Form\GeneralInformationType',
             ),
@@ -20,11 +23,8 @@ class CreateFormFlow extends FormFlow {
                 'form_type' => 'AppBundle\Form\CollaborationInformationType',
             ),
             array(
-                'label' => 'Background Information',
+                'label' => 'Background Information and Confirmation',
                 'form_type' => 'AppBundle\Form\BackgroundInformationType',
-            ),
-            array(
-                'label' => 'Confirmation',
             ),
         );
     }

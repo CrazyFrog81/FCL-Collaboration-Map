@@ -10,8 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use AppBundle\Entity\Individual;
 use AppBundle\Entity\Project;
 use AppBundle\Entity\Partner;
-use AppBundle\Entity\Disciplinary;
-use AppBundle\Entity\Work;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class FormController extends Controller
 {
@@ -21,16 +20,11 @@ class FormController extends Controller
 public function createFormAction() {
     $formData = new Individual(); // Your form data class. Has to be an object, won't work properly with an array.
 
-    $formData->setResearchGroup(new Work());
-
     $project = new Project();
     $formData->addProject($project);
 
     $partner = new Partner();
     $formData->addPartner($partner);
-
-    $disciplinary = new Disciplinary();
-    $formData->addDisciplinaryBackground($disciplinary);
 
     $flow = $this->get('form.flow.createForm'); // must match the flow's service id
     $flow->bind($formData);
@@ -59,6 +53,51 @@ public function createFormAction() {
         'form' => $form->createView(),
         'flow' => $flow,
     ));
+}
+
+public function editAction($id, Request $request)
+{
+    $em = $this->getDoctrine()->getManager();
+    $individual = $em->getRepository('AppBundle:Individual')->find($id);
+
+    if (!$individual) {
+        throw $this->createNotFoundException('No individual found for id '.$id);
+    }
+
+    $originalPartners = new ArrayCollection();
+
+    // Create an ArrayCollection of the current Partner objects in the database
+    foreach ($individual->getPartners() as $partner) {
+        $originalPartners->add($partner);
+    }
+
+    $editForm = $this->createForm(CollaborationInformationType::class, $individual);
+
+    $editForm->handleRequest($request);
+
+    if ($editForm->isValid()) {
+
+        // remove the relationship between the partner and the individual
+        foreach ($originalPartners as $partner) {
+            if (false === $individual->getPartners()->contains($partner)) {
+                // remove the Individual from the Partner
+//                $partner->getIndividual()->removeElement($individual);
+
+                // if it was a many-to-one relationship, remove the relationship like this
+                $partner->setIndividual(null);
+
+                $em->persist($partner);
+
+                // if you wanted to delete the Partner entirely, you can also do that
+                $em->remove($partner);
+            }
+        }
+
+        $em->persist($individual);
+        $em->flush();
+
+    }
+
 }
 }
 

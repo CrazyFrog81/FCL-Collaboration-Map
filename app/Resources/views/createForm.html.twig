@@ -1,39 +1,79 @@
 {# in AppBundle/Resources/views/Vehicle/createForm.html.twig #}
 {% extends 'base.html.twig' %}
-{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
 {% block body %}
-<div>
+<div class="col-lg-2 col-sm-3">
+</br>
     Steps:
     {% include '@CraueFormFlow/FormFlow/stepList.html.twig' %}
 </div>
+<div class="col-md-8" style="border-left:thin solid black;">
 {{ form_start(form) }}
     {{ form_errors(form) }}
 
     {% if flow.getCurrentStepNumber() == 1 %}
         <div>
-          <h> 1.General Information</h>
-            {{ form_widget(form) }}
+          <h3> 1.Rationale of the project</h3>
+          </br>
+            <div>
+            This on-line form is a part of a longitudinal research project called "Research Collaboration in FCL".</br> </br>
+            The objective is to study the pattern of research collaboration among researchers in a multi-disciplinary research institute such as FCL. You are invited to fill in this form every six months. The result will be treated as confidential. All names will be presented as anonymous in the final research output.</br></br>
+            Research Collaboration is defined as a collaboration between two or more social entity, where there is a common shared goal and reciprocity of actions/contributions across the collaboration timeline. </br></br>
+            Research collaboration may include co-authoring a publication, preparing a joint grant application, piloting a case study, expert consultation and data sharing. 	</br></br>
+            </div>
         </div>
     {% endif %}
 
     {% if flow.getCurrentStepNumber() == 2 %}
         <div>
-          <h> 2.Collaboration Information</h>
+          <h3> 2.General Information</h3>
+          </br>
             {{ form_widget(form) }}
         </div>
     {% endif %}
 
     {% if flow.getCurrentStepNumber() == 3 %}
         <div>
-          <h> 3.Background Information</h>
+          <h3> 3.Collaboration Information</h3>
+          </br>
+          <h4> Project </h4>
+            {{ form_row(form.projects) }}
+            </br>
+          <h4> Partner(s) </h4>
+          <div class="partners" data-prototype="{{ form_widget(form.partners.vars.prototype)|e('html_attr') }}">
+            {% for partner in form.partners %}
+              <span>
+              {{ form_row(partner.name) }}
+              {{ form_row(partner.collaborated_before) }}
+              </span>
+            {% endfor %}
+          </div>
+        </div>
+    {% endif %}
+
+    {% if flow.getCurrentStepNumber() == 4 %}
+        <div>
+          <h3> 4.Background Information</h3>
+          <br>
+          {{ form_label(form.disciplinary_backgrounds) }}
+          <div style="column-count:2;">
+            {{ form_widget(form.disciplinary_backgrounds) }}
+          </div>
             {{ form_widget(form) }}
         </div>
     {% endif %}
 
+    </br></br>
     {% include '@CraueFormFlow/FormFlow/buttons.html.twig' with {
+        craue_formflow_button_label_finish: 'Submit Survey',
+        craue_formflow_button_label_reset: 'Reset',
+        craue_formflow_button_label_back: 'Back',
+        craue_formflow_button_label_next: 'Next Step',
         craue_formflow_button_class_last: 'btn btn-primary',
         craue_formflow_button_class_back: 'btn',
         craue_formflow_button_class_reset: 'btn btn-warning',
     } %}
+</br></br></br></br>
+</div>
 {{ form_end(form) }}
 {% endblock %}

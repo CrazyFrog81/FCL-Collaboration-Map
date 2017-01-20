@@ -7,12 +7,8 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use AppBundle\Entity\Disciplinary;
-use AppBundle\Entity\Work;
 use AppBundle\Entity\Individual;
-use AppBundle\Form\Type\DisciplinaryType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\LanguageType;
@@ -23,16 +19,35 @@ class BackgroundInformationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
       $builder
-        ->add('disciplinary_backgrounds', CollectionType::class, array(
-            'entry_type' => DisciplinaryType::class,
-            'by_reference' => false,
-            'allow_add' => true,
+        ->add('disciplinary_backgrounds', ChoiceType::class, array(
             'label' => 'What is (are) your disciplinary background(s)?',
-            'entry_options' => array('label' => false),
+            'multiple' => true,
+            'expanded' => true,
+            'placeholder' => '--Select--',
+            'choices' => array(
+              'Architecture' => 'Architecture',
+              'Biology' => 'Biology',
+              'Chemistry' => 'Chemistry',
+              'Computer Science' => 'Computer Science',
+              'Ecology' => 'Ecology',
+              'Economics' => 'Economics',
+              'Engineering' => 'Engineering',
+              'Graphic designer' => 'Graphic designer',
+              'Landscape architecture' => 'Landscape architecture',
+              'Law' => 'Law',
+              'Literature' => 'Literature',
+              'Policy' => 'Policy',
+              'Psychology' => 'Psychology',
+              'Sociology' => 'Sociology',
+              'Urban design and planning' => 'Urban design and planning',
+              'Others' => 'Others',
+            )
         ))
         ->add('location', ChoiceType::class, array(
           'label' => 'Where do you work?',
           'placeholder' => '--Select--',
+          'multiple' => true,
+          'expanded' => true,
           'choices' => array(
             'FCL level 6' => 'FCL level 6',
             'FCL level 15' => 'FCL level 15',

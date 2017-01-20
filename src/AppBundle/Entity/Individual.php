@@ -50,7 +50,7 @@ class Individual
   protected $age;
 
   /**
-  * @ORM\OneToMany(targetEntity="Disciplinary", mappedBy="individual", cascade={"persist"})
+  * @ORM\Column(type="simple_array")
   */
   private $disciplinary_backgrounds;
 
@@ -65,12 +65,12 @@ class Individual
   protected $mother_tongue;
 
   /**
-  * @ORM\OneToOne(targetEntity="Work", mappedBy="individual", cascade={"persist", "merge"})
+  * @ORM\Column(type="string")
   */
   protected $research_group;
 
   /**
-  * @ORM\Column(type="string")
+  * @ORM\Column(type="simple_array")
   */
   protected $location;
 
@@ -95,7 +95,6 @@ class Individual
      */
     public function __construct()
     {
-        $this->disciplinary_backgrounds = new \Doctrine\Common\Collections\ArrayCollection();
         $this->partners = new \Doctrine\Common\Collections\ArrayCollection();
         $this->projects = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -257,7 +256,7 @@ class Individual
     /**
      * Get disciplinaryBackgrounds
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return simple_array
      */
     public function getDisciplinaryBackgrounds()
     {
@@ -265,54 +264,35 @@ class Individual
     }
 
     /**
-     * Set researchGroup
-     *
-     * @param \AppBundle\Entity\Work $researchGroup
+     * Set disciplinaryBackgrounds
      *
      * @return Individual
      */
-    public function setResearchGroup(\AppBundle\Entity\Work $researchGroup = null)
+    public function setDisciplinaryBackgrounds($disciplinary_backgrounds)
+    {
+        return $this->disciplinary_backgrounds = $disciplinary_backgrounds;
+    }
+
+    /**
+     * Set researchGroup
+     *
+     *
+     * @return Individual
+     */
+    public function setResearchGroup($researchGroup)
     {
         $this->research_group = $researchGroup;
-
-        $researchGroup->setIndividual($this);
-
-        return $this;
     }
 
     /**
      * Get researchGroup
      *
-     * @return \AppBundle\Entity\Work
+     * @return simple_array
      */
     public function getResearchGroup()
     {
         return $this->research_group;
     }
-
-    // /**
-    //  * Set location
-    //  *
-    //  * @param \AppBundle\Entity\Work $location
-    //  *
-    //  * @return Individual
-    //  */
-    // public function setLocation(\AppBundle\Entity\Work $location = null)
-    // {
-    //     $this->location = $location;
-    //
-    //     return $this;
-    // }
-    //
-    // /**
-    //  * Get location
-    //  *
-    //  * @return \AppBundle\Entity\Work
-    //  */
-    // public function getLocation()
-    // {
-    //     return $this->location;
-    // }
 
     /**
      * Add partner
@@ -459,32 +439,9 @@ class Individual
     }
 
     /**
-     * Add disciplinaryBackground
-     *
-     * @param \AppBundle\Entity\Disciplinary $disciplinaryBackground
-     *
-     * @return Individual
-     */
-    public function addDisciplinaryBackground(Disciplinary $disciplinaryBackground)
-    {
-        $this->disciplinary_backgrounds->add($disciplinaryBackground);
-        $disciplinaryBackground->setIndividual($this);
-    }
-
-    /**
-     * Remove disciplinaryBackground
-     *
-     * @param \AppBundle\Entity\Disciplinary $disciplinaryBackground
-     */
-    public function removeDisciplinaryBackground(\AppBundle\Entity\Disciplinary $disciplinaryBackground)
-    {
-        $this->disciplinary_backgrounds->removeElement($disciplinaryBackground);
-    }
-
-    /**
      * Set location
      *
-     * @param string $location
+     * @param simple_array $location
      *
      * @return Individual
      */
@@ -498,7 +455,7 @@ class Individual
     /**
      * Get location
      *
-     * @return string
+     * @return simple_array
      */
     public function getLocation()
     {

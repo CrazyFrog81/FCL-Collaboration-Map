@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "979797ca35722201f5da9084db5e6e1a",
+    "content-hash": "e986b6efcfb3b22e542623f86e04db57",
     "packages": [
         {
             "name": "craue/formflow-bundle",
