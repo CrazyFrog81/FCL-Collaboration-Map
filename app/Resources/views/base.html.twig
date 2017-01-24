@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" href="{{ asset('css/form-flow.css') }}" />
         <title>{% block title %}Data Collection Form{% endblock %}</title>
         {% block stylesheets %}
         {% endblock %}
@@ -29,16 +30,36 @@
         <script type="text/javascript">
         var $collectionHolder;
 
-        // setup an "add a partner" link
-        var $addPartnerLink = $('<a href="#" class="add_partner_link" style="float:left;">Add a partner</a>');
-        var $newLinkSpan = $('<span></span>').append($addPartnerLink);
+        // setup an "add a collaborator" link
+        var $addcollaboratorLink = $('<button href="#" class="add_collaborator_link btn btn-info" style="float:left;"> + Add a collaborator</button></br>');
+        var $newLinkSpan = $('<span></span>').append($addcollaboratorLink);
 
         jQuery(document).ready(function() {
+          $('#general_information_research_group_Choices').on("change",function(){
+          if ($('#general_information_research_group_Choices').val() == ' '){
+            $('#general_information_research_group_Others').show();
+          }else{
+            $('#general_information_research_group_Others').hide();
+          }
+          });
+
+          $('#background_information_nationality_Choices').on("change",function(){
+          if ($('#background_information_nationality_Choices').val() == ' '){
+            $('#background_information_nationality_Others').show();
+          }else{
+            $('#background_information_nationality_Others').hide();
+          }
+          });
+
+            $("#myRange").on("input change", function() {
+              var x = document.getElementById("myRange").value;
+              document.getElementById("demo").innerHTML = x;
+            });
             // Get the ul that holds the collection of tags
-            $collectionHolder = $('div.partners');
+            $collectionHolder = $('div.collaborators');
 
             $collectionHolder.find('span').each(function() {
-                addPartnerFormDeleteLink($(this));
+                addcollaboratorFormDeleteLink($(this));
             });
 
             // add the "add a tag" anchor and li to the tags ul
@@ -48,16 +69,16 @@
             // index when inserting a new item (e.g. 2)
             $collectionHolder.data('index', $collectionHolder.find(':input').length);
 
-            $addPartnerLink.on('click', function(e) {
+            $addcollaboratorLink.on('click', function(e) {
                 // prevent the link from creating a "#" on the URL
                 e.preventDefault();
 
                 // add a new tag form (see next code block)
-                addPartnerForm($collectionHolder, $newLinkSpan);
+                addcollaboratorForm($collectionHolder, $newLinkSpan);
             });
         });
 
-        function addPartnerForm($collectionHolder, $newLinkSpan) {
+        function addcollaboratorForm($collectionHolder, $newLinkSpan) {
             // Get the data-prototype explained earlier
             var prototype = $collectionHolder.data('prototype');
 
@@ -76,20 +97,30 @@
             $newLinkSpan.before($newFormSpan);
 
             // add a delete link to the new form
-            addPartnerFormDeleteLink($newFormSpan);
+            addcollaboratorFormDeleteLink($newFormSpan);
         }
 
-        function addPartnerFormDeleteLink($partnerFormSpan) {
-            var $removeFormA = $('<a href="#" style="float:right;">Delete this partner</a></br>');
-            $partnerFormSpan.append($removeFormA);
+        function addcollaboratorFormDeleteLink($collaboratorFormSpan) {
+            var $removeFormA = $('<button href="#" class="btn btn-warning" style="float:right;"> - Delete this collaborator</button></br><hr style="height:1px;border:none;color:#333;background-color:#333;" />');
+            $collaboratorFormSpan.append($removeFormA);
 
             $removeFormA.on('click', function(e) {
                 // prevent the link from creating a "#" on the URL
                 e.preventDefault();
 
                 // remove the li for the tag form
-                $partnerFormSpan.remove();
+                $collaboratorFormSpan.remove();
             });
+        }
+
+        function alertFunction(){
+          var x;
+          if(confirm("Data entered will not be saved. Do you want to proceed?") == true){
+            return true;
+          }
+          else {
+            return false;
+          }
         }
         </script>
         {% endblock %}

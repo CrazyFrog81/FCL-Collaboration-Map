@@ -13,6 +13,8 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\LanguageType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use AppBundle\Form\Type\RadioOtherDisciplinaryType;
+use AppBundle\Form\Type\ChoiceOtherNatType;
 
 class BackgroundInformationType extends AbstractType
 {
@@ -23,7 +25,6 @@ class BackgroundInformationType extends AbstractType
             'label' => 'What is (are) your disciplinary background(s)?',
             'multiple' => true,
             'expanded' => true,
-            'placeholder' => '--Select--',
             'choices' => array(
               'Architecture' => 'Architecture',
               'Biology' => 'Biology',
@@ -41,9 +42,10 @@ class BackgroundInformationType extends AbstractType
               'Sociology' => 'Sociology',
               'Urban design and planning' => 'Urban design and planning',
               'Others' => 'Others',
-            )
+            ),
         ))
-        ->add('location', ChoiceType::class, array(
+
+        ->add('locations', ChoiceType::class, array(
           'label' => 'Where do you work?',
           'placeholder' => '--Select--',
           'multiple' => true,
@@ -64,14 +66,14 @@ class BackgroundInformationType extends AbstractType
           'days' => array(1),
           'years' => range(1990,2017),
         ))
-        ->add('work_duration_in_fcl', ChoiceType::class, array(
+        ->add('before_fcl', ChoiceType::class, array(
           'label' => 'How long have you been working as a researcher* before joining FCL?',
           'choices' => array(
-            'Less than 1 year' => '<1',
-            '1-2 years' => '1-2',
-            '2-5 years' => '2-5',
-            '5-10 years' => '5-10',
-            'More than 10 years' => '>10',
+            'Less than 1 year' => '< 1 year',
+            '1-2 years' => '1-2 years',
+            '2-5 years' => '2-5 years',
+            '5-10 years' => '5-10 years',
+            'More than 10 years' => '>10 years',
           ),
           'expanded' => true,
           'multiple' => false,
@@ -88,6 +90,8 @@ class BackgroundInformationType extends AbstractType
         ))
         ->add('mother_tongue', LanguageType::class, array(
         'label' => 'Mother tongue',
+        'expanded' => false,
+        'preferred_choices' => array('ar','zh','nl','en','fr','de','hi','id','it','ja','ru','es','ms'),
       ))
         ->add('gender', ChoiceType::class, array(
           'choices' => array(
@@ -107,30 +111,8 @@ class BackgroundInformationType extends AbstractType
           'expanded' => true,
           'multiple' => false,
         ))
-         ->add('nationality', ChoiceType::class, array(
-           'choices' => array(
-             'Australian' => 'Australian',
-             'Chinese' => 'Chinese',
-             'Colombian' => 'Colombian',
-             'Dutch' => 'Dutch',
-             'English' => 'English',
-             'French' => 'French',
-             'German' => 'German',
-             'Indian' => 'Indian',
-             'Indonesian' => 'Indonesian',
-             'Iranian' => 'Iranian',
-             'Italian' => 'Italian',
-             'Japanese' => 'Japanese',
-             'Mexican' => 'Mexican',
-             'New Zealander' => 'New Zealander',
-             'Russian' => 'Russian',
-             'Serbian' => 'Serbian',
-             'Singaporean' => 'Singaporean',
-             'Spanish' => 'Spanish',
-             'Swiss' => 'Swiss',
-             'Taiwanese' => 'Taiwanese',
-             'Others' => 'Others',
-           )
+         ->add('nationality', ChoiceOtherNatType::class,array(
+           'label' => 'Nationality',
          ));
     }
 

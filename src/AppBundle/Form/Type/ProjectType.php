@@ -14,6 +14,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use AppBundle\Form\Type\RadioOtherProjectType;
 
 
 class ProjectType extends AbstractType
@@ -52,7 +53,8 @@ class ProjectType extends AbstractType
         )
       ));
 
-    $builder->add('project_outcomes',ChoiceType::class, array(
+    $builder->add('project_outcomes', ChoiceType::class, array(
+      'label' => 'What are the expected outcomes from this presentation?',
       'choices' => array(
         'Data sharing' => 'data sharing',
         'Expert analysis' => 'expert analysis',
@@ -60,13 +62,11 @@ class ProjectType extends AbstractType
         'Joint publication' => 'joint publication',
         'Joint prototype' => 'joint prototype',
         'Research modelling' => 'research modelling',
-        'Others' => 'others',
+        'Others' => 'Others',
       ),
       'expanded' => true,
       'multiple' => true,
-      'label' => 'What are the expected outcomes from this collaboration?',
     ));
-
   }
 
   public function configureOptions(OptionsResolver $resolver)

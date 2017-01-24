@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
 * @ORM\Entity
@@ -33,7 +34,7 @@ class Project
   protected $completion_date;
 
   /**
-  * @ORM\Column(type="string")
+  * @ORM\Column(type="integer")
   */
   protected $working_time;
 
@@ -110,7 +111,7 @@ class Project
     /**
      * Set workingTime
      *
-     * @param string $workingTime
+     * @param integer $workingTime
      *
      * @return Project
      */
@@ -124,7 +125,7 @@ class Project
     /**
      * Get workingTime
      *
-     * @return string
+     * @return integer
      */
     public function getWorkingTime()
     {
@@ -182,5 +183,29 @@ class Project
     public function __toString()
     {
       return $this->name;
+    }
+
+    /**
+     * Set startDate
+     *
+     * @param \DateTime $startDate
+     *
+     * @return Project
+     */
+    public function setStartDate($startDate)
+    {
+        $this->start_date = $startDate;
+
+        return $this;
+    }
+
+    /**
+     * Get startDate
+     *
+     * @return \DateTime
+     */
+    public function getStartDate()
+    {
+        return $this->start_date;
     }
 }

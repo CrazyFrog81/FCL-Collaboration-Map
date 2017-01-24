@@ -15,8 +15,8 @@ class Individual
   * @ORM\Column(type="integer")
   * @ORM\GeneratedValue(strategy="AUTO")
   */
-  //One individual has many partners
-  //ORM\OneToMany(targetEntity="individual", mappedBy="partners_id")
+  //One individual has many collaborators
+  //ORM\OneToMany(targetEntity="individual", mappedBy="collaborators_id")
   protected $id;
 
   /**
@@ -25,14 +25,14 @@ class Individual
   protected $name;
 
   /**
-  * @ORM\Column(type="string")
+  * @ORM\Column(type="date")
   */
   protected $start_date;
 
   /**
   * @ORM\Column(type="string")
   */
-  protected $work_duration_in_fcl;
+  protected $before_fcl;
 
   /**
   * @ORM\Column(type="string")
@@ -50,7 +50,7 @@ class Individual
   protected $age;
 
   /**
-  * @ORM\OneToMany(targetEntity="Disciplinary", mappedBy="individual", cascade={"persist"})
+  * @ORM\Column(type="simple_array")
   */
   private $disciplinary_backgrounds;
 
@@ -60,24 +60,24 @@ class Individual
   protected $nationality;
 
   /**
-  * @ORM\Column(type="string")
+  * @ORM\Column(type="string", length=200)
   */
   protected $mother_tongue;
 
   /**
-  * @ORM\OneToOne(targetEntity="Work", mappedBy="individual")
+  * @ORM\Column(type="simple_array")
   */
   protected $research_group;
 
   /**
-  * @ORM\Column(type="string")
+  * @ORM\Column(type="simple_array")
   */
-  protected $location;
+  protected $locations;
 
   /**
-  * @ORM\OneToMany(targetEntity="Partner", mappedBy="individual", cascade={"persist"})
+  * @ORM\OneToMany(targetEntity="collaborator", mappedBy="individual", cascade={"persist"})
   */
-  protected $partners;
+  protected $collaborators;
 
   /**
   * @ORM\OneToMany(targetEntity="Project", mappedBy="individual", cascade={"persist"})
@@ -85,18 +85,17 @@ class Individual
   protected $projects;
 
   // /**
-  // * many partners to one individual
+  // * many collaborators to one individual
   // * @ORM\ManyToOne(targetEntity="individual", inversedBy="id")
-  // * @ORM\JoinColumn(name="partners_id", referencedColumnName="id")
+  // * @ORM\JoinColumn(name="collaborators_id", referencedColumnName="id")
   // */
-  // protected $partners_id;
+  // protected $collaborators_id;
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->disciplinary_backgrounds = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->partners = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->collaborators = new \Doctrine\Common\Collections\ArrayCollection();
         $this->projects = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -156,30 +155,6 @@ class Individual
     public function getStartDate()
     {
         return $this->start_date;
-    }
-
-    /**
-     * Set workDurationInFcl
-     *
-     * @param string $workDurationInFcl
-     *
-     * @return Individual
-     */
-    public function setWorkDurationInFcl($workDurationInFcl)
-    {
-        $this->work_duration_in_fcl = $workDurationInFcl;
-
-        return $this;
-    }
-
-    /**
-     * Get workDurationInFcl
-     *
-     * @return string
-     */
-    public function getWorkDurationInFcl()
-    {
-        return $this->work_duration_in_fcl;
     }
 
     /**
@@ -257,7 +232,7 @@ class Individual
     /**
      * Get disciplinaryBackgrounds
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return simple_array
      */
     public function getDisciplinaryBackgrounds()
     {
@@ -265,89 +240,67 @@ class Individual
     }
 
     /**
-     * Set researchGroup
-     *
-     * @param \AppBundle\Entity\Work $researchGroup
+     * Set disciplinaryBackgrounds
      *
      * @return Individual
      */
-    public function setResearchGroup(\AppBundle\Entity\Work $researchGroup = null)
+    public function setDisciplinaryBackgrounds($disciplinary_backgrounds)
+    {
+        return $this->disciplinary_backgrounds = $disciplinary_backgrounds;
+    }
+
+    /**
+     * Set researchGroup
+     *
+     *
+     * @return Individual
+     */
+    public function setResearchGroup($researchGroup)
     {
         $this->research_group = $researchGroup;
-
-//        $researchGroup->setIndividual($this);
-
-        return $this;
     }
 
     /**
      * Get researchGroup
      *
-     * @return \AppBundle\Entity\Work
+     * @return simple_array
      */
     public function getResearchGroup()
     {
         return $this->research_group;
     }
 
-    // /**
-    //  * Set location
-    //  *
-    //  * @param \AppBundle\Entity\Work $location
-    //  *
-    //  * @return Individual
-    //  */
-    // public function setLocation(\AppBundle\Entity\Work $location = null)
-    // {
-    //     $this->location = $location;
-    //
-    //     return $this;
-    // }
-    //
-    // /**
-    //  * Get location
-    //  *
-    //  * @return \AppBundle\Entity\Work
-    //  */
-    // public function getLocation()
-    // {
-    //     return $this->location;
-    // }
-
     /**
-     * Add partner
+     * Add collaborator
      *
-     * @param \AppBundle\Entity\Partner $partner
+     * @param \AppBundle\Entity\collaborator $collaborator
      *
      * @return Individual
      */
-    public function addPartner(\AppBundle\Entity\Partner $partner)
+    public function addcollaborator(collaborator $collaborator)
     {
-        $this->partners[] = $partner;
-
-        $partner->setIndividual($this);
-
-        return $this;
+        $collaborator->setIndividual($this);
+        $this->collaborators->add($collaborator);
     }
 
     /**
-     * Remove partner
+     * Remove collaborator
      *
-     * @param \AppBundle\Entity\Partner $partner
+     * @param \AppBundle\Entity\collaborator $collaborator
      */
-    public function removePartner(\AppBundle\Entity\Partner $partner)
+    public function removecollaborator(\AppBundle\Entity\collaborator $collaborator)
     {
-        $this->partners->removeElement($partner);
+        $this->collaborators->removeElement($collaborator);
     }
 
     /**
-     * Get partners
+     * Get collaborators
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getPartners()
+    public function getcollaborators()
     {
-        return $this->partners;
+        return $this->collaborators;
     }
 
     /**
@@ -359,11 +312,9 @@ class Individual
      */
     public function addProject(\AppBundle\Entity\Project $project)
     {
-        $this->projects[] = $project;
+      $this->projects->add($project);
 
-        $project->setIndividual($this);
-
-        return $this;
+      $project->setIndividual($this);
     }
 
     /**
@@ -387,27 +338,27 @@ class Individual
     }
 
     // /**
-    //  * Set partnersId
+    //  * Set collaboratorsId
     //  *
-    //  * @param \AppBundle\Entity\individual $partnersId
+    //  * @param \AppBundle\Entity\individual $collaboratorsId
     //  *
     //  * @return Individual
     //  */
-    // public function setPartnersId(\AppBundle\Entity\individual $partnersId = null)
+    // public function setcollaboratorsId(\AppBundle\Entity\individual $collaboratorsId = null)
     // {
-    //     $this->partners_id = $partnersId;
+    //     $this->collaborators_id = $collaboratorsId;
     //
     //     return $this;
     // }
     //
     // /**
-    //  * Get partnersId
+    //  * Get collaboratorsId
     //  *
     //  * @return \AppBundle\Entity\individual
     //  */
-    // public function getPartnersId()
+    // public function getcollaboratorsId()
     // {
-    //     return $this->partners_id;
+    //     return $this->collaborators_id;
     // }
 
     public function __toString()
@@ -464,28 +415,26 @@ class Individual
     }
 
     /**
-     * Add disciplinaryBackground
+     * Set locations
      *
-     * @param \AppBundle\Entity\Disciplinary $disciplinaryBackground
+     * @param simple_array $locations
      *
      * @return Individual
      */
-    public function addDisciplinaryBackground(\AppBundle\Entity\Disciplinary $disciplinaryBackground)
+    public function setLocations($locations)
     {
-        $this->disciplinary_backgrounds[] = $disciplinaryBackground;
-
-        $disciplinaryBackground->setIndividual($this);
+        $this->locations = $locations;
 
         return $this;
     }
 
     /**
-     * Remove disciplinaryBackground
+     * Get location
      *
-     * @param \AppBundle\Entity\Disciplinary $disciplinaryBackground
+     * @return simple_array
      */
-    public function removeDisciplinaryBackground(\AppBundle\Entity\Disciplinary $disciplinaryBackground)
+    public function getLocations()
     {
-        $this->disciplinary_backgrounds->removeElement($disciplinaryBackground);
+        return $this->locations;
     }
 }

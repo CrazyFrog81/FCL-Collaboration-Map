@@ -13,6 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use AppBundle\Form\Type\ResearchGroupType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use AppBundle\Form\Type\ChoiceOtherRGType;
 
 class GeneralInformationType extends AbstractType
 {
@@ -32,29 +33,7 @@ class GeneralInformationType extends AbstractType
             ->orderBy('u.name', 'ASC');
     },
         ))
-        ->add('research_group', ChoiceType::class, array(
-          'label' => 'Your research group',
-          'placeholder' => '--Select--',
-          'choices' => array(
-            'Scenario 1.1' => 'Scenario 1.1',
-            'Scenario 1.2' => 'Scenario 1.2',
-            'Scenario 1.3' => 'Scenario 1.3',
-            'Scenario 1.4' => 'Scenario 1.4',
-            'Scenario 2.1' => 'Scenario 2.1',
-            'Scenario 2.2' => 'Scenario 2.2',
-            'Scenario 2.3' => 'Scenario 2.3',
-            'Scenario 2.4' => 'Scenario 2.4',
-            'Scenario 3.1' => 'Scenario 3.1',
-            'Scenario 3.2' => 'Scenario 3.2',
-            'Scenario 3.3' => 'Scenario 3.3',
-            'Scenario 3.4' => 'Scenario 3.4',
-            'Cooler Singapore' => 'Cooler Singapore',
-            '3 for 2' => '3 for 2',
-            'Robotic tiling' => 'Robotic tiling',
-            'CIVAL' => 'CIVAL',
-            'Others' => 'Others',
-          )
-        ));
+        ->add('research_group', ChoiceOtherRGType::class);
     }
 
 

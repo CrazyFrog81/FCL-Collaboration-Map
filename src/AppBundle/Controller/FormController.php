@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use AppBundle\Entity\Individual;
 use AppBundle\Entity\Project;
-use AppBundle\Entity\Partner;
+use AppBundle\Entity\collaborator;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class FormController extends Controller
@@ -23,8 +23,8 @@ public function createFormAction() {
     $project = new Project();
     $formData->addProject($project);
 
-    $partner = new Partner();
-    $formData->addPartner($partner);
+    $collaborator = new collaborator();
+    $formData->addcollaborator($collaborator);
 
     $flow = $this->get('form.flow.createForm'); // must match the flow's service id
     $flow->bind($formData);
@@ -52,6 +52,7 @@ public function createFormAction() {
     return $this->render('createForm.html.twig', array(
         'form' => $form->createView(),
         'flow' => $flow,
+        'formData' => $formData,
     ));
 }
 
@@ -64,11 +65,11 @@ public function editAction($id, Request $request)
         throw $this->createNotFoundException('No individual found for id '.$id);
     }
 
-    $originalPartners = new ArrayCollection();
+    $originalcollaborators = new ArrayCollection();
 
-    // Create an ArrayCollection of the current Partner objects in the database
-    foreach ($individual->getPartners() as $partner) {
-        $originalPartners->add($partner);
+    // Create an ArrayCollection of the current collaborator objects in the database
+    foreach ($individual->getcollaborators() as $collaborator) {
+        $originalcollaborators->add($collaborator);
     }
 
     $editForm = $this->createForm(CollaborationInformationType::class, $individual);
@@ -77,19 +78,19 @@ public function editAction($id, Request $request)
 
     if ($editForm->isValid()) {
 
-        // remove the relationship between the partner and the individual
-        foreach ($originalPartners as $partner) {
-            if (false === $individual->getPartners()->contains($partner)) {
-                // remove the Individual from the Partner
-//                $partner->getIndividual()->removeElement($individual);
+        // remove the relationship between the collaborator and the individual
+        foreach ($originalcollaborators as $collaborator) {
+            if (false === $individual->getcollaborators()->contains($collaborator)) {
+                // remove the Individual from the collaborator
+//                $collaborator->getIndividual()->removeElement($individual);
 
                 // if it was a many-to-one relationship, remove the relationship like this
-                $partner->setIndividual(null);
+                $collaborator->setIndividual(null);
 
-                $em->persist($partner);
+                $em->persist($collaborator);
 
-                // if you wanted to delete the Partner entirely, you can also do that
-                $em->remove($partner);
+                // if you wanted to delete the collaborator entirely, you can also do that
+                $em->remove($collaborator);
             }
         }
 

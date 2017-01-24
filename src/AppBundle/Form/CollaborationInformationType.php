@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use AppBundle\Entity\Individual;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use AppBundle\Form\Type\PartnerType;
+use AppBundle\Form\Type\collaboratorType;
 use AppBundle\Form\Type\ProjectType;
 
 class CollaborationInformationType extends AbstractType
@@ -18,8 +18,8 @@ class CollaborationInformationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
       $builder
-        ->add('partners', CollectionType::class, array(
-          'entry_type' => PartnerType::class,
+        ->add('collaborators', CollectionType::class, array(
+          'entry_type' => collaboratorType::class,
           'by_reference' => false,
           'label' => false,
           'allow_add' => true,

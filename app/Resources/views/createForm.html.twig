@@ -1,4 +1,4 @@
-{# in AppBundle/Resources/views/Vehicle/createForm.html.twig #}
+{# in AppBundle/Resources/views/createForm.html.twig #}
 {% extends 'base.html.twig' %}
 {% form_theme form 'bootstrap_3_layout.html.twig' %}
 {% block body %}
@@ -6,74 +6,188 @@
 </br>
     Steps:
     {% include '@CraueFormFlow/FormFlow/stepList.html.twig' %}
+    <hr>
+    <a href="/rationale" onclick="return alertFunction()">Rationale of the project</a>
+    <hr>
 </div>
-<div class="col-md-8" style="border-left:thin solid black;">
+<div class="col-md-9 col-lg-10" style="border-left:thin solid black; background-color:#F8F9F9; height:100%;">
 {{ form_start(form) }}
     {{ form_errors(form) }}
 
     {% if flow.getCurrentStepNumber() == 1 %}
         <div>
-          <h3> 1.Rationale of the project</h3>
+          <h3> 1.General Information</h3>
           </br>
-            <div>
-            This on-line form is a part of a longitudinal research project called "Research Collaboration in FCL".</br> </br>
-            The objective is to study the pattern of research collaboration among researchers in a multi-disciplinary research institute such as FCL. You are invited to fill in this form every six months. The result will be treated as confidential. All names will be presented as anonymous in the final research output.</br></br>
-            Research Collaboration is defined as a collaboration between two or more social entity, where there is a common shared goal and reciprocity of actions/contributions across the collaboration timeline. </br></br>
-            Research collaboration may include co-authoring a publication, preparing a joint grant application, piloting a case study, expert consultation and data sharing. 	</br></br>
-            </div>
-        </div>
+            {{ form_label(form.name) }}
+            {{ form_widget(form.name) }}
+            <br>
+            {{ form_label(form.research_group) }}
+            {{ form_widget(form.research_group.Choices) }}
+            <br>
+            {{ form_widget(form.research_group.Others, {'attr' : {'placeholder' : 'Please specify your research group'} }) }}
+            <br>
     {% endif %}
 
     {% if flow.getCurrentStepNumber() == 2 %}
         <div>
-          <h3> 2.General Information</h3>
+          <h3> 2.Collaboration Information</h3>
           </br>
-            {{ form_widget(form) }}
-        </div>
-    {% endif %}
+          <h4> Project </h4> </br>
+            {% for project in form.projects %}
+              <div>
+              {{ form_row(project.name) }} <br>
+              {{ form_row(project.start_date) }} <br>
+              {{ form_row(project.completion_date) }} <br>
+              {{ form_label(project.working_time) }}
+              {{ form_widget(project.working_time, {'id' : 'myRange'}) }} <br>
+              Value: <span id="demo"></span> % </br></br>
+              {{ form_row(project.project_outcomes)}}
+            <br>
+              </div>
+            {% endfor %}
 
-    {% if flow.getCurrentStepNumber() == 3 %}
-        <div>
-          <h3> 3.Collaboration Information</h3>
-          </br>
-          <h4> Project </h4>
-            {{ form_row(form.projects) }}
-            </br>
-          <h4> Partner(s) </h4>
-          <div class="partners" data-prototype="{{ form_widget(form.partners.vars.prototype)|e('html_attr') }}">
-            {% for partner in form.partners %}
+            <hr style="height:1px;border:none;color:#333;background-color:#333;" />
+          <h4> Collaborator(s) </h4></br>
+          <div class="collaborators" data-prototype="{{ form_widget(form.collaborators.vars.prototype)|e('html_attr') }}">
+            {% for collaborator in form.collaborators %}
               <span>
-              {{ form_row(partner.name) }}
-              {{ form_row(partner.collaborated_before) }}
+              {{ form_row(collaborator.name) }}
+              {{ form_row(collaborator.collaborated_before) }}
               </span>
             {% endfor %}
           </div>
         </div>
     {% endif %}
 
-    {% if flow.getCurrentStepNumber() == 4 %}
+    {% if flow.getCurrentStepNumber() == 3 %}
         <div>
-          <h3> 4.Background Information</h3>
+          <h3> 3.Background Information</h3>
+          <br>
+          <h4><i>Work related</i></h4>
           <br>
           {{ form_label(form.disciplinary_backgrounds) }}
           <div style="column-count:2;">
             {{ form_widget(form.disciplinary_backgrounds) }}
           </div>
-            {{ form_widget(form) }}
+            <br>
+            {{ form_row(form.locations) }} <br>
+            {{ form_row(form.start_date) }} <br>
+            {{ form_label(form.before_fcl) }}
+            <div style="float:right;">
+            (*Researcher may include: research assistant, research associate,<br> research fellows, research coordinator, PI and CoPI)
+            </div>
+            {{ form_widget(form.before_fcl) }} <br>
+            {{ form_row(form.academic_background) }}
+            <hr style="height:1px;border:none;color:#333;background-color:#333;" />
+            <h4><i>Personal</i></h4>
+            </br>
+            {{ form_row(form.mother_tongue) }}
+            {{ form_row(form.gender) }}
+            {{ form_row(form.age) }}
+            {{ form_label(form.nationality) }}
+            {{ form_widget(form.nationality.Choices) }}
+            <br>
+            {{ form_widget(form.nationality.Others, {'attr' : {'placeholder' : 'Please specify your nationality'}}) }}
+        </div>
+    {% endif %}
+
+    {% if flow.getCurrentStepNumber() == 4 %}
+        <div>
+          <h3> 4.Confirmation</h3>
+          <legend>{{ 'General Information' }}</legend>
+					<dl>
+						<dt>{{ 'Name' | trans }}:</dt>
+						<dd>{{ formData.name }}</dd>
+
+            <dt>{{ 'Research Group' | trans }}:</dt>
+            {% for research_group in formData.ResearchGroup %}
+						<dd>{{ research_group }}</dd>
+            {% endfor %}
+
+					</dl>
+
+          <legend>{{ 'Collaboration Information' }}</legend>
+          <p><i> Project </i></p>
+          <dl>
+						<dt>{{ 'Project title' | trans }}:</dt>
+            {% for project in formData.projects %}
+						<dd>{{ project.name }}</dd>
+            <dt>{{ 'Starting date' | trans }}:</dt>
+            <dd>{{ project.startDate|date('Y-m-d') }}</dd>
+            <dt>{{ 'Completion date' | trans }}:</dt>
+            <dd>{{ project.completionDate|date('Y-m-d') }}</dd>
+            <dt>{{ 'Average time working for the project' | trans }}:</dt>
+            <dd>{{ project.workingTime }}%</dd>
+            <dt>{{ 'Project outcome(s)' | trans }}:</dt>
+            {% for project_outcome in project.projectOutcomes %}
+            <dd>{{ project_outcome }}</dd>
+            {% endfor %}
+            {% endfor %}
+					</dl>
+          <hr>
+          <p><i> Collaborator(s) </i></p>
+          <dl>
+            {% for collaborator in formData.collaborators %}
+            <dt>{{ 'Collaborator' | trans }}:</dt>
+						<dd>{{ collaborator.name }}</dd>
+            <dt>{{ 'Collaborated before' | trans }}:</dt>
+            <dd>{{ collaborator.collaboratedBefore }}</dd>
+            <br>
+            {% endfor %}
+					</dl>
+
+          <legend>{{ 'Background Information' }}</legend>
+          <p><i> Work related </i></p>
+          <dl>
+            <dt>{{ 'Disciplinary Background(s)' | trans }}:</dt>
+            {% for disciplinary_background in formData.DisciplinaryBackgrounds%}
+            <dd>{{ disciplinary_background }}</dd>
+            {% endfor %}
+
+            <dt>{{ 'Working Location' | trans }}:</dt>
+            {% for location in formData.Locations %}
+            <dd>{{ location }}</dd>
+            {% endfor %}
+
+            <dt>{{ 'Start to work in/with FCL' | trans }}:</dt>
+						<dd>{{ formData.startDate|date('Y-m-d') }}</dd>
+
+            <dt>{{ 'Working as a researcher before joining FCL' | trans }}:</dt>
+						<dd>{{ formData.beforeFcl }}</dd>
+
+            <dt>{{ 'Highest Degree' | trans }}:</dt>
+						<dd>{{ formData.AcademicBackground }}</dd>
+            <hr>
+            <p><i> Personal </i></p>
+
+            <dt>{{ 'Mother Tongue' | trans }}:</dt>
+						<dd>{{ formData.motherTongue }}</dd>
+
+            <dt>{{ 'Gender' | trans }}:</dt>
+						<dd>{{ formData.gender }}</dd>
+
+            <dt>{{ 'Age' | trans }}:</dt>
+						<dd>{{ formData.age }}</dd>
+
+            <dt>{{ 'Nationality' | trans }}:</dt>
+            {% for nat in formData.nationality %}
+						<dd>{{ nat }}</dd>
+            {% endfor %}
+
+          </dl>
         </div>
     {% endif %}
 
     </br></br>
     {% include '@CraueFormFlow/FormFlow/buttons.html.twig' with {
         craue_formflow_button_label_finish: 'Submit Survey',
-        craue_formflow_button_label_reset: 'Reset',
         craue_formflow_button_label_back: 'Back',
         craue_formflow_button_label_next: 'Next Step',
         craue_formflow_button_class_last: 'btn btn-primary',
-        craue_formflow_button_class_back: 'btn',
-        craue_formflow_button_class_reset: 'btn btn-warning',
+        craue_formflow_button_class_back: 'btn btn-default',
     } %}
-</br></br></br></br>
+</br></br></br></br></br></br></br></br></br></br></br></br>
+</br></br></br></br></br></br></br></br></br>
 </div>
 {{ form_end(form) }}
 {% endblock %}

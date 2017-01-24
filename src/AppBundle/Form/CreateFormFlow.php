@@ -9,11 +9,10 @@ use Craue\FormFlowBundle\Form\FormFlowInterface;
 
 class CreateFormFlow extends FormFlow {
 
+  protected $allowDynamicStepNavigation = true;
+
     protected function loadStepsConfig() {
         return array(
-            array(
-                'label' => 'Rationale of the project',
-            ),
             array(
                 'label' => 'General Information',
                 'form_type' => 'AppBundle\Form\GeneralInformationType',
@@ -23,8 +22,11 @@ class CreateFormFlow extends FormFlow {
                 'form_type' => 'AppBundle\Form\CollaborationInformationType',
             ),
             array(
-                'label' => 'Background Information and Confirmation',
+                'label' => 'Background Information',
                 'form_type' => 'AppBundle\Form\BackgroundInformationType',
+            ),
+            array(
+                'label' => 'Confirmation',
             ),
         );
     }

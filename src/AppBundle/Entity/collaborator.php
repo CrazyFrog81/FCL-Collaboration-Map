@@ -6,9 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
 * @ORM\Entity
-* @ORM\Table(name="partner")
+* @ORM\Table(name="collaborator")
 */
-class Partner
+class collaborator
 {
   /**
   * @ORM\Id
@@ -28,7 +28,7 @@ class Partner
   protected $collaborated_before;
 
   /**
-  * @ORM\ManyToOne(targetEntity="Individual", inversedBy="partners")
+  * @ORM\ManyToOne(targetEntity="Individual", inversedBy="collaborators")
   * @ORM\JoinColumn(name="individual_id", referencedColumnName="id")
   */
   protected $individual;
@@ -48,7 +48,7 @@ class Partner
      *
      * @param string $name
      *
-     * @return Partner
+     * @return collaborator
      */
     public function setName($name)
     {
@@ -72,7 +72,7 @@ class Partner
      *
      * @param string $collaboratedBefore
      *
-     * @return Partner
+     * @return collaborator
      */
     public function setCollaboratedBefore($collaboratedBefore)
     {
@@ -96,7 +96,7 @@ class Partner
      *
      * @param \AppBundle\Entity\Individual $individual
      *
-     * @return Partner
+     * @return collaborator
      */
     public function setIndividual(\AppBundle\Entity\Individual $individual)
     {

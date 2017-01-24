@@ -15,8 +15,8 @@ class Individual
   * @ORM\Column(type="integer")
   * @ORM\GeneratedValue(strategy="AUTO")
   */
-  //One individual has many partners
-  //ORM\OneToMany(targetEntity="individual", mappedBy="partners_id")
+  //One individual has many collaborators
+  //ORM\OneToMany(targetEntity="individual", mappedBy="collaborators_id")
   protected $id;
 
   /**
@@ -32,7 +32,7 @@ class Individual
   /**
   * @ORM\Column(type="string")
   */
-  protected $work_duration_in_fcl;
+  protected $before_fcl;
 
   /**
   * @ORM\Column(type="string")
@@ -55,7 +55,7 @@ class Individual
   private $disciplinary_backgrounds;
 
   /**
-  * @ORM\Column(type="string")
+  * @ORM\Column(type="simple_array")
   */
   protected $nationality;
 
@@ -65,19 +65,19 @@ class Individual
   protected $mother_tongue;
 
   /**
-  * @ORM\Column(type="string")
+  * @ORM\Column(type="simple_array", nullable=true)
   */
   protected $research_group;
 
   /**
   * @ORM\Column(type="simple_array")
   */
-  protected $location;
+  protected $locations;
 
   /**
-  * @ORM\OneToMany(targetEntity="Partner", mappedBy="individual", cascade={"persist"})
+  * @ORM\OneToMany(targetEntity="collaborator", mappedBy="individual", cascade={"persist"})
   */
-  protected $partners;
+  protected $collaborators;
 
   /**
   * @ORM\OneToMany(targetEntity="Project", mappedBy="individual", cascade={"persist"})
@@ -85,17 +85,17 @@ class Individual
   protected $projects;
 
   // /**
-  // * many partners to one individual
+  // * many collaborators to one individual
   // * @ORM\ManyToOne(targetEntity="individual", inversedBy="id")
-  // * @ORM\JoinColumn(name="partners_id", referencedColumnName="id")
+  // * @ORM\JoinColumn(name="collaborators_id", referencedColumnName="id")
   // */
-  // protected $partners_id;
+  // protected $collaborators_id;
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->partners = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->collaborators = new \Doctrine\Common\Collections\ArrayCollection();
         $this->projects = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -155,30 +155,6 @@ class Individual
     public function getStartDate()
     {
         return $this->start_date;
-    }
-
-    /**
-     * Set workDurationInFcl
-     *
-     * @param string $workDurationInFcl
-     *
-     * @return Individual
-     */
-    public function setWorkDurationInFcl($workDurationInFcl)
-    {
-        $this->work_duration_in_fcl = $workDurationInFcl;
-
-        return $this;
-    }
-
-    /**
-     * Get workDurationInFcl
-     *
-     * @return string
-     */
-    public function getWorkDurationInFcl()
-    {
-        return $this->work_duration_in_fcl;
     }
 
     /**
@@ -295,36 +271,36 @@ class Individual
     }
 
     /**
-     * Add partner
+     * Add collaborator
      *
-     * @param \AppBundle\Entity\Partner $partner
+     * @param \AppBundle\Entity\collaborator $collaborator
      *
      * @return Individual
      */
-    public function addPartner(Partner $partner)
+    public function addcollaborator(collaborator $collaborator)
     {
-        $partner->setIndividual($this);
-        $this->partners->add($partner);
+        $collaborator->setIndividual($this);
+        $this->collaborators->add($collaborator);
     }
 
     /**
-     * Remove partner
+     * Remove collaborator
      *
-     * @param \AppBundle\Entity\Partner $partner
+     * @param \AppBundle\Entity\collaborator $collaborator
      */
-    public function removePartner(\AppBundle\Entity\Partner $partner)
+    public function removecollaborator(\AppBundle\Entity\collaborator $collaborator)
     {
-        $this->partners->removeElement($partner);
+        $this->collaborators->removeElement($collaborator);
     }
 
     /**
-     * Get partners
+     * Get collaborators
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getPartners()
+    public function getcollaborators()
     {
-        return $this->partners;
+        return $this->collaborators;
     }
 
     /**
@@ -362,27 +338,27 @@ class Individual
     }
 
     // /**
-    //  * Set partnersId
+    //  * Set collaboratorsId
     //  *
-    //  * @param \AppBundle\Entity\individual $partnersId
+    //  * @param \AppBundle\Entity\individual $collaboratorsId
     //  *
     //  * @return Individual
     //  */
-    // public function setPartnersId(\AppBundle\Entity\individual $partnersId = null)
+    // public function setcollaboratorsId(\AppBundle\Entity\individual $collaboratorsId = null)
     // {
-    //     $this->partners_id = $partnersId;
+    //     $this->collaborators_id = $collaboratorsId;
     //
     //     return $this;
     // }
     //
     // /**
-    //  * Get partnersId
+    //  * Get collaboratorsId
     //  *
     //  * @return \AppBundle\Entity\individual
     //  */
-    // public function getPartnersId()
+    // public function getcollaboratorsId()
     // {
-    //     return $this->partners_id;
+    //     return $this->collaborators_id;
     // }
 
     public function __toString()
@@ -439,15 +415,15 @@ class Individual
     }
 
     /**
-     * Set location
+     * Set locations
      *
-     * @param simple_array $location
+     * @param simple_array $locations
      *
      * @return Individual
      */
-    public function setLocation($location)
+    public function setLocations($locations)
     {
-        $this->location = $location;
+        $this->locations = $locations;
 
         return $this;
     }
@@ -457,8 +433,32 @@ class Individual
      *
      * @return simple_array
      */
-    public function getLocation()
+    public function getLocations()
     {
-        return $this->location;
+        return $this->locations;
+    }
+
+    /**
+     * Set beforeFcl
+     *
+     * @param string $beforeFcl
+     *
+     * @return Individual
+     */
+    public function setBeforeFcl($beforeFcl)
+    {
+        $this->before_fcl = $beforeFcl;
+
+        return $this;
+    }
+
+    /**
+     * Get beforeFcl
+     *
+     * @return string
+     */
+    public function getBeforeFcl()
+    {
+        return $this->before_fcl;
     }
 }
