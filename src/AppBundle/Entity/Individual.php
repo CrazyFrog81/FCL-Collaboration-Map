@@ -55,7 +55,7 @@ class Individual
   private $disciplinary_backgrounds;
 
   /**
-  * @ORM\Column(type="simple_array")
+  * @ORM\Column(type="string")
   */
   protected $nationality;
 
@@ -65,7 +65,7 @@ class Individual
   protected $mother_tongue;
 
   /**
-  * @ORM\Column(type="simple_array", nullable=true)
+  * @ORM\Column(type="string")
   */
   protected $research_group;
 

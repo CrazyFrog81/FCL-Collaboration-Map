@@ -13,9 +13,10 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use AppBundle\Form\Type\RadioOtherProjectType;
-
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\CallbackTransformer;
 
 class ProjectType extends AbstractType
 {
@@ -33,14 +34,14 @@ class ProjectType extends AbstractType
             ->orderBy('u.name', 'ASC');
     },
       ))
-      ->add('start_date', BirthdayType::class, array(
+      ->add('start_date', DateType::class, array(
         'days' => array(1),
-        'years' => range(1990,2017),
+        'years' => range(2015,2020),
         'label' => 'Starting date',
       ))
       ->add('completion_date', DateType::class, array(
         'label' => 'Completion date',
-        'years' => range(date('Y'), date('Y') + 12),
+        'years' => range(2015,2020),
         'days' => array(1),
         'empty_data' => array('year' => '----', 'months' => '----', 'day' => false),
       ))
@@ -53,19 +54,8 @@ class ProjectType extends AbstractType
         )
       ));
 
-    $builder->add('project_outcomes', ChoiceType::class, array(
+    $builder->add('project_outcomes', RadioOtherProjectType::class, array(
       'label' => 'What are the expected outcomes from this presentation?',
-      'choices' => array(
-        'Data sharing' => 'data sharing',
-        'Expert analysis' => 'expert analysis',
-        'Granted research proposal' => 'granted research proposal',
-        'Joint publication' => 'joint publication',
-        'Joint prototype' => 'joint prototype',
-        'Research modelling' => 'research modelling',
-        'Others' => 'Others',
-      ),
-      'expanded' => true,
-      'multiple' => true,
     ));
   }
 

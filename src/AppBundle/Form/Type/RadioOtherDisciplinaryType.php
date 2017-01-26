@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\CallbackTransformer;
 
 class RadioOtherDisciplinaryType extends AbstractType
 {
@@ -34,12 +35,22 @@ class RadioOtherDisciplinaryType extends AbstractType
         'Psychology' => 'Psychology',
         'Sociology' => 'Sociology',
         'Urban design and planning' => 'Urban design and planning',
+        'Others' => null,
       )
   ));
     $builder->add('Others', TextType::class, array(
       'empty_data' => null,
       'required' => false,
       'label' => false,
+    ));
+
+    $builder->get('RadioChoices')->addModelTransformer(new CallbackTransformer(
+      function($radioChoicesAsString) {
+        return explode(',', $radioChoicesAsString);
+      },
+      function($radioChoicesAsArray) {
+        return implode(',', $radioChoicesAsArray);
+      }
     ));
   }
 }

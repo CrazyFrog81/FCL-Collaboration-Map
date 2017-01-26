@@ -15,34 +15,17 @@ use Symfony\Component\Form\Extension\Core\Type\LanguageType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use AppBundle\Form\Type\RadioOtherDisciplinaryType;
 use AppBundle\Form\Type\ChoiceOtherNatType;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\CallbackTransformer;
 
 class BackgroundInformationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
       $builder
-        ->add('disciplinary_backgrounds', ChoiceType::class, array(
+        ->add('disciplinary_backgrounds', RadioOtherDisciplinaryType::class, array(
             'label' => 'What is (are) your disciplinary background(s)?',
-            'multiple' => true,
-            'expanded' => true,
-            'choices' => array(
-              'Architecture' => 'Architecture',
-              'Biology' => 'Biology',
-              'Chemistry' => 'Chemistry',
-              'Computer Science' => 'Computer Science',
-              'Ecology' => 'Ecology',
-              'Economics' => 'Economics',
-              'Engineering' => 'Engineering',
-              'Graphic designer' => 'Graphic designer',
-              'Landscape architecture' => 'Landscape architecture',
-              'Law' => 'Law',
-              'Literature' => 'Literature',
-              'Policy' => 'Policy',
-              'Psychology' => 'Psychology',
-              'Sociology' => 'Sociology',
-              'Urban design and planning' => 'Urban design and planning',
-              'Others' => 'Others',
-            ),
         ))
 
         ->add('locations', ChoiceType::class, array(
@@ -113,6 +96,15 @@ class BackgroundInformationType extends AbstractType
         ))
          ->add('nationality', ChoiceOtherNatType::class,array(
            'label' => 'Nationality',
+         ));
+
+         $builder->get('nationality')->addModelTransformer(new CallbackTransformer(
+           function($nationalityAsString) {
+             return explode(' ', $nationalityAsString);
+           },
+           function($nationalityAsArray) {
+             return implode(' ', $nationalityAsArray);
+           }
          ));
     }
 

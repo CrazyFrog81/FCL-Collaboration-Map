@@ -10,6 +10,7 @@ use Craue\FormFlowBundle\Form\FormFlowInterface;
 class CreateFormFlow extends FormFlow {
 
   protected $allowDynamicStepNavigation = true;
+  protected $allowRedirectAfterSubmit = true;
 
     protected function loadStepsConfig() {
         return array(

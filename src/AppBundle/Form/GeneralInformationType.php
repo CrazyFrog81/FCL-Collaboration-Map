@@ -14,6 +14,9 @@ use AppBundle\Form\Type\ResearchGroupType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use AppBundle\Form\Type\ChoiceOtherRGType;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\CallbackTransformer;
 
 class GeneralInformationType extends AbstractType
 {
@@ -34,6 +37,23 @@ class GeneralInformationType extends AbstractType
     },
         ))
         ->add('research_group', ChoiceOtherRGType::class);
+
+        $builder->get('research_group')->addModelTransformer(new CallbackTransformer(
+          function($researchGroupAsString) {
+            return explode(' ', $researchGroupAsString);
+          },
+          function($researchGroupAsArray) {
+            return implode(' ', $researchGroupAsArray);
+          }
+        ));
+
+        // $builder->get('research_group')->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) {
+        //   $data = $event->getData();
+        //
+        //   $changeData = implode("", ($data));
+        //   $event->setData($changeData);
+        //
+        // });
     }
 
 

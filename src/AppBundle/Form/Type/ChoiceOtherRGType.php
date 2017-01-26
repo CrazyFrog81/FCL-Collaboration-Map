@@ -16,7 +16,6 @@ class ChoiceOtherRGType extends AbstractType
   public function buildForm(FormBuilderInterface $builder, array $options)
   {
     $builder->add('Choices', ChoiceType::class, array(
-      'data' => ' ',
       'label' => false,
       'choices'=>array(
       'Scenario 1.1' => 'Scenario 1.1',

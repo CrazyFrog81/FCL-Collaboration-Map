@@ -41,8 +41,9 @@
               {{ form_label(project.working_time) }}
               {{ form_widget(project.working_time, {'id' : 'myRange'}) }} <br>
               Value: <span id="demo"></span> % </br></br>
-              {{ form_row(project.project_outcomes)}}
-            <br>
+              {{ form_label(project.project_outcomes)}}
+              {{ form_widget(project.project_outcomes.RadioChoices) }}
+              {{ form_widget(project.project_outcomes.Others, {'attr' : {'placeholder' : 'If others, please specify here'}}) }}
               </div>
             {% endfor %}
 
@@ -67,8 +68,9 @@
           <br>
           {{ form_label(form.disciplinary_backgrounds) }}
           <div style="column-count:2;">
-            {{ form_widget(form.disciplinary_backgrounds) }}
+            {{ form_widget(form.disciplinary_backgrounds.RadioChoices) }}
           </div>
+          {{ form_widget(form.disciplinary_backgrounds.Others, {'attr' : {'placeholder' : 'If others, please specify here'}}) }}
             <br>
             {{ form_row(form.locations) }} <br>
             {{ form_row(form.start_date) }} <br>
@@ -100,9 +102,7 @@
 						<dd>{{ formData.name }}</dd>
 
             <dt>{{ 'Research Group' | trans }}:</dt>
-            {% for research_group in formData.ResearchGroup %}
-						<dd>{{ research_group }}</dd>
-            {% endfor %}
+						<dd>{{ formData.researchGroup }}</dd>
 
 					</dl>
 
@@ -120,7 +120,7 @@
             <dd>{{ project.workingTime }}%</dd>
             <dt>{{ 'Project outcome(s)' | trans }}:</dt>
             {% for project_outcome in project.projectOutcomes %}
-            <dd>{{ project_outcome }}</dd>
+            <dd> {{ project_outcome }} </dd>
             {% endfor %}
             {% endfor %}
 					</dl>
@@ -170,9 +170,7 @@
 						<dd>{{ formData.age }}</dd>
 
             <dt>{{ 'Nationality' | trans }}:</dt>
-            {% for nat in formData.nationality %}
-						<dd>{{ nat }}</dd>
-            {% endfor %}
+						<dd>{{ formData.nationality }}</dd>
 
           </dl>
         </div>

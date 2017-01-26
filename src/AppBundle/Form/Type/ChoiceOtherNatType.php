@@ -16,7 +16,6 @@ class ChoiceOtherNatType extends AbstractType
   public function buildForm(FormBuilderInterface $builder, array $options)
   {
     $builder->add('Choices', ChoiceType::class, array(
-      'data' => ' ',
       'label' => false,
       'choices' => array(
         'Australian' => 'Australian',

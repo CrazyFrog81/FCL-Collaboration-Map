@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\CallbackTransformer;
 
 class RadioOtherProjectType extends AbstractType
 {
@@ -17,21 +18,32 @@ class RadioOtherProjectType extends AbstractType
   {
     $builder->add('RadioChoices', ChoiceType::class, array(
       'choices' => array(
-        'Data sharing' => 'data sharing',
-        'Expert analysis' => 'expert analysis',
-        'Granted research proposal' => 'granted research proposal',
-        'Joint publication' => 'joint publication',
-        'Joint prototype' => 'joint prototype',
-        'Research modelling' => 'research modelling',
+        'Data sharing' => 'Data sharing',
+        'Expert analysis' => 'Expert analysis',
+        'Granted research proposal' => 'Granted research proposal',
+        'Joint publication' => 'Joint publication',
+        'Joint prototype' => 'Joint prototype',
+        'Research modelling' => 'Research modelling',
+        'Others' => null,
       ),
       'expanded' => true,
       'multiple' => true,
       'label' => false,
     ));
+
     $builder->add('Others', TextType::class, array(
       'empty_data' => null,
       'required' => false,
       'label' => false,
+    ));
+
+    $builder->get('RadioChoices')->addModelTransformer(new CallbackTransformer(
+      function($radioChoicesAsString) {
+        return explode(',', $radioChoicesAsString);
+      },
+      function($radioChoicesAsArray) {
+        return implode(',', $radioChoicesAsArray);
+      }
     ));
   }
 }

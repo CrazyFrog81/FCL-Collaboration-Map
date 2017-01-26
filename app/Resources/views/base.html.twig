@@ -35,21 +35,49 @@
         var $newLinkSpan = $('<span></span>').append($addcollaboratorLink);
 
         jQuery(document).ready(function() {
+          $('#general_information_research_group_Others').hide();
+          $('#general_information_research_group_Others').removeAttr("disabled");
+
+          $('#background_information_nationality_Others').hide();
+          $('#general_information_research_group_Others').attr("disabled","disabled");
+
           $('#general_information_research_group_Choices').on("change",function(){
           if ($('#general_information_research_group_Choices').val() == ' '){
+            $('#general_information_research_group_Others').removeAttr("disabled");
             $('#general_information_research_group_Others').show();
           }else{
+            $('#general_information_research_group_Others').attr("disabled","disabled");
             $('#general_information_research_group_Others').hide();
           }
           });
 
           $('#background_information_nationality_Choices').on("change",function(){
           if ($('#background_information_nationality_Choices').val() == ' '){
+            $('#background_information_nationality_Others').removeAttr("disabled");
             $('#background_information_nationality_Others').show();
           }else{
+            $('#background_information_nationality_Others').attr("disabled","disabled");
             $('#background_information_nationality_Others').hide();
           }
           });
+
+          $('#collaboration_information_projects_0_project_outcomes_Others').attr("disabled","disabled");
+
+          $('#collaboration_information_projects_0_project_outcomes_RadioChoices').on("change",function(){
+          if ($('#collaboration_information_projects_0_project_outcomes_RadioChoices_6').is(':checked')){
+            $('#collaboration_information_projects_0_project_outcomes_Others').removeAttr("disabled");
+        }else {
+          $('#collaboration_information_projects_0_project_outcomes_Others').attr("disabled","disabled");
+        }});
+
+        $('#background_information_disciplinary_backgrounds_Others').attr("disabled","disabled");
+
+        $('#background_information_disciplinary_backgrounds_RadioChoices').on("change",function(){
+        if ($('#background_information_disciplinary_backgrounds_RadioChoices_15').is(':checked')){
+          $('#background_information_disciplinary_backgrounds_Others').removeAttr("disabled");
+      }else {
+        $('#background_information_disciplinary_backgrounds_Others').attr("disabled","disabled");
+      }});
 
             $("#myRange").on("input change", function() {
               var x = document.getElementById("myRange").value;
