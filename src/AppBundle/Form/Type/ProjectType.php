@@ -17,23 +17,24 @@ use AppBundle\Form\Type\RadioOtherProjectType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class ProjectType extends AbstractType
 {
   public function buildForm(FormBuilderInterface $builder, array $options)
   {
     $builder
-      ->add('name', EntityType::class, array(
-        'class' => 'AppBundle:Project',
-        'choice_label' => 'name',
-        'choice_value' => 'name',
-        'label' => 'Project title',
-        'placeholder' => '--Select--',
-        'query_builder' => function (EntityRepository $er) {
-        return $er->createQueryBuilder('u')
-            ->orderBy('u.name', 'ASC');
-    },
-      ))
+    ->add('name', EntityType::class, array(
+      'class' => 'AppBundle:Project',
+      'choice_label' => 'name',
+      'choice_value' => 'name',
+      'label' => 'Project title',
+      'placeholder' => '--Select--',
+      'query_builder' => function (EntityRepository $er) {
+      return $er->createQueryBuilder('u')
+          ->orderBy('u.name', 'ASC');
+  },
+    ))
       ->add('start_date', DateType::class, array(
         'days' => array(1),
         'years' => range(2015,2020),

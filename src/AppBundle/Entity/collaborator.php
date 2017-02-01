@@ -2,120 +2,31 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+class Collaborator{
 
-/**
-* @ORM\Entity
-* @ORM\Table(name="collaborator")
-*/
-class collaborator
-{
-  /**
-  * @ORM\Id
-  * @ORM\Column(type="integer")
-  * @ORM\GeneratedValue(strategy="AUTO")
-  */
   protected $id;
-
-  /**
-  * @ORM\Column(type="string")
-  */
-  protected $name;
-
-  /**
-  * @ORM\Column(type="string")
-  */
   protected $collaborated_before;
 
-  /**
-  * @ORM\ManyToOne(targetEntity="Individual", inversedBy="collaborators")
-  * @ORM\JoinColumn(name="individual_id", referencedColumnName="id")
-  */
-  protected $individual;
+  public function getId(){
+    $this->id;
+  }
 
-    /**
-     * Get id
-     *
-     * @return string
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+  public function setId($id)
+  {
+    $this->id = $id;
+  }
 
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return collaborator
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
+  public function getCollaboratedBefore()
+  {
+    $this->collaborated_before;
+  }
 
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set collaboratedBefore
-     *
-     * @param string $collaboratedBefore
-     *
-     * @return collaborator
-     */
-    public function setCollaboratedBefore($collaboratedBefore)
-    {
-        $this->collaborated_before = $collaboratedBefore;
-
-        return $this;
-    }
-
-    /**
-     * Get collaboratedBefore
-     *
-     * @return string
-     */
-    public function getCollaboratedBefore()
-    {
-        return $this->collaborated_before;
-    }
-
-    /**
-     * Set individual
-     *
-     * @param \AppBundle\Entity\Individual $individual
-     *
-     * @return collaborator
-     */
-    public function setIndividual(\AppBundle\Entity\Individual $individual)
-    {
-       $this->individual = $individual;
-
-        return $this;
-    }
-
-    /**
-     * Get individual
-     *
-     * @return \AppBundle\Entity\Individual
-     */
-    public function getIndividual()
-    {
-        return $this->individual;
-    }
-
-    public function __toString(){
-      return $this->name;
-    }
+  public function setCollaboratedBefore($collaborated_before)
+  {
+    $this->collaborated_before = $collaborated_before;
+  }
 }
+
+
+
+ ?>

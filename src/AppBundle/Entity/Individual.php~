@@ -17,7 +17,7 @@ class Individual
   */
   //One individual has many collaborators
   //ORM\OneToMany(targetEntity="individual", mappedBy="collaborators_id")
-  protected $id;
+  public $id;
 
   /**
   * @ORM\Column(type="string")
@@ -65,7 +65,7 @@ class Individual
   protected $mother_tongue;
 
   /**
-  * @ORM\Column(type="simple_array")
+  * @ORM\Column(type="string")
   */
   protected $research_group;
 
@@ -75,14 +75,14 @@ class Individual
   protected $locations;
 
   /**
-  * @ORM\OneToMany(targetEntity="collaborator", mappedBy="individual", cascade={"persist"})
-  */
-  protected $collaborators;
-
-  /**
   * @ORM\OneToMany(targetEntity="Project", mappedBy="individual", cascade={"persist"})
   */
   protected $projects;
+
+  /**
+  * @ORM\Column(type="simple_array")
+  */
+  protected $collaborators;
 
   // /**
   // * many collaborators to one individual
@@ -95,8 +95,9 @@ class Individual
      */
     public function __construct()
     {
-        $this->collaborators = new \Doctrine\Common\Collections\ArrayCollection();
         $this->projects = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->collaborators = new \Doctrine\Common\Collections\ArrayCollection();
+
     }
 
     /**
@@ -260,47 +261,9 @@ class Individual
         $this->research_group = $researchGroup;
     }
 
-    /**
-     * Get researchGroup
-     *
-     * @return simple_array
-     */
     public function getResearchGroup()
     {
-        return $this->research_group;
-    }
-
-    /**
-     * Add collaborator
-     *
-     * @param \AppBundle\Entity\collaborator $collaborator
-     *
-     * @return Individual
-     */
-    public function addcollaborator(collaborator $collaborator)
-    {
-        $collaborator->setIndividual($this);
-        $this->collaborators->add($collaborator);
-    }
-
-    /**
-     * Remove collaborator
-     *
-     * @param \AppBundle\Entity\collaborator $collaborator
-     */
-    public function removecollaborator(\AppBundle\Entity\collaborator $collaborator)
-    {
-        $this->collaborators->removeElement($collaborator);
-    }
-
-    /**
-     * Get collaborators
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getcollaborators()
-    {
-        return $this->collaborators;
+      return $this->research_group;
     }
 
     /**
@@ -436,5 +399,61 @@ class Individual
     public function getLocations()
     {
         return $this->locations;
+    }
+
+    /**
+     * Set beforeFcl
+     *
+     * @param string $beforeFcl
+     *
+     * @return Individual
+     */
+    public function setBeforeFcl($beforeFcl)
+    {
+        $this->before_fcl = $beforeFcl;
+
+        return $this;
+    }
+
+    /**
+     * Get beforeFcl
+     *
+     * @return string
+     */
+    public function getBeforeFcl()
+    {
+        return $this->before_fcl;
+    }
+
+    /**
+     * Set collaborators
+     *
+     * @param array $collaborators
+     *
+     * @return Individual
+     */
+    public function setCollaborators($collaborators)
+    {
+        $this->collaborators = $collaborators;
+
+        return $this;
+    }
+
+    /**
+     * Get collaborators
+     *
+     * @return array
+     */
+    public function getCollaborators()
+    {
+        return $this->collaborators;
+    }
+
+    public function addCollaborators($collaborator){
+      $data = json_decode($this->collaborators,true);
+
+      $data[] = $collaborator;
+
+      $this->collaborators = json_encode($data);
     }
 }

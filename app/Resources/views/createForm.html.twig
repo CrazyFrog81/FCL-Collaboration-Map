@@ -4,6 +4,22 @@
 {% block body %}
 <div class="col-lg-2 col-sm-3">
 </br>
+{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+    {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}
+    <hr>
+    <a href="{{ path('fos_user_security_logout') }}">
+        {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+    </a>
+    <hr>
+{% else %}
+    <br>
+    <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+    <hr>
+    <a href="{{ path('fos_user_registration_register') }}">{{ 'layout.register'|trans({}, 'FOSUserBundle') }}</a>
+    <hr>
+    <a href="/resetting/request">Reset Password</a>
+    <hr>
+{% endif %}
     Steps:
     {% include '@CraueFormFlow/FormFlow/stepList.html.twig' %}
     <hr>
@@ -47,16 +63,18 @@
               </div>
             {% endfor %}
 
+            <h4> Collaborator(s) </h4>
+            <div class="collaborators" data-prototype="{{ form_widget(form.collaborators.vars.prototype)|e('html_attr') }}">
+              {% for collaborator in form.collaborators %}
+                <span>
+                {{ form_row(collaborator.id) }}
+                {{ form_row(collaborator.collaborated_before) }}
+                </span>
+              {% endfor %}
+            </div>
+
             <hr style="height:1px;border:none;color:#333;background-color:#333;" />
-          <h4> Collaborator(s) </h4></br>
-          <div class="collaborators" data-prototype="{{ form_widget(form.collaborators.vars.prototype)|e('html_attr') }}">
-            {% for collaborator in form.collaborators %}
-              <span>
-              {{ form_row(collaborator.name) }}
-              {{ form_row(collaborator.collaborated_before) }}
-              </span>
-            {% endfor %}
-          </div>
+            {{ form_row(form.collaborators) }}
         </div>
     {% endif %}
 
@@ -124,17 +142,15 @@
             {% endfor %}
             {% endfor %}
 					</dl>
-          <hr>
+
           <p><i> Collaborator(s) </i></p>
-          <dl>
-            {% for collaborator in formData.collaborators %}
-            <dt>{{ 'Collaborator' | trans }}:</dt>
-						<dd>{{ collaborator.name }}</dd>
-            <dt>{{ 'Collaborated before' | trans }}:</dt>
-            <dd>{{ collaborator.collaboratedBefore }}</dd>
-            <br>
-            {% endfor %}
-					</dl>
+          <dt>{{ 'Collaborator(s)' | trans }}:</dt>
+{#          {% for collab in formData.collaborators %}
+        <dd> {{ collab }} </dd>
+          {% endfor %} #}
+{#          {{ formData.collaborators | serialize('json') }} #}
+          <hr>
+
 
           <legend>{{ 'Background Information' }}</legend>
           <p><i> Work related </i></p>

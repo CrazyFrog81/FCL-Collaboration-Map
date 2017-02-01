@@ -3,6 +3,22 @@
 {% block body %}
 <div class="col-lg-2 col-sm-3">
 </br>
+{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+    {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}
+    <hr>
+    <a href="{{ path('fos_user_security_logout') }}">
+        {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+    </a>
+    <hr>
+{% else %}
+    <br>
+    <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+    <hr>
+    <a href="{{ path('fos_user_registration_register') }}">{{ 'layout.register'|trans({}, 'FOSUserBundle') }}</a>
+    <hr>
+    <a href="/resetting/request">Reset Password</a>
+    <hr>
+{% endif %}
     <a href="/form">Back to the form</a>
     <hr>
     <p>Rationale of the project</p>
