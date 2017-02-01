@@ -2,9 +2,19 @@
 
 namespace AppBundle\Entity;
 
+use JMS\Serializer\Annotation\Type;
+use AppBundle\Entity\Individual;
+
 class Collaborator{
 
+  /**
+  * @Type("array")
+  */
   protected $id;
+
+  /**
+  * @Type("string")
+  */
   protected $collaborated_before;
 
   public function getId(){

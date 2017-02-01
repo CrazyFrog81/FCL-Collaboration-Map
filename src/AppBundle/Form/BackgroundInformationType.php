@@ -18,6 +18,7 @@ use AppBundle\Form\Type\ChoiceOtherNatType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class BackgroundInformationType extends AbstractType
 {
@@ -71,11 +72,15 @@ class BackgroundInformationType extends AbstractType
           'multiple' => false,
           'label' => 'What is your highest degree?',
         ))
-        ->add('mother_tongue', LanguageType::class, array(
-        'label' => 'Mother tongue',
-        'expanded' => false,
-        'preferred_choices' => array('ar','zh','nl','en','fr','de','hi','id','it','ja','ru','es','ms'),
-      ))
+        ->add('mother_tongues', LanguageType::class, array(
+              'attr' => array(
+                'class' => 'mother_tongues',
+              ),
+              'label' => 'Mother tongue(s)',
+              'multiple' => 'multiple',
+              'expanded' => false,
+              'preferred_choices' => array('ar','zh','nl','en','fr','de','hi','id','it','ja','ru','es','ms'),
+            ))
         ->add('gender', ChoiceType::class, array(
           'choices' => array(
             'Female' => 'female',

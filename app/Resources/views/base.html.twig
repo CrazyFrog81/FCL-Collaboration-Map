@@ -4,6 +4,7 @@
         <meta charset="UTF-8" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link rel="stylesheet" href="{{ asset('css/form-flow.css') }}" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
         <title>{% block title %}Data Collection Form{% endblock %}</title>
         {% block stylesheets %}
         {% endblock %}
@@ -27,7 +28,11 @@
         {% block javascripts %}
         <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
         <script src="{{ asset('js/main.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
         <script type="text/javascript">
+
+        $(".mother_tongues").select2();
+
         var $collectionHolder;
 
         // setup an "add a collaborator" link
@@ -83,7 +88,8 @@
               var x = document.getElementById("myRange").value;
               document.getElementById("demo").innerHTML = x;
             });
-            // Get the ul that holds the collection of tags
+
+            // Get the div that holds the collection of collaborators
             $collectionHolder = $('div.collaborators');
 
             $collectionHolder.find('span').each(function() {

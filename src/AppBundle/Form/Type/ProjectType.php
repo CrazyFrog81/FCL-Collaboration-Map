@@ -18,23 +18,25 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use AppBundle\Form\Type\CollaboratorCustomType;
+use AppBundle\Form\Type\CollaboratorType;
 
 class ProjectType extends AbstractType
 {
   public function buildForm(FormBuilderInterface $builder, array $options)
   {
-    $builder
-    ->add('name', EntityType::class, array(
-      'class' => 'AppBundle:Project',
-      'choice_label' => 'name',
-      'choice_value' => 'name',
-      'label' => 'Project title',
-      'placeholder' => '--Select--',
-      'query_builder' => function (EntityRepository $er) {
-      return $er->createQueryBuilder('u')
-          ->orderBy('u.name', 'ASC');
-  },
-    ))
+    $builder->add('name')
+  //   ->add('name', EntityType::class, array(
+  //     'class' => 'AppBundle:Project',
+  //     'choice_label' => 'name',
+  //     'choice_value' => 'name',
+  //     'label' => 'Project title',
+  //     'placeholder' => '--Select--',
+  //     'query_builder' => function (EntityRepository $er) {
+  //     return $er->createQueryBuilder('u')
+  //         ->orderBy('u.name', 'ASC');
+  // },
+  //   ))
       ->add('start_date', DateType::class, array(
         'days' => array(1),
         'years' => range(2015,2020),
@@ -58,7 +60,15 @@ class ProjectType extends AbstractType
     $builder->add('project_outcomes', RadioOtherProjectType::class, array(
       'label' => 'What are the expected outcomes from this presentation?',
     ));
-  }
+
+    $builder->add('collaborators', CollectionType::class, array(
+              'entry_type' => CollaboratorType::class,
+              'allow_delete' => true,
+              'allow_add' => true,
+              'by_reference' => false,
+              'label' => false,
+            ));
+          }
 
   public function configureOptions(OptionsResolver $resolver)
   {

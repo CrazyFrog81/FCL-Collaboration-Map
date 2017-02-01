@@ -3,15 +3,14 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-use JMS\Serializer\SerializerBuilder;
-use JMS\Serializer\Annotation\ExclusionPolicy;
-use JMS\Serializer\Annotation\Expose;
-use JMS\Serializer\Annotation as JMS;
+// use JMS\Serializer\SerializerBuilder;
+// use JMS\Serializer\Annotation\ExclusionPolicy;
+// use JMS\Serializer\Annotation\Expose;
+// use JMS\Serializer\Annotation as JMS;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="individual")
- * @ExclusionPolicy("all")
  */
 class Individual
 {
@@ -19,7 +18,6 @@ class Individual
   * @ORM\Id
   * @ORM\Column(type="integer")
   * @ORM\GeneratedValue(strategy="AUTO")
-  * @Expose
   */
   public $id;
 
@@ -64,9 +62,9 @@ class Individual
   protected $nationality;
 
   /**
-  * @ORM\Column(type="string", length=200)
+  * @ORM\Column(type="simple_array")
   */
-  protected $mother_tongue;
+  protected $mother_tongues;
 
   /**
   * @ORM\Column(type="string")
@@ -83,19 +81,13 @@ class Individual
   */
   protected $projects;
 
-  /**
-  * @ORM\Column(type="json_array")
-  * @JMS\Type("ArrayCollection<AppBundle\Entity\Collaborator>")
-  */
-  protected $collaborators;
-
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->projects = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->collaborators = new \Doctrine\Common\Collections\ArrayCollection();
+//        $this->collaborators = new \Doctrine\Common\Collections\ArrayCollection();
 
     }
 
@@ -329,27 +321,27 @@ class Individual
     }
 
     /**
-     * Set motherTongue
+     * Set motherTongues
      *
-     * @param string $motherTongue
+     * @param simple_array $motherTongues
      *
      * @return Individual
      */
-    public function setMotherTongue($motherTongue)
+    public function setMotherTongues($motherTongues)
     {
-        $this->mother_tongue = $motherTongue;
+        $this->mother_tongues = $motherTongues;
 
         return $this;
     }
 
     /**
-     * Get motherTongue
+     * Get motherTongues
      *
-     * @return string
+     * @return simple_array
      */
-    public function getMotherTongue()
+    public function getMotherTongues()
     {
-        return $this->mother_tongue;
+        return $this->mother_tongues;
     }
 
     /**
@@ -400,42 +392,48 @@ class Individual
         return $this->before_fcl;
     }
 
-    /**
-     * Set collaborators
-     *
-     * @param array $collaborators
-     *
-     * @return Individual
-     */
-    public function setCollaborators($collaborators)
-    {
-        $serializer = SerializerBuilder::create()->build();
-
-        $jsonCollaborator = $serializer->serialize($collaborators, 'json');
-
-        //var_dump($jsonCollaborator);
-
-        // $deserialization = $serializer->deserialize($jsonCollaborator, 'AppBundle\Form\Type\CollaboratorCustomType', 'json');
-        // var_dump(array($deserialization));
-
-        $this->collaborators= $jsonCollaborator;
-
-        return $this->collaborators;
-    }
-
-    /**
-     * Get collaborators
-     *
-     * @return array
-     */
-    public function getCollaborators()
-    {
-      // $serializer = SerializerBuilder::create()->build();
-      // var_dump($this->collaborators);
-      // $object = $serializer->deserialize($this->collaborators, 'AppBundle\Entity\Collaborator', 'json');
-      // var_dump($object);
-      // return $object;
-
-       return $this->collaborators;
-    }
+    // /**
+    //  * Set collaborators
+    //  *
+    //  * @param array $collaborators
+    //  *
+    //  * @return Individual
+    //  */
+    // public function setCollaborators($collaborators)
+    // {
+    //     $serializer = SerializerBuilder::create()->build();
+    //
+    //     $jsonCollaborator = $serializer->serialize($collaborators, 'json');
+    //
+    //     // var_dump($jsonCollaborator);
+    //
+    //     // $deserialization = $serializer->deserialize($jsonCollaborator, 'ArrayCollection<AppBundle\Entity\Collaborator>', 'json');
+    //     // var_dump($deserialization);
+    //
+    //     $this->collaborators= $jsonCollaborator;
+    //
+    //     return $this->collaborators;
+    // }
+    //
+    // /**
+    //  * Get collaborators
+    //  *
+    //  * @return array
+    //  */
+    // public function getCollaborators()
+    // {
+    //   if(count(json_decode($this->collaborators)) == 0) {
+    //     // var_dump(count(json_decode($this->collaborators)));
+    //     return $this->collaborators;
+    //   }
+    //   //var_dump(count(json_decode($this->collaborators)));
+    //   else {
+    //     $serializer = SerializerBuilder::create()->build();
+    //
+    //     $object = $serializer->deserialize($this->collaborators, 'ArrayCollection<AppBundle\Entity\Collaborator>', 'json');
+    //
+    //     return $object;
+    //   }
+    //   //return $this->collaborators;
+    // }
 }

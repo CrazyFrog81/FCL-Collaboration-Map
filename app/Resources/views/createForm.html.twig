@@ -48,8 +48,8 @@
         <div>
           <h3> 2.Collaboration Information</h3>
           </br>
-          <h4> Project </h4> </br>
             {% for project in form.projects %}
+            <h4> Project </h4> </br>
               <div>
               {{ form_row(project.name) }} <br>
               {{ form_row(project.start_date) }} <br>
@@ -61,20 +61,18 @@
               {{ form_widget(project.project_outcomes.RadioChoices) }}
               {{ form_widget(project.project_outcomes.Others, {'attr' : {'placeholder' : 'If others, please specify here'}}) }}
               </div>
-            {% endfor %}
 
             <h4> Collaborator(s) </h4>
-            <div class="collaborators" data-prototype="{{ form_widget(form.collaborators.vars.prototype)|e('html_attr') }}">
-              {% for collaborator in form.collaborators %}
+            <div class="collaborators" data-prototype="{{ form_widget(project.collaborators.vars.prototype)|e('html_attr') }}">
+              {% for collaborator in project.collaborators %}
                 <span>
                 {{ form_row(collaborator.id) }}
                 {{ form_row(collaborator.collaborated_before) }}
                 </span>
               {% endfor %}
             </div>
-
+            {% endfor %}
             <hr style="height:1px;border:none;color:#333;background-color:#333;" />
-            {{ form_row(form.collaborators) }}
         </div>
     {% endif %}
 
@@ -101,7 +99,7 @@
             <hr style="height:1px;border:none;color:#333;background-color:#333;" />
             <h4><i>Personal</i></h4>
             </br>
-            {{ form_row(form.mother_tongue) }}
+            {{ form_row(form.mother_tongues) }}
             {{ form_row(form.gender) }}
             {{ form_row(form.age) }}
             {{ form_label(form.nationality) }}
@@ -176,8 +174,8 @@
             <hr>
             <p><i> Personal </i></p>
 
-            <dt>{{ 'Mother Tongue' | trans }}:</dt>
-						<dd>{{ formData.motherTongue }}</dd>
+{#            <dt>{{ 'Mother Tongue' | trans }}:</dt>
+						<dd>{{ formData.motherTongue }}</dd> #}
 
             <dt>{{ 'Gender' | trans }}:</dt>
 						<dd>{{ formData.gender }}</dd>

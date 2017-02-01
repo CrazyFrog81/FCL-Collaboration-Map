@@ -16,15 +16,15 @@ class CollaboratorType extends AbstractType
 {
   public function buildForm(FormBuilderInterface $builder, array $options)
   {
-    // $builder->add('id', EntityType::class, array(
-    //   'class' => 'AppBundle:Individual',
-    //   'choice_label' => 'name',
-    //   'query_builder' => function(EntityRepository $er) {
-    //     return $er->createQueryBuilder('u')
-    //               ->orderBy('u.name', 'ASC');
-    //     }
-    // ))
-    $builder->add('id', TextType::class)
+    $builder->add('id', EntityType::class, array(
+      'class' => 'AppBundle:Individual',
+      'choice_label' => 'name',
+      'query_builder' => function(EntityRepository $er) {
+        return $er->createQueryBuilder('u')
+                  ->orderBy('u.name', 'ASC');
+        }
+    ))
+    // $builder->add('id', TextType::class)
            ->add('collaborated_before', ChoiceType::class, array(
              'choices' => array(
                'Yes' => 'Yes',
