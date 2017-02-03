@@ -1,6 +1,6 @@
 {# in AppBundle/Resources/views/createForm.html.twig #}
 {% extends 'base.html.twig' %}
-{% form_theme form 'bootstrap_3_layout.html.twig' %}
+{% form_theme form 'bootstrap_3_layout.html.twig' 'jquery.collection.html.twig' %}
 {% block body %}
 <div class="col-lg-2 col-sm-3">
 </br>
@@ -48,32 +48,8 @@
         <div>
           <h3> 2.Collaboration Information</h3>
           </br>
-            {% for project in form.projects %}
-            <h4> Project </h4> </br>
-              <div>
-              {{ form_row(project.name) }} <br>
-              {{ form_row(project.start_date) }} <br>
-              {{ form_row(project.completion_date) }} <br>
-              {{ form_label(project.working_time) }}
-              {{ form_widget(project.working_time, {'id' : 'myRange'}) }} <br>
-              Value: <span id="demo"></span> % </br></br>
-              {{ form_label(project.project_outcomes)}}
-              {{ form_widget(project.project_outcomes.RadioChoices) }}
-              {{ form_widget(project.project_outcomes.Others, {'attr' : {'placeholder' : 'If others, please specify here'}}) }}
-              </div>
-
-            <h4> Collaborator(s) </h4>
-            <div class="collaborators" data-prototype="{{ form_widget(project.collaborators.vars.prototype)|e('html_attr') }}">
-              {% for collaborator in project.collaborators %}
-                <span>
-                {{ form_row(collaborator.id) }}
-                {{ form_row(collaborator.collaborated_before) }}
-                </span>
-              {% endfor %}
-            </div>
-            {% endfor %}
-            <hr style="height:1px;border:none;color:#333;background-color:#333;" />
-        </div>
+          {{ form(form.projects) }}
+          
     {% endif %}
 
     {% if flow.getCurrentStepNumber() == 3 %}

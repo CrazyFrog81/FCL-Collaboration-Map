@@ -17,14 +17,22 @@ class CollaborationInformationType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+      
       $builder
         ->add('projects', CollectionType::class, array(
           'entry_type' => ProjectType::class,
+          'entry_options' => array(
+            'label' => '',
+          ),
           'label' => false,
           'by_reference' => false,
           'allow_add' => true,
           'allow_delete' => true,
-          'entry_options' => array('label' => false),
+          'prototype' => true,
+          'prototype_name' => '__parent_name__',
+          'attr' => array(
+            'class' => "parent-collection",
+          ),
         ));
       }
 

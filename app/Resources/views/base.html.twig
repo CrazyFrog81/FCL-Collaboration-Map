@@ -29,17 +29,29 @@
         <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
         <script src="{{ asset('js/main.js') }}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+        <script src="{{ asset('js/jquery.collection.js') }}"></script>
         <script type="text/javascript">
 
         $(".mother_tongues").select2();
-
-        var $collectionHolder;
-
-        // setup an "add a collaborator" link
-        var $addcollaboratorLink = $('<button href="#" class="add_collaborator_link btn btn-info" style="float:left;"> + Add a collaborator</button></br>');
-        var $newLinkSpan = $('<span></span>').append($addcollaboratorLink);
+        $('.parent-collection').collection({
+            add: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Add project</a>',
+            remove: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span> Remove project</a>',
+            allow_up: $('#up').is(':checked'),
+            allow_down: $('#down').is(':checked'),
+            add_at_the_end: true,
+            prefix: 'parent',
+            children: [{
+                selector: '.child-collection',
+                add: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Add collaborator</span></a>',
+                remove: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span> Remove collaborator</span></a>',
+                allow_up: $('#up').is(':checked'),
+                allow_down: $('#down').is(':checked'),
+                add_at_the_end: true,
+            }]
+        });
 
         jQuery(document).ready(function() {
+
           $('#general_information_research_group_Others').hide();
           $('#general_information_research_group_Others').removeAttr("disabled");
 
@@ -88,64 +100,7 @@
               var x = document.getElementById("myRange").value;
               document.getElementById("demo").innerHTML = x;
             });
-
-            // Get the div that holds the collection of collaborators
-            $collectionHolder = $('div.collaborators');
-
-            $collectionHolder.find('span').each(function() {
-                addcollaboratorFormDeleteLink($(this));
-            });
-
-            // add the "add a tag" anchor and li to the tags ul
-            $collectionHolder.append($newLinkSpan);
-
-            // count the current form inputs we have (e.g. 2), use that as the new
-            // index when inserting a new item (e.g. 2)
-            $collectionHolder.data('index', $collectionHolder.find(':input').length);
-
-            $addcollaboratorLink.on('click', function(e) {
-                // prevent the link from creating a "#" on the URL
-                e.preventDefault();
-
-                // add a new tag form (see next code block)
-                addcollaboratorForm($collectionHolder, $newLinkSpan);
-            });
         });
-
-        function addcollaboratorForm($collectionHolder, $newLinkSpan) {
-            // Get the data-prototype explained earlier
-            var prototype = $collectionHolder.data('prototype');
-
-            // get the new index
-            var index = $collectionHolder.data('index');
-
-            // Replace '__name__' in the prototype's HTML to
-            // instead be a number based on how many items we have
-            var newForm = prototype.replace(/__name__/g, index);
-
-            // increase the index with one for the next item
-            $collectionHolder.data('index', index + 1);
-
-            // Display the form in the page in an li, before the "Add a tag" link li
-            var $newFormSpan = $('<span></span>').append(newForm);
-            $newLinkSpan.before($newFormSpan);
-
-            // add a delete link to the new form
-            addcollaboratorFormDeleteLink($newFormSpan);
-        }
-
-        function addcollaboratorFormDeleteLink($collaboratorFormSpan) {
-            var $removeFormA = $('<button href="#" class="btn btn-warning" style="float:right;"> - Delete this collaborator</button></br><hr style="height:1px;border:none;color:#333;background-color:#333;" />');
-            $collaboratorFormSpan.append($removeFormA);
-
-            $removeFormA.on('click', function(e) {
-                // prevent the link from creating a "#" on the URL
-                e.preventDefault();
-
-                // remove the li for the tag form
-                $collaboratorFormSpan.remove();
-            });
-        }
 
         function alertFunction(){
           var x;
