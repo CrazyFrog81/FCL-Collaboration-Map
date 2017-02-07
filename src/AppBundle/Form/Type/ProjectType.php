@@ -64,17 +64,14 @@ class ProjectType extends AbstractType
     $builder->add('collaborators', CollectionType::class, array(
               'entry_type' => CollaboratorType::class,
               'entry_options' => array(
-                'label' => false,
+                'label' => 'Collaborator',
               ),
               'allow_delete' => true,
               'allow_add' => true,
               'by_reference' => false,
-              'label' => 'Collaborator(s)',
+              'label' => false,
               'prototype' => true,
-              'prototype_name' => '__children_name__',
-              'attr' => array(
-                'class' => 'child-collection',
-              )
+              'prototype_name' => '__collaborator__',
             ));
           }
 

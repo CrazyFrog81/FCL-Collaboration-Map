@@ -1,6 +1,6 @@
 {# in AppBundle/Resources/views/createForm.html.twig #}
 {% extends 'base.html.twig' %}
-{% form_theme form 'bootstrap_3_layout.html.twig' 'jquery.collection.html.twig' %}
+{% form_theme form 'bootstrap_3_layout.html.twig'%}
 {% block body %}
 <div class="col-lg-2 col-sm-3">
 </br>
@@ -48,8 +48,24 @@
         <div>
           <h3> 2.Collaboration Information</h3>
           </br>
-          {{ form(form.projects) }}
-          
+          <section
+    class="projects"
+    data-prototype-project="{{ form_widget(form.projects.vars.prototype) | e }}"
+>
+      {% for project in form.projects %}
+      {{ form_row(project) }}
+      <label for="">collaborators</label><br>
+      <span
+    class="collaborators"
+    data-prototype-collaborator="{{ form_widget(form.projects.vars.prototype.collaborators.vars.prototype) | e }}"
+    >
+      {% for collaborator in project.collaborators %}
+    {{ form_row(collaborator) }}
+      {% endfor %}
+      </span>
+      {% endfor %}
+            <hr style="height:1px;border:none;color:#333;background-color:#333;" />
+          </section>
     {% endif %}
 
     {% if flow.getCurrentStepNumber() == 3 %}
