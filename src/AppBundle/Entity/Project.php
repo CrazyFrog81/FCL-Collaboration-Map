@@ -4,16 +4,10 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-use AppBundle\Entity\Collaborator;
-use JMS\Serializer\SerializerBuilder;
-use JMS\Serializer\Annotation\ExclusionPolicy;
-use JMS\Serializer\Annotation\Expose;
-use JMS\Serializer\Annotation as JMS;
 
 /**
 * @ORM\Entity
 * @ORM\Table(name="project")
-* @ExclusionPolicy("all")
 */
 class Project
 {
@@ -21,7 +15,6 @@ class Project
   * @ORM\Id
   * @ORM\Column(type="integer")
   * @ORM\GeneratedValue(strategy="AUTO")
-  * @Expose
   */
   protected $id;
 
@@ -47,21 +40,21 @@ class Project
 
   /**
   * @ORM\ManyToOne(targetEntity="Individual", inversedBy="projects")
-  * @ORM\JoinColumn(name="individual_id", referencedColumnName="id")
+  * @ORM\JoinColumn(name="individual_id", referencedColumnName="user_id")
   */
   protected $individual;
 
   /**
-  * @ORM\Column(type="simple_array")
+  * @ORM\Column(type="json_array")
   *
   */
   protected $project_outcomes;
 
   /**
   * @ORM\Column(type="json_array")
-  * @JMS\Type("ArrayCollection<AppBundle\Entity\Collaborator>")
   */
   protected $collaborators;
+
 
     /**
      * Get id
@@ -165,7 +158,6 @@ class Project
     public function __construct()
     {
         $this->collaborators = new \Doctrine\Common\Collections\ArrayCollection();
-
     }
 
     /**
@@ -217,7 +209,6 @@ class Project
     public function setStartDate($startDate)
     {
         $this->start_date = $startDate;
-
         return $this;
     }
 
@@ -231,48 +222,25 @@ class Project
         return $this->start_date;
     }
 
+
     /**
      * Set collaborators
      *
      * @param array $collaborators
-     *
      * @return Project
      */
     public function setCollaborators($collaborators)
     {
-        $serializer = SerializerBuilder::create()->build();
-
-        $jsonCollaborator = $serializer->serialize($collaborators, 'json');
-
-        // var_dump($jsonCollaborator);
-
-        // $deserialization = $serializer->deserialize($jsonCollaborator, 'ArrayCollection<AppBundle\Entity\Collaborator>', 'json');
-        // var_dump($deserialization);
-
-        $this->collaborators= $jsonCollaborator;
-
-        return $this->collaborators;
+      $this->collaborators = $collaborators ;
+      return $this->collaborators;
     }
 
     /**
      * Get collaborators
-     *
      * @return array
      */
     public function getCollaborators()
     {
-      if(count(json_decode($this->collaborators)) == 0) {
-        // var_dump(count(json_decode($this->collaborators)));
-        return $this->collaborators;
-      }
-      //var_dump(count(json_decode($this->collaborators)));
-      else {
-        $serializer = SerializerBuilder::create()->build();
-
-        $object = $serializer->deserialize($this->collaborators, 'ArrayCollection<AppBundle\Entity\Collaborator>', 'json');
-
-        return $object;
-      }
-      //return $this->collaborators;
+      return ($this->collaborators);
     }
 }

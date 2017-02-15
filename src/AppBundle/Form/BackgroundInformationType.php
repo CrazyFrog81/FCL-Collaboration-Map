@@ -102,15 +102,6 @@ class BackgroundInformationType extends AbstractType
          ->add('nationality', ChoiceOtherNatType::class,array(
            'label' => 'Nationality',
          ));
-
-         $builder->get('nationality')->addModelTransformer(new CallbackTransformer(
-           function($nationalityAsString) {
-             return explode(' ', $nationalityAsString);
-           },
-           function($nationalityAsArray) {
-             return implode(' ', $nationalityAsArray);
-           }
-         ));
     }
 
     public function configureOptions(OptionsResolver $resolver)

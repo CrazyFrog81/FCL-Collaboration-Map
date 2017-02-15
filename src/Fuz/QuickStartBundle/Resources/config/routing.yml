@@ -1,0 +1,4 @@
+fuz_quickstart:
+    resource: '@FuzQuickStartBundle/Controller/'
+    type: annotation
+    prefix: /

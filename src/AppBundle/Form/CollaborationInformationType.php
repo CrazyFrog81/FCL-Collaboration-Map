@@ -23,10 +23,10 @@ class CollaborationInformationType extends AbstractType
           'label' => false,
           'by_reference' => false,
           'allow_add' => true,
-          'allow_delete' => true,
-          'entry_options' => array('label' => false),
           'prototype' => true,
           'prototype_name' => '__project__',
+          'allow_delete' => true,
+          'entry_options' => array('label' => false),
         ));
       }
 

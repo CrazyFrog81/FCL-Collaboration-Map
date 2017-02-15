@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -24,25 +24,32 @@ class RadioOtherProjectType extends AbstractType
         'Joint publication' => 'Joint publication',
         'Joint prototype' => 'Joint prototype',
         'Research modelling' => 'Research modelling',
-        'Others' => null,
+        'Other' => 'Other',
       ),
       'expanded' => true,
       'multiple' => true,
       'label' => false,
-    ));
-
-    $builder->add('Others', TextType::class, array(
-      'empty_data' => null,
+    ))
+    ->add('Others', TextType::class, array(
       'required' => false,
       'label' => false,
-    ));
-
-    $builder->get('RadioChoices')->addModelTransformer(new CallbackTransformer(
-      function($radioChoicesAsString) {
-        return explode(',', $radioChoicesAsString);
+    ))
+    ->addModelTransformer(new CallbackTransformer(
+      function($data)
+      {
+        if (is_array($data[0])){
+          return (array('RadioChoices' => $data[0], 'Others' => $data[1]));
+        } else {
+        return array('RadioChoices' => $data, 'Others' => null);}
       },
-      function($radioChoicesAsArray) {
-        return implode(',', $radioChoicesAsArray);
+      function ($data)
+      {
+        if (in_array('Other', $data['RadioChoices'], true)) {
+          return array($data['RadioChoices'], ($data['Others']));
+        }
+        else{
+          return $data['RadioChoices'];
+        }
       }
     ));
   }

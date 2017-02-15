@@ -1,0 +1,42 @@
+<?php
+
+// src/AppBundle/Entity/User.php
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
+use FOS\UserBundle\Model\User as BaseUser;
+use JMS\Serializer\SerializerBuilder;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation as JMS;
+use JMS\Serializer\Annotation\Type;
+
+/**
+ * @ORM\Entity
+ * @UniqueEntity(fields="email", message="Email already taken")
+ * @UniqueEntity(fields="username", message="Username already taken")
+ * @ExclusionPolicy("all")
+ */
+class User extends BaseUser
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     * @Type("integer")
+     * @Expose
+     */
+    protected $id;
+
+    // other properties and methods
+    public function __construct()
+    {
+      parent::__construct();
+    }
+
+}
+
+ ?>

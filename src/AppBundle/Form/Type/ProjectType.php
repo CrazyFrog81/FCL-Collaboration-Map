@@ -18,8 +18,8 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use AppBundle\Form\Type\CollaboratorCustomType;
 use AppBundle\Form\Type\CollaboratorType;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class ProjectType extends AbstractType
 {
@@ -72,8 +72,11 @@ class ProjectType extends AbstractType
               'label' => false,
               'prototype' => true,
               'prototype_name' => '__collaborator__',
+              'attr' => array(
+                'class' => 'my-selector',
+              )
             ));
-          }
+}
 
   public function configureOptions(OptionsResolver $resolver)
   {

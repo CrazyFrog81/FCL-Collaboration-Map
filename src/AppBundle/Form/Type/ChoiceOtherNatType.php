@@ -6,10 +6,11 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\CallbackTransformer;
 
 class ChoiceOtherNatType extends AbstractType
 {
@@ -38,14 +39,64 @@ class ChoiceOtherNatType extends AbstractType
         'Spanish' => 'Spanish',
         'Swiss' => 'Swiss',
         'Taiwanese' => 'Taiwanese',
-        'Others' => ' ',
+        'Other' => 'Other',
     )
-    ));
-    $builder->add('Others', TextType::class, array(
-      'empty_data' => null,
+    ))
+    ->add('Others', TextType::class, array(
       'required' => false,
       'label' => false,
+    ))
+    ->addModelTransformer(new CallbackTransformer(
+      function($data)
+      {
+        if (in_array($data,
+        array(
+          'Australian' => 'Australian',
+          'Chinese' => 'Chinese',
+          'Colombian' => 'Colombian',
+          'Dutch' => 'Dutch',
+          'English' => 'English',
+          'French' => 'French',
+          'German' => 'German',
+          'Indian' => 'Indian',
+          'Indonesian' => 'Indonesian',
+          'Iranian' => 'Iranian',
+          'Italian' => 'Italian',
+          'Japanese' => 'Japanese',
+          'Mexican' => 'Mexican',
+          'New Zealander' => 'New Zealander',
+          'Russian' => 'Russian',
+          'Serbian' => 'Serbian',
+          'Singaporean' => 'Singaporean',
+          'Spanish' => 'Spanish',
+          'Swiss' => 'Swiss',
+          'Taiwanese' => 'Taiwanese',
+        )
+        , true)){
+          return array('Choices' => $data, 'Others' => null);
+        } else {
+        return array('Choices' => 'Other', 'Others' => $data);}
+      },
+      function ($data)
+      {
+        if ('Other' === $data['Choices']) {
+          return $data['Others'];
+        }
+
+        return $data['Choices'];
+      }
     ));
+  }
+
+  public function setDefaultOptions(OptionsResolverInterface $resolver)
+  {
+    $resolver->setRequired(array('choices'));
+    $resolver->setAllowedTypes(array('choices' => 'array'));
+  }
+
+  public function getParent()
+  {
+    return FormType::class;
   }
 }
 

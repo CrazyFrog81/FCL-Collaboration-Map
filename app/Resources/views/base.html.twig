@@ -29,159 +29,121 @@
         <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
         <script src="{{ asset('js/main.js') }}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+        <script src="{{ asset('js/jquery.collection.js') }}"></script>
         <script type="text/javascript">
 
         $(".mother_tongues").select2();
 
-
-
         var $collectionHolder;
-        var $childCollectionHolder;
 
-        // setup an "add a tag" link
-        var $addProjectLink = $('<a href="#" class="add_project_link">Add a project</a>');
-        var $newLinkDiv = $('<section></section>').append($addProjectLink);
+        // setup an "add a project" link
+        var $addprojectLink = $('<a href="#" class="add_project_link btn btn-default glyphicon glyphicon-plus-sign"></a> <span>Add a project</span>');
+        var $newLinkLi = $('<section></section>').append($addprojectLink);
 
-        var $addCollaboratorLink = $('<a href="#" class="add_collaborator_link">Add a collaborator</a>');
-        var $newLinkSpan = $('<span></span>').append($addCollaboratorLink);
+          jQuery(document).ready(function() {
+              // Get the ul that holds the collection of projects
+              $collectionHolder = $('div.projects');
 
-        jQuery(document).ready(function() {
-            // Get the ul that holds the collection of tags
-            $collectionHolder = $('section.projects');
-            $childCollectionHolder = $('span.collaborators');
+              // add a delete link to all of the existing project form li elements
+              $collectionHolder.find('section').each(function() {
+                  addprojectFormDeleteLink($(this));
+              });
 
-            // add a delete link to all of the existing tag form li elements
-            $collectionHolder.find('section').each(function() {
-              addProjectFormDeleteLink($(this));
-            });
+              // add the "add a project" anchor and li to the projects ul
+              $collectionHolder.append($newLinkLi);
 
-            $childCollectionHolder.find('span').each(function() {
-              addCollaboratorFormDeleteLink($(this));
-            });
+              // count the current form inputs we have (e.g. 2), use that as the new
+              // index when inserting a new item (e.g. 2)
+              $collectionHolder.data('index', $collectionHolder.find(':input').length);
 
-            // add the "add a tag" anchor and li to the tags ul
-            $collectionHolder.append($newLinkDiv);
-            $childCollectionHolder.append($newLinkSpan);
+              $addprojectLink.on('click', function(e) {
+                  // prevent the link from creating a "#" on the URL
+                  e.preventDefault();
 
-            // count the current form inputs we have (e.g. 2), use that as the new
-            // index when inserting a new item (e.g. 2)
-            $collectionHolder.data('index', $collectionHolder.find(':input').length);
-            $childCollectionHolder.data('index', $childCollectionHolder.find(':input').length);
+                  // add a new project form (see next code block)
+                  addprojectForm($collectionHolder, $newLinkLi);
+              });
+          });
 
-            $addProjectLink.on('click', function(e) {
-                // prevent the link from creating a "#" on the URL
-                e.preventDefault();
+          function addprojectForm($collectionHolder, $newLinkLi) {
+              // Get the data-prototype explained earlier
+              var prototype = $collectionHolder.data('prototype-project');
 
-                // add a new tag form (see next code block)
-                addProjectForm($collectionHolder, $newLinkDiv);
-            });
+              // get the new index
+              var index = $collectionHolder.data('index');
 
-            $addCollaboratorLink.on('click', function(e) {
-                // prevent the link from creating a "#" on the URL
-                e.preventDefault();
+              // Replace '__name__' in the prototype's HTML to
+              // instead be a number based on how many items we have
+              var newForm = prototype.replace(/__project__/g, index);
 
-                // add a new tag form (see next code block)
-                addCollaboratorForm($childCollectionHolder, $newLinkSpan);
-            });
-        });
+              // increase the index with one for the next item
+              $collectionHolder.data('index', index + 1);
 
-        function addProjectForm($collectionHolder, $newLinkDiv) {
-            // Get the data-prototype explained earlier
-            var prototype = $collectionHolder.data('prototype-project');
+              // Display the form in the page in an li, before the "Add a project" link li
+              var $newFormLi = $('<section></section>').append(newForm);
+              $newLinkLi.before($newFormLi);
 
-            // get the new index
-            var index = $collectionHolder.data('index');
+              // add a delete link to the new form
+             addprojectFormDeleteLink($newFormLi);
 
-            // Replace '__name__' in the prototype's HTML to
-            // instead be a number based on how many items we have
-            var newForm = prototype.replace(/__name__/g, index);
+             $(".my-selector").collection({
+               allow_up: $('#up').is(':checked'),
+               allow_down: $('#down').is(':checked'),
+               add_at_the_end: true,
+               add: '<a href="#" class="btn btn-default"> + Add Collaborator</a>',
+               remove: '<a href="#" class="btn btn-default"> - Remove Collaborator</a><hr>',
+             });
 
-            // increase the index with one for the next item
-            $collectionHolder.data('index', index + 1);
+             $('input[type=range]').on('input change',function(){
+               var id = ($(this).attr('id'));
+               rangeFunction(id);
+              });
 
-            // Display the form in the page in an li, before the "Add a tag" link li
-            var $newFormDiv = $('<section></section>').append(newForm);
-            $newLinkDiv.before($newFormDiv);
+              $('[id$=_project_outcomes_Others]').attr("disabled","disabled");
+              $('[id$=_project_outcomes_Others]').attr("placeholder", "If others, please specify here");
+              $('.collab_label').remove();
+              $('[id$=_project_outcomes_Others]').after("<h4 class='collab_label'>Collaborator(s)</h4>");
 
-            // add a delete link to the new form
-   addProjectFormDeleteLink($newFormDiv);
-        }
+              $('input[type=checkbox]').on('input change',function(){
+                var id =($(this).attr('id'));
+                if(id.substr(id.length - 1) == '6')
+                {
+                  var other_id = id.replace("RadioChoices_6", "Others");
+                  if($('#' + id).is(':checked')){
+                    $('#' + other_id).removeAttr("disabled");
+                  }else{
+                    $('#' + other_id).attr("disabled", "disabled");
+                  }
+                }
+              });
+            }
 
+          function addprojectFormDeleteLink($projectFormLi) {
+              var $removeFormA = $('<a href="#" class="delete btn btn-default glyphicon glyphicon-trash"></a> <span>Delete this project</span>');
 
-        function addCollaboratorForm($collectionHolder, $newLinkSpan) {
-            // Get the data-prototype explained earlier
-            var prototype = $collectionHolder.data('prototype-collaborator');
+              $projectFormLi.append($removeFormA);
 
-            // get the new index
-            var index = $collectionHolder.data('index');
+              $projectFormLi.append('<hr style="height:1px;border:none;color:#333;background-color:#333;" /><h4>Project</h4><br>');
 
-            // Replace '__name__' in the prototype's HTML to
-            // instead be a number based on how many items we have
-            var newForm = prototype.replace(/__name__/g, index);
-
-            // increase the index with one for the next item
-            $collectionHolder.data('index', index + 1);
-
-            // Display the form in the page in an li, before the "Add a tag" link li
-            var $newFormSpan = $('<span></span>').append(newForm);
-            $newLinkSpan.before($newFormSpan);
-
-            // add a delete link to the new form
-   addCollaboratorFormDeleteLink($newFormSpan);
-        }
-
-        function addProjectFormDeleteLink($projectFormDiv) {
-    var $removeFormA = $('<a href="#">delete this project</a>');
-    $projectFormDiv.append($removeFormA);
-
-    $removeFormA.on('click', function(e) {
-        // prevent the link from creating a "#" on the URL
-        e.preventDefault();
-
-        // remove the li for the tag form
-        $projectFormDiv.remove();
-    });
-}
-
-function addCollaboratorFormDeleteLink($collaboratorFormSpan) {
-var $removeFormA = $('<a href="#">delete this collaborator</a>');
-$collaboratorFormSpan.append($removeFormA);
-
-$removeFormA.on('click', function(e) {
-// prevent the link from creating a "#" on the URL
-e.preventDefault();
-
-// remove the li for the tag form
-$collaboratorFormSpan.remove();
-});
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+              $removeFormA.on('click', function(e) {
+                  // prevent the link from creating a "#" on the URL
+                  e.preventDefault();
+                  // remove the li for the project form
+                  $projectFormLi.remove();
+              });
+          }
 
         jQuery(document).ready(function() {
-          $('#general_information_research_group_Others').hide();
-          $('#general_information_research_group_Others').removeAttr("disabled");
-
-          $('#background_information_nationality_Others').hide();
-          $('#general_information_research_group_Others').attr("disabled","disabled");
+          if ($('#general_information_research_group_Choices').val() == 'Other'){
+            $('#general_information_research_group_Others').removeAttr("disabled");
+            $('#general_information_research_group_Others').show();
+          }else{
+            $('#general_information_research_group_Others').attr("disabled","disabled");
+            $('#general_information_research_group_Others').hide();
+          }
 
           $('#general_information_research_group_Choices').on("change",function(){
-          if ($('#general_information_research_group_Choices').val() == ' '){
+          if ($('#general_information_research_group_Choices').val() == 'Other'){
             $('#general_information_research_group_Others').removeAttr("disabled");
             $('#general_information_research_group_Others').show();
           }else{
@@ -190,8 +152,16 @@ $collaboratorFormSpan.remove();
           }
           });
 
+          if ($('#background_information_nationality_Choices').val() == 'Other'){
+            $('#background_information_nationality_Others').removeAttr("disabled");
+            $('#background_information_nationality_Others').show();
+          }else{
+            $('#background_information_nationality_Others').attr("disabled","disabled");
+            $('#background_information_nationality_Others').hide();
+          }
+
           $('#background_information_nationality_Choices').on("change",function(){
-          if ($('#background_information_nationality_Choices').val() == ' '){
+          if ($('#background_information_nationality_Choices').val() == 'Other'){
             $('#background_information_nationality_Others').removeAttr("disabled");
             $('#background_information_nationality_Others').show();
           }else{
@@ -200,16 +170,11 @@ $collaboratorFormSpan.remove();
           }
           });
 
-          $('#collaboration_information_projects_0_project_outcomes_Others').attr("disabled","disabled");
-
-          $('#collaboration_information_projects_0_project_outcomes_RadioChoices').on("change",function(){
-          if ($('#collaboration_information_projects_0_project_outcomes_RadioChoices_6').is(':checked')){
-            $('#collaboration_information_projects_0_project_outcomes_Others').removeAttr("disabled");
+          if ($('#background_information_disciplinary_backgrounds_RadioChoices_15').is(':checked')){
+            $('#background_information_disciplinary_backgrounds_Others').removeAttr("disabled");
         }else {
-          $('#collaboration_information_projects_0_project_outcomes_Others').attr("disabled","disabled");
-        }});
-
-        $('#background_information_disciplinary_backgrounds_Others').attr("disabled","disabled");
+          $('#background_information_disciplinary_backgrounds_Others').attr("disabled","disabled");
+        }
 
         $('#background_information_disciplinary_backgrounds_RadioChoices').on("change",function(){
         if ($('#background_information_disciplinary_backgrounds_RadioChoices_15').is(':checked')){
@@ -218,11 +183,38 @@ $collaboratorFormSpan.remove();
         $('#background_information_disciplinary_backgrounds_Others').attr("disabled","disabled");
       }});
 
-            $("#myRange").on("input change", function() {
-              var x = document.getElementById("myRange").value;
-              document.getElementById("demo").innerHTML = x;
-            });
+        $('input[type=range]').on('input change',function(){
+          var id = ($(this).attr('id'));
+          rangeFunction(id);
         });
+
+      if($('[id$=_project_outcomes_RadioChoices_6]').is(':checked')){
+        $('[id$=_project_outcomes_Others]').removeAttr("disabled");
+      }else{
+        $('[id$=_project_outcomes_Others]').attr("disabled","disabled");
+      }
+
+      $('input[type=checkbox]').on('input change',function(){
+        var id =($(this).attr('id'));
+        if(id.substr(id.length - 1) == '6')
+        {
+          var other_id = id.replace("RadioChoices_6", "Others");
+          if($('#' + id).is(':checked')){
+            $('#' + other_id).removeAttr("disabled");
+          }else{
+            $('#' + other_id).attr("disabled", "disabled");
+          }
+        }
+      });
+
+        });
+
+        function rangeFunction(id){
+          $("#range_label" + id).remove();
+          $("#" + id).after('<div id="range_label'+ id + '">Value : <span id="value' + id + '"></span>%</div>' );
+          var x = document.getElementById(id).value;
+          document.getElementById("value" + id).innerHTML = x;
+        }
 
         function alertFunction(){
           var x;
@@ -233,6 +225,7 @@ $collaboratorFormSpan.remove();
             return false;
           }
         }
+
         </script>
         {% endblock %}
     </body>

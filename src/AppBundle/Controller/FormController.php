@@ -9,10 +9,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use AppBundle\Entity\Individual;
 use AppBundle\Entity\Project;
-use AppBundle\Entity\Collaborator;
 use AppBundle\Form\Type\CollaboratorCustomType;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Form\Type\CollaboratorType;
+use FOS\UserBundle\Entity\UserManager;
 
 class FormController extends Controller
 {
@@ -20,10 +20,16 @@ class FormController extends Controller
   * @Route("/", name="form")
   */
 public function createFormAction() {
-    $formData = new Individual(); // Your form data class. Has to be an object, won't work properly with an array.
+    $userId = $this->getUser()->getId();
 
-    $project = new Project();
-    $formData->addProject($project);
+    $individual = $this->getDoctrine()->getRepository('AppBundle:Individual')->find($userId);
+
+    if($individual){
+      return $this->redirect($this->generateUrl('edit'));
+    }
+
+    $formData = new Individual(); // Your form data class. Has to be an object, won't work properly with an array.
+    $formData->setId($this->getUser());
 
     $flow = $this->get('form.flow.createForm'); // must match the flow's service id
     $flow->bind($formData);
@@ -39,12 +45,13 @@ public function createFormAction() {
         } else {
             // flow finished
             $em = $this->getDoctrine()->getManager();
+
             $em->persist($formData);
             $em->flush();
 
             $flow->reset(); // remove step data from the session
 
-            return $this->redirect($this->generateUrl('form')); // redirect when done
+            return $this->redirect($this->generateUrl('edit')); // redirect when done
         }
     }
 
@@ -54,6 +61,49 @@ public function createFormAction() {
         'formData' => $formData,
     ));
 }
+
+    /**
+    * @Route("/edit", name="edit")
+    */
+    public function editFormAction() {
+      $userId = $this->getUser()->getId();
+
+      $individual = $this->getDoctrine()->getRepository('AppBundle:Individual')->find($userId);
+
+      if(!$individual){
+        throw $this->createNotFoundException(
+          'No product found for id '.$userId
+        );
+      }
+
+      $flow = $this->get('form.flow.createForm'); // must match the flow's service id
+      $flow->bind($individual);
+
+      $form = $flow->createForm();
+      if ($flow->isValid($form)) {
+          $flow->saveCurrentStepData($form);
+
+          if ($flow->nextStep()) {
+              // form for the next step
+              $form = $flow->createForm();
+          } else {
+              // flow finished
+              $em = $this->getDoctrine()->getManager();
+
+              $em->flush();
+
+              $flow->reset(); // remove step data from the session
+
+              return $this->redirect($this->generateUrl('edit')); // redirect when done
+          }
+      }
+      return $this->render('createForm.html.twig', array(
+          'form' => $form->createView(),
+          'flow' => $flow,
+          'formData' => $individual,
+      ));
+
+    }
 }
 
  ?>

@@ -3,6 +3,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Entity\User;
 
 /**
  * @ORM\Entity
@@ -12,12 +13,10 @@ class Individual
 {
   /**
   * @ORM\Id
-  * @ORM\Column(type="integer")
-  * @ORM\GeneratedValue(strategy="AUTO")
+  * @ORM\OneToOne(targetEntity="User")
+  * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
   */
-  //One individual has many collaborators
-  //ORM\OneToMany(targetEntity="individual", mappedBy="collaborators_id")
-  public $id;
+  protected $id;
 
   /**
   * @ORM\Column(type="string")
@@ -50,7 +49,7 @@ class Individual
   protected $age;
 
   /**
-  * @ORM\Column(type="simple_array")
+  * @ORM\Column(type="json_array")
   */
   private $disciplinary_backgrounds;
 
@@ -60,9 +59,9 @@ class Individual
   protected $nationality;
 
   /**
-  * @ORM\Column(type="string", length=200)
+  * @ORM\Column(type="simple_array")
   */
-  protected $mother_tongue;
+  protected $mother_tongues;
 
   /**
   * @ORM\Column(type="string")
@@ -79,24 +78,18 @@ class Individual
   */
   protected $projects;
 
-  /**
-  * @ORM\Column(type="simple_array")
-  */
-  protected $collaborators;
-
   // /**
-  // * many collaborators to one individual
-  // * @ORM\ManyToOne(targetEntity="individual", inversedBy="id")
-  // * @ORM\JoinColumn(name="collaborators_id", referencedColumnName="id")
+  // * @ORM\Column(type="simple_array")
   // */
-  // protected $collaborators_id;
+  // protected $all_collaborators;
+
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->projects = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->collaborators = new \Doctrine\Common\Collections\ArrayCollection();
+//        $this->collaborators = new \Doctrine\Common\Collections\ArrayCollection();
 
     }
 
@@ -107,6 +100,17 @@ class Individual
      */
     public function getId()
     {
+        return $this->id;
+    }
+
+    /**
+     * Set id
+     *
+     * @return integer
+     */
+    public function setId($id)
+    {
+      $this->id = $id;
         return $this->id;
     }
 
@@ -131,7 +135,7 @@ class Individual
      */
     public function getName()
     {
-        return $this->name;
+      return($this->name);
     }
 
     /**
@@ -258,9 +262,16 @@ class Individual
      */
     public function setResearchGroup($researchGroup)
     {
-        $this->research_group = $researchGroup;
+      $this->research_group = ($researchGroup);
+      return $this;
     }
 
+    /**
+    * Get researchGroup
+    *
+    *
+    * @return Individual
+    */
     public function getResearchGroup()
     {
       return $this->research_group;
@@ -300,30 +311,6 @@ class Individual
         return $this->projects;
     }
 
-    // /**
-    //  * Set collaboratorsId
-    //  *
-    //  * @param \AppBundle\Entity\individual $collaboratorsId
-    //  *
-    //  * @return Individual
-    //  */
-    // public function setcollaboratorsId(\AppBundle\Entity\individual $collaboratorsId = null)
-    // {
-    //     $this->collaborators_id = $collaboratorsId;
-    //
-    //     return $this;
-    // }
-    //
-    // /**
-    //  * Get collaboratorsId
-    //  *
-    //  * @return \AppBundle\Entity\individual
-    //  */
-    // public function getcollaboratorsId()
-    // {
-    //     return $this->collaborators_id;
-    // }
-
     public function __toString()
     {
       return $this->getName();
@@ -354,27 +341,27 @@ class Individual
     }
 
     /**
-     * Set motherTongue
+     * Set motherTongues
      *
-     * @param string $motherTongue
+     * @param simple_array $motherTongues
      *
      * @return Individual
      */
-    public function setMotherTongue($motherTongue)
+    public function setMotherTongues($motherTongues)
     {
-        $this->mother_tongue = $motherTongue;
+        $this->mother_tongues = $motherTongues;
 
         return $this;
     }
 
     /**
-     * Get motherTongue
+     * Get motherTongues
      *
-     * @return string
+     * @return simple_array
      */
-    public function getMotherTongue()
+    public function getMotherTongues()
     {
-        return $this->mother_tongue;
+        return $this->mother_tongues;
     }
 
     /**
@@ -423,37 +410,5 @@ class Individual
     public function getBeforeFcl()
     {
         return $this->before_fcl;
-    }
-
-    /**
-     * Set collaborators
-     *
-     * @param array $collaborators
-     *
-     * @return Individual
-     */
-    public function setCollaborators($collaborators)
-    {
-        $this->collaborators = $collaborators;
-
-        return $this;
-    }
-
-    /**
-     * Get collaborators
-     *
-     * @return array
-     */
-    public function getCollaborators()
-    {
-        return $this->collaborators;
-    }
-
-    public function addCollaborators($collaborator){
-      $data = json_decode($this->collaborators,true);
-
-      $data[] = $collaborator;
-
-      $this->collaborators = json_encode($data);
     }
 }

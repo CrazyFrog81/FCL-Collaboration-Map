@@ -11,20 +11,29 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\Common\Persistence\ObjectManager;
+use AppBundle\Form\DataTransformer\IssueToNumberTransformer;
 
 class CollaboratorType extends AbstractType
 {
+  private $manager;
+
+    public function __construct(ObjectManager $manager)
+    {
+        $this->manager = $manager;
+    }
+
   public function buildForm(FormBuilderInterface $builder, array $options)
   {
     $builder->add('id', EntityType::class, array(
-      'class' => 'AppBundle:Individual',
-      'choice_label' => 'name',
+      'label' => 'Name',
+      'class' => 'AppBundle:User',
+      'choice_label' => 'username',
       'query_builder' => function(EntityRepository $er) {
         return $er->createQueryBuilder('u')
-                  ->orderBy('u.name', 'ASC');
+                  ->orderBy('u.username', 'ASC');
         }
     ))
-    // $builder->add('id', TextType::class)
            ->add('collaborated_before', ChoiceType::class, array(
              'choices' => array(
                'Yes' => 'Yes',
@@ -33,14 +42,11 @@ class CollaboratorType extends AbstractType
              'multiple' => false,
              'expanded' => true,
            ));
-  }
 
-  public function configureOptions(OptionsResolver $resolver)
-  {
-    $resolver->setDefaults(array(
-      'data_class' => 'AppBundle\Entity\Collaborator'
-    ));
-  }
+
+   $builder->get('id')
+          ->addModelTransformer(new IssueToNumberTransformer($this->manager));
+   }
 }
 
  ?>

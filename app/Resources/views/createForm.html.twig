@@ -1,6 +1,6 @@
 {# in AppBundle/Resources/views/createForm.html.twig #}
 {% extends 'base.html.twig' %}
-{% form_theme form 'bootstrap_3_layout.html.twig'%}
+{% form_theme form 'bootstrap_3_layout.html.twig' 'jquery.collection.html.twig' %}
 {% block body %}
 <div class="col-lg-2 col-sm-3">
 </br>
@@ -48,24 +48,24 @@
         <div>
           <h3> 2.Collaboration Information</h3>
           </br>
-          <section
-    class="projects"
-    data-prototype-project="{{ form_widget(form.projects.vars.prototype) | e }}"
->
-      {% for project in form.projects %}
-      {{ form_row(project) }}
-      <label for="">collaborators</label><br>
-      <span
-    class="collaborators"
-    data-prototype-collaborator="{{ form_widget(form.projects.vars.prototype.collaborators.vars.prototype) | e }}"
-    >
-      {% for collaborator in project.collaborators %}
-    {{ form_row(collaborator) }}
-      {% endfor %}
-      </span>
-      {% endfor %}
-            <hr style="height:1px;border:none;color:#333;background-color:#333;" />
-          </section>
+          <div class="projects" data-prototype-project="{{ form_widget(form.projects.vars.prototype)|e('html_attr') }}">
+            {% for project in form.projects %}
+            <h4> Project </h4> </br>
+            <section>
+              {{ form_row(project.name) }} <br>
+              {{ form_row(project.start_date) }} <br>
+              {{ form_row(project.completion_date) }} <br>
+              {{ form_label(project.working_time) }}
+              {{ form_widget(project.working_time) }} <br>
+              {{ form_label(project.project_outcomes)}}
+              {{ form_widget(project.project_outcomes.RadioChoices) }}
+              {{ form_widget(project.project_outcomes.Others, {'attr' : {'placeholder' : 'If others, please specify here'}}) }}
+
+            <h4 class="collab_label"> Collaborator(s) </h4>
+            {{ form_row(project.collaborators) }}
+            </section>
+              {% endfor %}
+        </div>
     {% endif %}
 
     {% if flow.getCurrentStepNumber() == 3 %}
@@ -115,10 +115,10 @@
 					</dl>
 
           <legend>{{ 'Collaboration Information' }}</legend>
+          {% for project in formData.projects %}
           <p><i> Project </i></p>
           <dl>
 						<dt>{{ 'Project title' | trans }}:</dt>
-            {% for project in formData.projects %}
 						<dd>{{ project.name }}</dd>
             <dt>{{ 'Starting date' | trans }}:</dt>
             <dd>{{ project.startDate|date('Y-m-d') }}</dd>
@@ -128,27 +128,27 @@
             <dd>{{ project.workingTime }}%</dd>
             <dt>{{ 'Project outcome(s)' | trans }}:</dt>
             {% for project_outcome in project.projectOutcomes %}
-            <dd> {{ project_outcome }} </dd>
-            {% endfor %}
+            <dd> {{ project_outcome | json_encode() }} </dd>
             {% endfor %}
 					</dl>
 
           <p><i> Collaborator(s) </i></p>
           <dt>{{ 'Collaborator(s)' | trans }}:</dt>
-{#          {% for collab in formData.collaborators %}
-        <dd> {{ collab }} </dd>
-          {% endfor %} #}
-{#          {{ formData.collaborators | serialize('json') }} #}
+          {% for collab in project.Collaborators %}
+            {{ collab | json_encode() }}
+          {% endfor %}
           <hr>
-
+        {% endfor %}
 
           <legend>{{ 'Background Information' }}</legend>
           <p><i> Work related </i></p>
           <dl>
-            <dt>{{ 'Disciplinary Background(s)' | trans }}:</dt>
-            {% for disciplinary_background in formData.DisciplinaryBackgrounds%}
-            <dd>{{ disciplinary_background }}</dd>
+
+            <dt>{{ 'Disciplinary background(s)' | trans }}:</dt>
+            {% for disc in formData.DisciplinaryBackgrounds %}
+              {{ disc | json_encode() }}
             {% endfor %}
+
 
             <dt>{{ 'Working Location' | trans }}:</dt>
             {% for location in formData.Locations %}
@@ -166,8 +166,10 @@
             <hr>
             <p><i> Personal </i></p>
 
-{#            <dt>{{ 'Mother Tongue' | trans }}:</dt>
-						<dd>{{ formData.motherTongue }}</dd> #}
+            <dt>{{ 'Mother Tongue(s)' | trans }}:</dt>
+            {% for mother_tongue in formData.motherTongues%}
+						      <dd>{{ mother_tongue }}</dd>
+            {% endfor %}
 
             <dt>{{ 'Gender' | trans }}:</dt>
 						<dd>{{ formData.gender }}</dd>

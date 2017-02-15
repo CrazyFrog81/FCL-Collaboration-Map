@@ -35,21 +35,29 @@ class RadioOtherDisciplinaryType extends AbstractType
         'Psychology' => 'Psychology',
         'Sociology' => 'Sociology',
         'Urban design and planning' => 'Urban design and planning',
-        'Others' => null,
+        'Other' => 'Other',
       )
-  ));
-    $builder->add('Others', TextType::class, array(
-      'empty_data' => null,
+  ))
+   ->add('Others', TextType::class, array(
       'required' => false,
       'label' => false,
-    ));
-
-    $builder->get('RadioChoices')->addModelTransformer(new CallbackTransformer(
-      function($radioChoicesAsString) {
-        return explode(',', $radioChoicesAsString);
+    ))
+    ->addModelTransformer(new CallbackTransformer(
+      function($data)
+      {
+        if (is_array($data[0])){
+          return (array('RadioChoices' => $data[0], 'Others' => $data[1]));
+        } else {
+        return array('RadioChoices' => $data, 'Others' => null);}
       },
-      function($radioChoicesAsArray) {
-        return implode(',', $radioChoicesAsArray);
+      function ($data)
+      {
+        if (in_array('Other', $data['RadioChoices'], true)) {
+          return array($data['RadioChoices'], ($data['Others']));
+        }
+        else{
+          return $data['RadioChoices'];
+        }
       }
     ));
   }

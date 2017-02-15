@@ -22,29 +22,7 @@ class GeneralInformationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
       $builder->add('name')
-  //     ->add('name', EntityType::class, array(
-  //       'class' => 'AppBundle:Individual',
-  //       'choice_label' => 'name',
-  //       'label' => 'Your name',
-  //       'placeholder' => '--Select--',
-  //       'choice_value' => 'name',
-  //       'expanded' =>false,
-  //       'multiple' => false,
-  //       'query_builder' => function (EntityRepository $er) {
-  //     return $er->createQueryBuilder('u')
-  //         ->orderBy('u.name', 'ASC');
-  // },
-      // ))
-        ->add('research_group', ChoiceOtherRGType::class);
-
-        $builder->get('research_group')->addModelTransformer(new CallbackTransformer(
-          function($researchGroupAsString) {
-            return explode(' ', $researchGroupAsString);
-          },
-          function($researchGroupAsArray) {
-            return implode(' ', $researchGroupAsArray);
-          }
-        ));
+              ->add('research_group', ChoiceOtherRGType::class);
     }
 
 

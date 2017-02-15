@@ -4,11 +4,13 @@ parameters:
 #    parameter_name: value
 
 services:
+  
   app.form.type.collaborator:
-        class: AppBundle\Form\CollaborationInformationType
+        class: AppBundle\Form\Type\CollaboratorType
         arguments: ["@doctrine.orm.entity_manager"]
         tags:
             - { name: form.type }
+
   form.flow.createForm:
     class: AppBundle\Form\CreateFormFlow
     parent: craue.form.flow

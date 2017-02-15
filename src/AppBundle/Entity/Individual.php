@@ -3,10 +3,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-// use JMS\Serializer\SerializerBuilder;
-// use JMS\Serializer\Annotation\ExclusionPolicy;
-// use JMS\Serializer\Annotation\Expose;
-// use JMS\Serializer\Annotation as JMS;
+use AppBundle\Entity\User;
 
 /**
  * @ORM\Entity
@@ -16,10 +13,10 @@ class Individual
 {
   /**
   * @ORM\Id
-  * @ORM\Column(type="integer")
-  * @ORM\GeneratedValue(strategy="AUTO")
+  * @ORM\OneToOne(targetEntity="User")
+  * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
   */
-  public $id;
+  protected $id;
 
   /**
   * @ORM\Column(type="string")
@@ -52,7 +49,7 @@ class Individual
   protected $age;
 
   /**
-  * @ORM\Column(type="simple_array")
+  * @ORM\Column(type="json_array")
   */
   private $disciplinary_backgrounds;
 
@@ -81,6 +78,11 @@ class Individual
   */
   protected $projects;
 
+  // /**
+  // * @ORM\Column(type="simple_array")
+  // */
+  // protected $all_collaborators;
+
     /**
      * Constructor
      */
@@ -98,6 +100,17 @@ class Individual
      */
     public function getId()
     {
+        return $this->id;
+    }
+
+    /**
+     * Set id
+     *
+     * @return integer
+     */
+    public function setId($id)
+    {
+      $this->id = $id;
         return $this->id;
     }
 
@@ -122,7 +135,7 @@ class Individual
      */
     public function getName()
     {
-        return $this->name;
+      return($this->name);
     }
 
     /**
@@ -249,9 +262,16 @@ class Individual
      */
     public function setResearchGroup($researchGroup)
     {
-        $this->research_group = $researchGroup;
+      $this->research_group = ($researchGroup);
+      return $this;
     }
 
+    /**
+    * Get researchGroup
+    *
+    *
+    * @return Individual
+    */
     public function getResearchGroup()
     {
       return $this->research_group;
@@ -391,49 +411,4 @@ class Individual
     {
         return $this->before_fcl;
     }
-
-    // /**
-    //  * Set collaborators
-    //  *
-    //  * @param array $collaborators
-    //  *
-    //  * @return Individual
-    //  */
-    // public function setCollaborators($collaborators)
-    // {
-    //     $serializer = SerializerBuilder::create()->build();
-    //
-    //     $jsonCollaborator = $serializer->serialize($collaborators, 'json');
-    //
-    //     // var_dump($jsonCollaborator);
-    //
-    //     // $deserialization = $serializer->deserialize($jsonCollaborator, 'ArrayCollection<AppBundle\Entity\Collaborator>', 'json');
-    //     // var_dump($deserialization);
-    //
-    //     $this->collaborators= $jsonCollaborator;
-    //
-    //     return $this->collaborators;
-    // }
-    //
-    // /**
-    //  * Get collaborators
-    //  *
-    //  * @return array
-    //  */
-    // public function getCollaborators()
-    // {
-    //   if(count(json_decode($this->collaborators)) == 0) {
-    //     // var_dump(count(json_decode($this->collaborators)));
-    //     return $this->collaborators;
-    //   }
-    //   //var_dump(count(json_decode($this->collaborators)));
-    //   else {
-    //     $serializer = SerializerBuilder::create()->build();
-    //
-    //     $object = $serializer->deserialize($this->collaborators, 'ArrayCollection<AppBundle\Entity\Collaborator>', 'json');
-    //
-    //     return $object;
-    //   }
-    //   //return $this->collaborators;
-    // }
 }
