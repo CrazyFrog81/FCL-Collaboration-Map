@@ -10,7 +10,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\RangeType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use AppBundle\Form\Type\RadioOtherProjectType;
@@ -20,23 +19,17 @@ use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use AppBundle\Form\Type\CollaboratorType;
 use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Form\Type\ChoiceOtherProType;
+
 
 class ProjectType extends AbstractType
 {
   public function buildForm(FormBuilderInterface $builder, array $options)
   {
-    $builder->add('name')
-  //   ->add('name', EntityType::class, array(
-  //     'class' => 'AppBundle:Project',
-  //     'choice_label' => 'name',
-  //     'choice_value' => 'name',
-  //     'label' => 'Project title',
-  //     'placeholder' => '--Select--',
-  //     'query_builder' => function (EntityRepository $er) {
-  //     return $er->createQueryBuilder('u')
-  //         ->orderBy('u.name', 'ASC');
-  // },
-  //   ))
+    $builder
+    ->add('name',ChoiceOtherProType::class, array(
+      'label' => false,
+    ))
       ->add('start_date', DateType::class, array(
         'days' => array(1),
         'years' => range(2015,2020),
@@ -76,7 +69,7 @@ class ProjectType extends AbstractType
                 'class' => 'my-selector',
               )
             ));
-}
+          }
 
   public function configureOptions(OptionsResolver $resolver)
   {

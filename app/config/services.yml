@@ -4,7 +4,15 @@ parameters:
 #    parameter_name: value
 
 services:
-  
+
+  app.twig_extension:
+        class: AppBundle\Twig\AppExtension
+        public: false
+        tags:
+            - { name: twig.extension }
+        arguments:
+            doctrine: "@doctrine"
+
   app.form.type.collaborator:
         class: AppBundle\Form\Type\CollaboratorType
         arguments: ["@doctrine.orm.entity_manager"]

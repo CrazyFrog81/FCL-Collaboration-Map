@@ -78,10 +78,10 @@ class Individual
   */
   protected $projects;
 
-  // /**
-  // * @ORM\Column(type="simple_array")
-  // */
-  // protected $all_collaborators;
+  /**
+  * @ORM\Column(type="json_array")
+  */
+  protected $collaborators;
 
     /**
      * Constructor
@@ -89,8 +89,6 @@ class Individual
     public function __construct()
     {
         $this->projects = new \Doctrine\Common\Collections\ArrayCollection();
-//        $this->collaborators = new \Doctrine\Common\Collections\ArrayCollection();
-
     }
 
     /**
@@ -410,5 +408,16 @@ class Individual
     public function getBeforeFcl()
     {
         return $this->before_fcl;
+    }
+
+    public function setCollaborators($collaborators)
+    {
+      $this->collaborators = $collaborators;
+      return $this;
+    }
+
+    public function getCollaborators()
+    {
+      return $this->collaborators;
     }
 }

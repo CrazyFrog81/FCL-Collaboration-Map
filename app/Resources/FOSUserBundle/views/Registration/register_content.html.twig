@@ -1,0 +1,76 @@
+
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block content %}
+
+{{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register form-register'}}) }}
+    <h2 class="form-register-heading">Registration</h2>
+    {{ form_widget(form.email, { 'attr' : {'class': 'form-control', 'placeholder' : 'Email address'}} ) }}
+    {{ form_widget(form.username, { 'attr' : {'class': 'form-control', 'placeholder' : 'Username' }} ) }}
+    {{ form_widget(form.plainPassword.first, { 'attr' : {'class': 'form-control', 'placeholder' : 'Password' }} ) }}
+    {{ form_widget(form.plainPassword.second, { 'attr' : {'class': 'form-control', 'placeholder' : 'Repeat password' }} ) }}
+    <div>
+        <input type="submit"
+               class="btn btn-lg btn-primary btn-block button"
+               id="_submit"
+               name="_submit"
+               value="{{ 'registration.submit'|trans }}" />
+    </div>
+{{ form_end(form) }}
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+
+        .button{
+            max-width: 330px;
+            padding: 15px;
+            margin: 0 auto;
+            margin-top: 20px;
+        }
+
+        .form-register {
+            max-width: 330px;
+            padding: 15px;
+            margin: 0 auto;
+        }
+
+        .form-register-heading {
+          text-align: center;
+        }
+
+        .form-register .form-control {
+            position: relative;
+            height: auto;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .form-register .form-control:focus{
+            z-index: 2;
+        }
+
+        .form-register input[type="email"] {
+            margin-bottom: -1px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .form-register input[type="username"] {
+            margin-bottom: -1px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .form-register input[type="password"] {
+            margin-bottom: -1px;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+    </style>
+
+{% endblock %}

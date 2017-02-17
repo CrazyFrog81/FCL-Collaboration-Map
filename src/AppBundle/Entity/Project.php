@@ -55,7 +55,6 @@ class Project
   */
   protected $collaborators;
 
-
     /**
      * Get id
      *
@@ -222,25 +221,24 @@ class Project
         return $this->start_date;
     }
 
-
     /**
-     * Set collaborators
+     * Get beforeFcl
      *
-     * @param array $collaborators
-     * @return Project
+     * @return string
      */
-    public function setCollaborators($collaborators)
+    public function getBeforeFcl()
     {
-      $this->collaborators = $collaborators ;
-      return $this->collaborators;
+        return $this->before_fcl;
     }
 
-    /**
-     * Get collaborators
-     * @return array
-     */
+    public function setCollaborators($collaborators)
+    {
+      $this->collaborators = $collaborators;
+      return $this;
+    }
+
     public function getCollaborators()
     {
-      return ($this->collaborators);
+      return $this->collaborators;
     }
 }

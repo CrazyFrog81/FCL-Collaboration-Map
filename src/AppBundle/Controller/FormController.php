@@ -31,6 +31,8 @@ public function createFormAction() {
     $formData = new Individual(); // Your form data class. Has to be an object, won't work properly with an array.
     $formData->setId($this->getUser());
 
+    $projects = $formData->getProjects();
+
     $flow = $this->get('form.flow.createForm'); // must match the flow's service id
     $flow->bind($formData);
 
@@ -47,6 +49,31 @@ public function createFormAction() {
             $em = $this->getDoctrine()->getManager();
 
             $em->persist($formData);
+
+            $data = array();
+            $projects = $formData->getProjects();
+            foreach($projects as $project)
+            {
+              $collaborators = $project->getCollaborators();
+              foreach($collaborators as $collab)
+              {
+                if(sizeof($data) == 0)
+                {
+                  array_push($data, $collab);
+                } else {
+                  foreach($data as $i)
+                  {
+                    if($i['id'] === $collab['id']){
+                      break;
+                    }
+                    array_push($data, $collab);
+                  }
+                }
+              }
+            }
+
+            $formData->setCollaborators($data);
+
             $em->flush();
 
             $flow->reset(); // remove step data from the session
@@ -89,6 +116,29 @@ public function createFormAction() {
           } else {
               // flow finished
               $em = $this->getDoctrine()->getManager();
+
+              $data = array();
+              $projects = $individual->getProjects();
+              foreach($projects as $project)
+              {
+                $collaborators = $project->getCollaborators();
+                foreach($collaborators as $collab)
+                {
+                  if(sizeof($data) == 0)
+                  {
+                    array_push($data, $collab);
+                  } else {
+                    foreach($data as $i)
+                    {
+                      if($i['id'] === $collab['id']){
+                        break;
+                      }
+                      array_push($data, $collab);
+                    }
+                  }
+                }
+              }
+              $individual->setCollaborators($data);
 
               $em->flush();
 

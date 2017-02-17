@@ -29,6 +29,10 @@ class IssueToNumberTransformer implements DataTransformerInterface
             return '';
         }
 
+        if(is_string($issue)){
+          return $issue;
+        }
+
         return $issue->getId();
     }
 
@@ -44,7 +48,7 @@ class IssueToNumberTransformer implements DataTransformerInterface
         // no issue number? It's optional, so that's ok
         if (!$issueNumber) {
             return;
-        }
+          }
 
         $issue = $this->manager
             ->getRepository('AppBundle:User')

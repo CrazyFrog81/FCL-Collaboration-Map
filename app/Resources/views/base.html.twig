@@ -28,6 +28,7 @@
         {% block javascripts %}
         <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
         <script src="{{ asset('js/main.js') }}"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
         <script src="{{ asset('js/jquery.collection.js') }}"></script>
         <script type="text/javascript">
@@ -94,6 +95,17 @@
                remove: '<a href="#" class="btn btn-default"> - Remove Collaborator</a><hr>',
              });
 
+             $('[id$=_id_id]').on('input change',function(){
+               if($('[id$=_id_id]').val() == "Other")
+               {
+                 $('[id$=_id_Others]').removeAttr("disabled");
+                 $('[id$=_id_Others]').show();
+               }else {
+                 $('[id$=_id_Others]').attr("disabled", "disabled");
+                 $('[id$=_id_Others]').hide();
+               }
+             });
+
              $('input[type=range]').on('input change',function(){
                var id = ($(this).attr('id'));
                rangeFunction(id);
@@ -134,6 +146,14 @@
           }
 
         jQuery(document).ready(function() {
+          $(".my-selector").collection({
+            allow_up: $('#up').is(':checked'),
+            allow_down: $('#down').is(':checked'),
+            add_at_the_end: true,
+            add: '<a href="#" class="btn btn-default"> + Add Collaborator</a>',
+            remove: '<a href="#" class="btn btn-default"> - Remove Collaborator</a><hr>',
+          });
+
           if ($('#general_information_research_group_Choices').val() == 'Other'){
             $('#general_information_research_group_Others').removeAttr("disabled");
             $('#general_information_research_group_Others').show();
@@ -193,6 +213,40 @@
       }else{
         $('[id$=_project_outcomes_Others]').attr("disabled","disabled");
       }
+
+      $('[id$=_name_Others]').attr("disabled", "disabled");
+      $('[id$=_name_Others]').hide();
+
+      $('[id$=_name_name]').on('input change',function(){
+        if($('[id$=_name_name]').val() == "Other")
+        {
+          $('[id$=_name_Others]').removeAttr("disabled");
+          $('[id$=_name_Others]').show();
+        }else {
+          $('[id$=_name_Others]').attr("disabled", "disabled");
+          $('[id$=_name_Others]').hide();
+        }
+      });
+
+      if($('[id$=_id_id]').val() == "Other")
+      {
+        $('[id$=_id_Others]').removeAttr("disabled");
+        $('[id$=_id_Others]').show();
+      }else {
+        $('[id$=_id_Others]').attr("disabled", "disabled");
+        $('[id$=_id_Others]').hide();
+      }
+
+      $('[id$=_id_id]').on('input change',function(){
+        if($('[id$=_id_id]').val() == "Other")
+        {
+          $('[id$=_id_Others]').removeAttr("disabled");
+          $('[id$=_id_Others]').show();
+        }else {
+          $('[id$=_id_Others]').attr("disabled", "disabled");
+          $('[id$=_id_Others]').hide();
+        }
+      });
 
       $('input[type=checkbox]').on('input change',function(){
         var id =($(this).attr('id'));

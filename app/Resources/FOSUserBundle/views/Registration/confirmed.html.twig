@@ -1,0 +1,10 @@
+{% extends "@FOSUser/layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block fos_user_content %}
+    <p>{{ 'registration.confirmed'|trans({'%username%': user.username}) }}</p>
+
+    <p><a href="/">Continue to the form</a></p>
+
+{% endblock fos_user_content %}

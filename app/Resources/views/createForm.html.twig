@@ -23,7 +23,34 @@
     Steps:
     {% include '@CraueFormFlow/FormFlow/stepList.html.twig' %}
     <hr>
-    <a href="/rationale" onclick="return alertFunction()">Rationale of the project</a>
+    <!-- Trigger the modal with a button -->
+<a data-toggle="modal" data-target="#myModal">Rationale of the project</a>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Rationale of the project</h4>
+      </div>
+      <div class="modal-body" style="background-color:#F8F9F9;">
+        <div>
+        This on-line form is a part of a longitudinal research project called "Research Collaboration in FCL".</br> </br>
+        The objective is to study the pattern of research collaboration among researchers in a multi-disciplinary research institute such as FCL. You are invited to fill in this form every six months. The result will be treated as confidential. All names will be presented as anonymous in the final research output.</br></br>
+        Research Collaboration is defined as a collaboration between <u>two or more social entity</u>, where there is a <u>common shared goal</u> and <u>reciprocity</u> of actions/contributions across the collaboration timeline. </br></br>
+        Research collaboration may include co-authoring a publication, preparing a joint grant application, piloting a case study, expert consultation and data sharing. 	</br></br>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
     <hr>
 </div>
 <div class="col-md-9 col-lg-10" style="border-left:thin solid black; background-color:#F8F9F9; height:100%;">
@@ -34,7 +61,7 @@
         <div>
           <h3> 1.General Information</h3>
           </br>
-            {{ form_label(form.name) }}
+            {{ form_label(form.name)}}
             {{ form_widget(form.name) }}
             <br>
             {{ form_label(form.research_group) }}
@@ -49,8 +76,8 @@
           <h3> 2.Collaboration Information</h3>
           </br>
           <div class="projects" data-prototype-project="{{ form_widget(form.projects.vars.prototype)|e('html_attr') }}">
+          <h4> Project </h4> </br>
             {% for project in form.projects %}
-            <h4> Project </h4> </br>
             <section>
               {{ form_row(project.name) }} <br>
               {{ form_row(project.start_date) }} <br>
@@ -128,15 +155,15 @@
             <dd>{{ project.workingTime }}%</dd>
             <dt>{{ 'Project outcome(s)' | trans }}:</dt>
             {% for project_outcome in project.projectOutcomes %}
-            <dd> {{ project_outcome | json_encode() }} </dd>
+            <dd> {{ project_outcome | toString }} </dd>
             {% endfor %}
 					</dl>
 
-          <p><i> Collaborator(s) </i></p>
+  {#        <p><i> Collaborator(s) </i></p>
           <dt>{{ 'Collaborator(s)' | trans }}:</dt>
           {% for collab in project.Collaborators %}
-            {{ collab | json_encode() }}
-          {% endfor %}
+           {{ collab | collaborators }}
+          {% endfor %} #}
           <hr>
         {% endfor %}
 
@@ -146,7 +173,7 @@
 
             <dt>{{ 'Disciplinary background(s)' | trans }}:</dt>
             {% for disc in formData.DisciplinaryBackgrounds %}
-              {{ disc | json_encode() }}
+              {{ disc | toString }}
             {% endfor %}
 
 
