@@ -13,8 +13,8 @@ services:
         arguments:
             doctrine: "@doctrine"
 
-  app.form.type.collaborator:
-        class: AppBundle\Form\Type\CollaboratorType
+  app.form.type.project:
+        class: AppBundle\Form\Type\ProjectType
         arguments: ["@doctrine.orm.entity_manager"]
         tags:
             - { name: form.type }

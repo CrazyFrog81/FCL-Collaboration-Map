@@ -1,28 +1,29 @@
 <!DOCTYPE html>
 <html>
-    <head>
+    <head style="font-family: lato;">
         <meta charset="UTF-8" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link rel="stylesheet" href="{{ asset('css/form-flow.css') }}" />
+        <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato" />
         <title>{% block title %}Data Collection Form{% endblock %}</title>
         {% block stylesheets %}
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
         <header class="col-md-12" style="border-bottom:thin solid black;">
-          <div style="font-size:150%; font-style:italic; font-weight:bold;">
+          <div style="font: italic bold 20px lato;">
           </br>
           Research Collaboration in FCL: </br>
           Data Collection Form </br>
         </div>
         <div style="float:right;">
-          <img src="{{ asset('images/fcl.jpg') }}" alt="FCL" style="height:60%; width:auto; position:absolute; top:10px; right:10px;">
-        <span style="padding-right:30px;">
+          <img src="{{ asset('images/fcl.jpg') }}" alt="FCL" style="height:43px; width:197px; position:absolute; top:10px; right:28px;">
+        <span style="padding-right:10px; font-size:12px;">
           Developed by CIVAL
         </span>
         </div>
         </header>
     </head>
-<body>
+<body style="font-family:lato;">
 {% block content %}
   <div class="col-lg-2 col-sm-3">
       {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
@@ -54,7 +55,7 @@
       {% endfor %}
   {% endif %}
 
-  <div class="col-md-9 col-lg-10" style="border-left:thin solid black; background-color:#F8F9F9; height:100vh;">
+  <div class="col-md-9 col-lg-10" style="font-family:lato;border-left:thin solid black; background-color:#F8F9F9; height:100vh;">
       {% block fos_user_content %}
       {% endblock fos_user_content %}
   </div>

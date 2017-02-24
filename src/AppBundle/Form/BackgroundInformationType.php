@@ -37,7 +37,7 @@ class BackgroundInformationType extends AbstractType
           'choices' => array(
             'FCL level 6' => 'FCL level 6',
             'FCL level 15' => 'FCL level 15',
-            'Other location in CREATE' => 'Other location in CREATE',
+            'Other location' => 'Other location',
             'ETH Zurich' => 'ETH Zurich',
             'EPFL' => 'EPFL',
             'NUS' => 'NUS',
@@ -46,9 +46,12 @@ class BackgroundInformationType extends AbstractType
           ),
         ))
         ->add('start_date', BirthdayType::class, array(
+          'placeholder' => array(
+            'year' => '--Year--', 'month' => '--Month--',
+          ),
           'label' => 'When did you start working in/with FCL?',
           'days' => array(1),
-          'years' => range(1990,2017),
+          'years' => range(2010,2017),
         ))
         ->add('before_fcl', ChoiceType::class, array(
           'label' => 'How long have you been working as a researcher* before joining FCL?',
@@ -75,6 +78,7 @@ class BackgroundInformationType extends AbstractType
         ->add('mother_tongues', LanguageType::class, array(
               'attr' => array(
                 'class' => 'mother_tongues',
+                'style' => 'width:50%',
               ),
               'label' => 'Mother tongue(s)',
               'multiple' => 'multiple',

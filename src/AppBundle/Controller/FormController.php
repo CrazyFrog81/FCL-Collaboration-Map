@@ -31,8 +31,6 @@ public function createFormAction() {
     $formData = new Individual(); // Your form data class. Has to be an object, won't work properly with an array.
     $formData->setId($this->getUser());
 
-    $projects = $formData->getProjects();
-
     $flow = $this->get('form.flow.createForm'); // must match the flow's service id
     $flow->bind($formData);
 
@@ -57,18 +55,7 @@ public function createFormAction() {
               $collaborators = $project->getCollaborators();
               foreach($collaborators as $collab)
               {
-                if(sizeof($data) == 0)
-                {
-                  array_push($data, $collab);
-                } else {
-                  foreach($data as $i)
-                  {
-                    if($i['id'] === $collab['id']){
-                      break;
-                    }
-                    array_push($data, $collab);
-                  }
-                }
+                array_push($data,$collab);
               }
             }
 
@@ -78,7 +65,7 @@ public function createFormAction() {
 
             $flow->reset(); // remove step data from the session
 
-            return $this->redirect($this->generateUrl('edit')); // redirect when done
+            return $this->redirect($this->generateUrl('sucess')); // redirect when done
         }
     }
 
@@ -106,6 +93,7 @@ public function createFormAction() {
       $flow = $this->get('form.flow.createForm'); // must match the flow's service id
       $flow->bind($individual);
 
+
       $form = $flow->createForm();
       if ($flow->isValid($form)) {
           $flow->saveCurrentStepData($form);
@@ -124,18 +112,7 @@ public function createFormAction() {
                 $collaborators = $project->getCollaborators();
                 foreach($collaborators as $collab)
                 {
-                  if(sizeof($data) == 0)
-                  {
-                    array_push($data, $collab);
-                  } else {
-                    foreach($data as $i)
-                    {
-                      if($i['id'] === $collab['id']){
-                        break;
-                      }
-                      array_push($data, $collab);
-                    }
-                  }
+                  array_push($data,$collab);
                 }
               }
               $individual->setCollaborators($data);
@@ -144,7 +121,7 @@ public function createFormAction() {
 
               $flow->reset(); // remove step data from the session
 
-              return $this->redirect($this->generateUrl('edit')); // redirect when done
+              return $this->redirect($this->generateUrl('sucess')); // redirect when done
           }
       }
       return $this->render('createForm.html.twig', array(
@@ -153,6 +130,22 @@ public function createFormAction() {
           'formData' => $individual,
       ));
 
+    }
+
+    /**
+    * @Route("/success", name="sucess")
+    */
+    public function successFormAction()
+    {
+      $userId = $this->getUser()->getId();
+
+      $individual = $this->getDoctrine()->getRepository('AppBundle:Individual')->find($userId);
+
+      if(!$individual){
+        return $this->redirect($this->generateUrl('form'));
+      }
+
+      return $this->render('success.html.twig');
     }
 }
 

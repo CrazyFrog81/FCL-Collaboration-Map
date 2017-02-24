@@ -5,52 +5,129 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link rel="stylesheet" href="{{ asset('css/form-flow.css') }}" />
         <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato" />
         <title>{% block title %}Data Collection Form{% endblock %}</title>
         {% block stylesheets %}
+        <style>
+        body {
+          max-width: 100%;
+          overflow-x: hidden;
+          font-family: lato;
+          padding-top:112px;
+          font-size: 12px;
+        }
+        head{
+          font-family: lato;
+          font-size: 12px;
+        }
+        .affix{
+          top:100px;
+          width: 17.3%;
+        }
+        :target:before {
+          content:"";
+          display:block;
+          height:150px; /* fixed header height*/
+          margin:-150px 0 0; /* negative fixed header height */
+          }
+        .number{
+          margin-right: 10px;
+        	content: counter(item);
+        	background: black;
+        	border-radius: 100%;
+        	color: white;
+        	width: 1.2em;
+        	text-align: center;
+        	display: inline-block;
+        }
+        .legend{
+          font-weight: bolder;
+          font-size:14px;
+        }
+        hr{
+          background-color: #C8C8C8;
+          height:1px;
+        }
+        dt{
+          font-size:10px;
+        }
+        dd{
+          font-size:14px;
+          font-weight: bold;
+        }
+        input[type="range"]{
+          -webkit-appearance: none;
+          -moz-apperance: none;
+          height: 0px;
+          width: 0px;
+          background-image: -webkit-gradient(
+              linear,
+              left top,
+              right top,
+          )}
+    input[type='range']::-webkit-slider-thumb {
+            -webkit-appearance: none !important;
+            background-color: #5cb8d6;
+            border: 1px solid #5cb8d6;
+            height: 20px;
+            width: 20px;
+        }
+        </style>
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-        <header class="col-md-12" style="border-bottom:thin solid black;">
-          <div style="font-size:150%; font-style:italic; font-weight:bold;">
+        <header class="col-md-12 navbar-fixed-top navbar" style="background-color:white; border-bottom:thin solid black;">
+          <div style="font: italic bolder 20px lato;">
           </br>
           Research Collaboration in FCL: </br>
           Data Collection Form </br>
         </div>
         <div style="float:right;">
-          <img src="{{ asset('images/fcl.jpg') }}" alt="FCL" style="height:60%; width:auto; position:absolute; top:10px; right:10px;">
-        <span style="padding-right:30px;">
+          <img src="{{ asset('images/fcl.jpg') }}" alt="FCL" style="height:43px; width:197px; position:absolute; top:10px; right:28px;">
+        <span style="padding-right:10px; font-size:12px;">
           Developed by CIVAL
         </span>
         </div>
         </header>
     </head>
-    <body>
+    <body class="col-md-12">
         {% block body %}{% endblock %}
         {% block javascripts %}
         <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
         <script src="{{ asset('js/main.js') }}"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+        <script src="https://use.fontawesome.com/3c81317088.js"></script>
         <script src="{{ asset('js/jquery.collection.js') }}"></script>
         <script type="text/javascript">
 
-        $(".mother_tongues").select2();
+        // Allow multiple selection, select2 plugin
+        $(".mother_tongues").select2({
+          placeholder: '--Multiple Select--',
+          allowClear: true,
+        });
 
+        // Collection holder for the project collection
         var $collectionHolder;
 
+        var existing_project_count=0;
+
+        // To produce project number in the form
+        var project_index = 2;
+
         // setup an "add a project" link
-        var $addprojectLink = $('<a href="#" class="add_project_link btn btn-default glyphicon glyphicon-plus-sign"></a> <span>Add a project</span>');
+        var $addprojectLink = $('<a href="#" class="add_project_link"><i class="fa fa-plus-circle" style="color:green;"><span style="color:black; font: italic bold 14px lato;"> Add a project </b></span></i></a>');
         var $newLinkLi = $('<section></section>').append($addprojectLink);
 
           jQuery(document).ready(function() {
-              // Get the ul that holds the collection of projects
+              // Get the div that holds the collection of projects
               $collectionHolder = $('div.projects');
 
-              // add a delete link to all of the existing project form li elements
+              // add a delete link to all of the existing project form section elements
               $collectionHolder.find('section').each(function() {
                   addprojectFormDeleteLink($(this));
               });
 
-              // add the "add a project" anchor and li to the projects ul
+              // add the "add a project" anchor and section to the projects div
               $collectionHolder.append($newLinkLi);
 
               // count the current form inputs we have (e.g. 2), use that as the new
@@ -80,80 +157,295 @@
               // increase the index with one for the next item
               $collectionHolder.data('index', index + 1);
 
-              // Display the form in the page in an li, before the "Add a project" link li
-              var $newFormLi = $('<section></section>').append(newForm);
+              // Display the form in the page in an li, before the "Add a project" link section
+              var $newFormLi = $('<section class="tab-pane active" id="projectIndex'+ index +'"></section>').append(newForm);
+
+              // Due to the way the project label is attached, hence minus one to match with the project list shown at the side bar
+              var number = project_index - 1;
+
+              // Adding project list at the side bar
+              $('ul.projectList').append('<li><a href="#projectIndex'+ index +'">Project ' + number +'</a></li>');
+
               $newLinkLi.before($newFormLi);
 
               // add a delete link to the new form
              addprojectFormDeleteLink($newFormLi);
 
-             $(".my-selector").collection({
-               allow_up: $('#up').is(':checked'),
-               allow_down: $('#down').is(':checked'),
-               add_at_the_end: true,
-               add: '<a href="#" class="btn btn-default"> + Add Collaborator</a>',
-               remove: '<a href="#" class="btn btn-default"> - Remove Collaborator</a><hr>',
-             });
+             // Hide and disabled 'Others' textbox accordingly
+             collectionOfCollaborators();
 
-             $('[id$=_id_id]').on('input change',function(){
-               if($('[id$=_id_id]').val() == "Other")
-               {
-                 $('[id$=_id_Others]').removeAttr("disabled");
-                 $('[id$=_id_Others]').show();
-               }else {
-                 $('[id$=_id_Others]').attr("disabled", "disabled");
-                 $('[id$=_id_Others]').hide();
-               }
-             });
-
+             // Update value of the range slider
              $('input[type=range]').on('input change',function(){
                var id = ($(this).attr('id'));
                rangeFunction(id);
               });
 
-              $('[id$=_project_outcomes_Others]').attr("disabled","disabled");
-              $('[id$=_project_outcomes_Others]').attr("placeholder", "If others, please specify here");
-              $('.collab_label').remove();
-              $('[id$=_project_outcomes_Others]').after("<h4 class='collab_label'>Collaborator(s)</h4>");
+            // Upload value of the range slider
+            $("input[type=range]").each(function(){
+              var id = ($(this).attr('id'));
+              rangeFunction(id);
+            });
 
-              $('input[type=checkbox]').on('input change',function(){
-                var id =($(this).attr('id'));
-                if(id.substr(id.length - 1) == '6')
-                {
-                  var other_id = id.replace("RadioChoices_6", "Others");
-                  if($('#' + id).is(':checked')){
-                    $('#' + other_id).removeAttr("disabled");
-                  }else{
-                    $('#' + other_id).attr("disabled", "disabled");
-                  }
-                }
-              });
-            }
+            // Hide and disabled 'Others' textbox accordingly
+            checkboxFunction();
 
-          function addprojectFormDeleteLink($projectFormLi) {
-              var $removeFormA = $('<a href="#" class="delete btn btn-default glyphicon glyphicon-trash"></a> <span>Delete this project</span>');
+            // Hide and disabled 'Others' textbox accordingly
+            projectTitleFunction();
 
-              $projectFormLi.append($removeFormA);
-
-              $projectFormLi.append('<hr style="height:1px;border:none;color:#333;background-color:#333;" /><h4>Project</h4><br>');
-
-              $removeFormA.on('click', function(e) {
-                  // prevent the link from creating a "#" on the URL
-                  e.preventDefault();
-                  // remove the li for the project form
-                  $projectFormLi.remove();
-              });
+            // For all the 'day' in dates are by default '1'
+            // No need for user input
+           $("[id$=_day]").hide();
           }
 
-        jQuery(document).ready(function() {
-          $(".my-selector").collection({
-            allow_up: $('#up').is(':checked'),
-            allow_down: $('#down').is(':checked'),
-            add_at_the_end: true,
-            add: '<a href="#" class="btn btn-default"> + Add Collaborator</a>',
-            remove: '<a href="#" class="btn btn-default"> - Remove Collaborator</a><hr>',
+        function addprojectFormDeleteLink($projectFormLi) {
+            var $removeFormA = $('<hr><a href="#" class="delete"> <i class="fa fa-minus-circle" style="color:orange;"><span style="color:black; font: italic 12px lato;"> Remove this project</span></i></a>');
+
+            $projectFormLi.append($removeFormA);
+
+            // Append project title with numbers
+            $projectFormLi.append('<hr style="height:3px;" /><h3 id="project_label_' + project_index + '" style="font-weight:bold; font-size:14px;">Project #' + project_index +'</h3><br>');
+
+            project_index++;
+
+            $removeFormA.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+                // Due to the way the project title is attached
+                // To match the project title and project list
+                var delete_text = $('li.active').text();
+                var li_id = $('li.active').next().text();
+                var substring = delete_text.substring(0,7); //Project
+                if(substring == 'Project')
+                {
+                  var index_result = li_id.match(/\d+/);
+                  var result = 'Project #' + index_result;
+                  var delete_text_index = delete_text.match(/\d+/);
+                }
+                else{
+                  var index_result = li_id.match(/\d+/);
+                  var result = 'Project #' + index_result;
+                  var delete_text_index = existing_project_count - 1;
+                }
+                if(!li_id)
+                {
+                  var text;
+                  $('[id^=project_label_]').each(function(){
+                    text = $(this).text().match(/\d+/);
+                  });
+                  var result = 'Project #' + text;
+                }
+                $('#project_label_' + delete_text_index).text(result);
+
+
+
+                // Remove project list which is deleted
+                $('li.active').remove();
+
+                // Remove one project form
+                $projectFormLi.remove();
+            });
+        }
+
+      jQuery(document).ready(function() {
+
+        /* All ----Function() are to hide and disable 'Others' textbox accordingly */
+
+        collectionOfCollaborators();
+
+        researchGroupFunction();
+
+        nationalityFunction();
+
+        disciplinaryBackgroundFunction();
+
+        $('input[type=range]').on('input change',function(){
+          var id = ($(this).attr('id'));
+          rangeFunction(id);
+        });
+
+        $("input[type=range]").each(function(){
+          var id = ($(this).attr('id'));
+          rangeFunction(id);
+        });
+
+        checkboxFunction();
+
+        projectTitleFunction();
+
+        $("[id$=_day]").hide();
+
+        collaboratorsFunction();
+
+        toCamelCaseFunction('#general_information_name');
+
+        toCamelCaseFunction('#general_information_research_group_Others');
+
+        $('.my-selector').wrap("<div class='my-selector_style' style='position:relative; left:15%;' </div>");
+        $('.add_collaborator').removeAttr('style');
+
+        $('[id^=project_label_]').each(function(){
+          existing_project_count++;
+        });
+
+        $('li.stepLi').each(function(){
+          if($(this).css('color') == 'rgb(0, 0, 0)'){
+            $(this).find('span.stepLiNumber').css('background-color','black');
+          }
+        });
+
+      });
+
+      function toCamelCaseFunction(id)
+      {
+        $(id).on('keyup', function(){
+          var text = $(this).val();
+          if (text){
+            for(var i = 0; i < text.length; i++)
+            {
+              if(i == 0){
+                var result = text[i].toUpperCase();
+              }
+              else if(text[i - 1] == ' ')
+              {
+                result = result + text[i].toUpperCase();
+              }else{
+                result = result + text[i];
+              }
+            }
+          }
+          $(this).val(result);
+        });
+
+      }
+
+      function rangeFunction(id){
+        var val = ($('#' + id).val() - 0) / (100 - 0);
+
+        $('#' +id).css('background-image',
+                    '-webkit-gradient(linear, left top, right top, '
+                    + 'color-stop(' + val + ', #808080), '
+                    + 'color-stop(' + val + ', #FFFFFF)'
+                    + ')'
+                    );
+        $("#range_label" + id).remove();
+        $("#" + id).after('<div id="range_label'+ id + '"><br><input readonly="readonly" style="width:60px; background:white" class="form-control" type="text" id="value' + id + '"></input></div>' );
+        var x = document.getElementById(id).value;
+        $("#value" + id).val(x + '%');
+      }
+
+      function collectionOfCollaborators(){
+        $('.each_collab_label').before('<hr class="style">');
+        $('.style').remove();
+        // Using jquery-symfony-collection plugin
+        $(".my-selector").collection({
+          min : 1,
+          allow_up: $('#up').is(':checked'),
+          allow_down: $('#down').is(':checked'),
+          add_at_the_end: true,
+          custom_remove_location:true,
+          add: '<a href="#" class="add_collaborator" style="position:relative; left:15%;"><i class="fa fa-plus-circle" style="color:green;"><span style="color:black; font: bold italic 14px lato;"> Add a collaborator</span></i></a>',
+          remove: '<a href="#" class="collection-remove"></br><i class="fa fa-minus-circle" style="color:orange;"><span style="color:black; font: italic 12px lato;"> Remove this person</span></br></i></a><hr style="width:85%; margin-left:0px;">',
+          // Hide and disable 'Others' textbox accordingly
+          after_add: function(collection,element){
+            collaboratorsFunction();
+            $('.add_collaborator').removeAttr('style');
+            $(collection).unwrap();
+            $(collection).wrap("<div class='my-selector_style' style='position:relative; left:15%;' </div>");
+            $('.each_collab_label').before('<hr class="style">');
+            $('.style').remove();
+            var collection_id = ($(collection).attr('id'));
+            $('[id^=' + collection_id + '][id$=_id_id]').each(function(){
+              var element_id = '#' + $(this).attr('id');
+              var idOther = element_id.replace(/id$/,'') + 'Others';
+              if($(this).val() == 'Other'){
+                $(idOther).show();
+                $(idOther).removeAttr('disabled');
+              }
+              else {
+                $(idOther).hide();
+                $(idOther).attr('disabled','disabled');
+              }
+            });
+
+            $('[id^=' + collection_id + '][id$=_id_id]').on('input change',function(){
+              var element_id = '#' + $(this).attr('id');
+              var idOther = element_id.replace(/id$/,'') + 'Others';
+              if($(this).val() == 'Other'){
+                $(idOther).show();
+                $(idOther).removeAttr('disabled');
+              }
+              else {
+                $(idOther).hide();
+                $(idOther).attr('disabled','disabled');
+              }
+            });
+          },
+        });
+      }
+
+        function checkboxFunction()
+        {
+          $("input[type=checkbox]").each(function(){
+            //additional of adding the 'Collaborator(s) label'
+            $('.hr_label').remove();
+            $('[id$=_project_outcomes_Others]').after("<span class='hr_label'><hr></span>");
+            var id =($(this).attr('id'));
+            if(id.substr(id.length - 1) == '6')
+            {
+              var other_id = id.replace("RadioChoices_6", "Others");
+              if($('#' + id).is(':checked')){
+                $('#' + other_id).removeAttr("disabled");
+              }else{
+                $('#' + other_id).attr("disabled", "disabled");
+              }
+            }
           });
 
+          $('input[type=checkbox]').on('input change',function(){
+            var id =($(this).attr('id'));
+            if(id.substr(id.length - 1) == '6')
+            {
+              var other_id = id.replace("RadioChoices_6", "Others");
+              if($('#' + id).is(':checked')){
+                $('#' + other_id).removeAttr("disabled");
+              }else{
+                $('#' + other_id).attr("disabled", "disabled");
+              }
+            }
+          });
+        }
+
+        function projectTitleFunction()
+        {
+          $("[id$=_name_name]").each(function(){
+            var id = '#' + $(this).attr('id');
+            var idOther = id.replace(/name$/,'') + 'Others';
+            if($(id).val() === 'Other'){
+              toCamelCaseFunction(idOther);
+              $(idOther).show();
+              $(idOther).removeAttr("disabled");
+            } else{
+              $(idOther).hide();
+              $(idOther).attr("disabled", "disabled");
+            }
+          });
+
+         $("[id$=_name_name]").on('input change', function(){
+           var id = '#' + $(this).attr('id');
+           var idOther = id.replace(/name$/,'') + 'Others';
+           if($(id).val() === 'Other'){
+             toCamelCaseFunction(idOther);
+             $(idOther).show();
+             $(idOther).removeAttr("disabled");
+           } else{
+             $(idOther).hide();
+             $(idOther).attr("disabled", "disabled");
+           }
+         });
+        }
+
+        function researchGroupFunction()
+        {
           if ($('#general_information_research_group_Choices').val() == 'Other'){
             $('#general_information_research_group_Others').removeAttr("disabled");
             $('#general_information_research_group_Others').show();
@@ -171,8 +463,12 @@
             $('#general_information_research_group_Others').hide();
           }
           });
+        }
 
+        function nationalityFunction()
+        {
           if ($('#background_information_nationality_Choices').val() == 'Other'){
+            toCamelCaseFunction('#background_information_nationality_Others');
             $('#background_information_nationality_Others').removeAttr("disabled");
             $('#background_information_nationality_Others').show();
           }else{
@@ -182,6 +478,7 @@
 
           $('#background_information_nationality_Choices').on("change",function(){
           if ($('#background_information_nationality_Choices').val() == 'Other'){
+            toCamelCaseFunction('#background_information_nationality_Others');
             $('#background_information_nationality_Others').removeAttr("disabled");
             $('#background_information_nationality_Others').show();
           }else{
@@ -189,7 +486,9 @@
             $('#background_information_nationality_Others').hide();
           }
           });
+        }
 
+        function disciplinaryBackgroundFunction(){
           if ($('#background_information_disciplinary_backgrounds_RadioChoices_15').is(':checked')){
             $('#background_information_disciplinary_backgrounds_Others').removeAttr("disabled");
         }else {
@@ -202,83 +501,40 @@
       }else {
         $('#background_information_disciplinary_backgrounds_Others').attr("disabled","disabled");
       }});
+        }
 
-        $('input[type=range]').on('input change',function(){
-          var id = ($(this).attr('id'));
-          rangeFunction(id);
+        function collaboratorsFunction()
+        {
+          $("[id$=_id_id]").each(function(){
+            var id = '#' + $(this).attr('id');
+            var idOther = id.replace(/id$/,'') + 'Others';
+            $(idOther).css('text-transform','capitalize');
+            if($(id).val() === 'Other'){
+              toCamelCaseFunction(idOther);
+              $(idOther).show();
+              $(idOther).removeAttr("disabled");
+            } else{
+              $(idOther).hide();
+              $(idOther).attr("disabled", "disabled");
+            }
+          });
+
+
+        $('[id$=_id_id]').on('input change',function(){
+            var element_id = '#' + $(this).attr('id');
+            var idOther = element_id.replace(/id$/,'') + 'Others';
+            if($(this).val() === 'Other'){
+              toCamelCaseFunction(idOther);
+              $(idOther).show();
+              $(idOther).removeAttr('disabled');
+            }
+            else {
+              $(idOther).hide();
+              $(idOther).attr('disabled','disabled');
+            }
         });
-
-      if($('[id$=_project_outcomes_RadioChoices_6]').is(':checked')){
-        $('[id$=_project_outcomes_Others]').removeAttr("disabled");
-      }else{
-        $('[id$=_project_outcomes_Others]').attr("disabled","disabled");
-      }
-
-      $('[id$=_name_Others]').attr("disabled", "disabled");
-      $('[id$=_name_Others]').hide();
-
-      $('[id$=_name_name]').on('input change',function(){
-        if($('[id$=_name_name]').val() == "Other")
-        {
-          $('[id$=_name_Others]').removeAttr("disabled");
-          $('[id$=_name_Others]').show();
-        }else {
-          $('[id$=_name_Others]').attr("disabled", "disabled");
-          $('[id$=_name_Others]').hide();
-        }
-      });
-
-      if($('[id$=_id_id]').val() == "Other")
-      {
-        $('[id$=_id_Others]').removeAttr("disabled");
-        $('[id$=_id_Others]').show();
-      }else {
-        $('[id$=_id_Others]').attr("disabled", "disabled");
-        $('[id$=_id_Others]').hide();
-      }
-
-      $('[id$=_id_id]').on('input change',function(){
-        if($('[id$=_id_id]').val() == "Other")
-        {
-          $('[id$=_id_Others]').removeAttr("disabled");
-          $('[id$=_id_Others]').show();
-        }else {
-          $('[id$=_id_Others]').attr("disabled", "disabled");
-          $('[id$=_id_Others]').hide();
-        }
-      });
-
-      $('input[type=checkbox]').on('input change',function(){
-        var id =($(this).attr('id'));
-        if(id.substr(id.length - 1) == '6')
-        {
-          var other_id = id.replace("RadioChoices_6", "Others");
-          if($('#' + id).is(':checked')){
-            $('#' + other_id).removeAttr("disabled");
-          }else{
-            $('#' + other_id).attr("disabled", "disabled");
-          }
-        }
-      });
-
-        });
-
-        function rangeFunction(id){
-          $("#range_label" + id).remove();
-          $("#" + id).after('<div id="range_label'+ id + '">Value : <span id="value' + id + '"></span>%</div>' );
-          var x = document.getElementById(id).value;
-          document.getElementById("value" + id).innerHTML = x;
         }
 
-        function alertFunction(){
-          var x;
-          if(confirm("Data entered will not be saved. Do you want to proceed?") == true){
-            return true;
-          }
-          else {
-            return false;
-          }
-        }
 
         </script>
         {% endblock %}

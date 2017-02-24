@@ -1,0 +1,63 @@
+{# in AppBundle/Resources/views/createForm.html.twig #}
+{% extends 'base.html.twig' %}
+{% block body %}
+
+<div class="col-lg-2 col-sm-3" style="position:fixed; width:20%; top:100px;">
+</br>
+<a href=/edit style="font: bold 14px lato">Edit form</a>
+<hr>
+    <!-- Trigger the modal with a button -->
+    <a data-toggle="modal" data-target="#myModal" style="font: bold 14px lato">Rationale of the project</a>
+    <hr>
+</div>
+{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+<div style="position:fixed; bottom:10%; left:3%; font-size:12px;">
+    {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}<br /></br>
+    <a class="btn btn-default" style="font-size:12px; font-weight:bold; color:black;" href="{{ path('fos_user_security_logout') }}">
+        {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+    </a>
+</div>
+{% else %}
+    <br>
+    <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+    <hr>
+    <a href="{{ path('fos_user_registration_register') }}">{{ 'layout.register'|trans({}, 'FOSUserBundle') }}</a>
+    <hr>
+    <a href="/resetting/request">Reset Password</a>
+    <hr>
+{% endif %}
+
+<div class="col-md-9 col-lg-10" style="background-color:#F8F9F9; position:fixed; border-left:thin solid black; width:80%; height:100vh; left: 20%; top:8%;">
+
+<br><br>
+<h1> Thanks for your cooperation! </h1>
+<h5> You can edit whenever you want from the side bar.</h5>
+
+</div>
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog" style="position:relative;">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Rationale of the project</h4>
+      </div>
+      <div class="modal-body" style="background-color:#F8F9F9;">
+        <div>
+        This on-line form is a part of a longitudinal research project called "Research Collaboration in FCL".</br> </br>
+        The objective is to study the pattern of research collaboration among researchers in a multi-disciplinary research institute such as FCL. You are invited to fill in this form every six months. The result will be treated as confidential. All names will be presented as anonymous in the final research output.</br></br>
+        Research Collaboration is defined as a collaboration between <u>two or more social entity</u>, where there is a <u>common shared goal</u> and <u>reciprocity</u> of actions/contributions across the collaboration timeline. </br></br>
+        Research collaboration may include co-authoring a publication, preparing a joint grant application, piloting a case study, expert consultation and data sharing. 	</br></br>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

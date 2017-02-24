@@ -14,15 +14,15 @@ class CreateFormFlow extends FormFlow {
     protected function loadStepsConfig() {
         return array(
             array(
-                'label' => 'General Information',
+                'label' => 'Initial Information',
                 'form_type' => 'AppBundle\Form\GeneralInformationType',
             ),
             array(
-                'label' => 'Collaboration Information',
+                'label' => 'Collaboration',
                 'form_type' => 'AppBundle\Form\CollaborationInformationType',
             ),
             array(
-                'label' => 'Background Information',
+                'label' => 'Background',
                 'form_type' => 'AppBundle\Form\BackgroundInformationType',
             ),
             array(

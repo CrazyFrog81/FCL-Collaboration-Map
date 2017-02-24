@@ -6,6 +6,7 @@ namespace AppBundle\Twig;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use AppBundle\Entity\User;
+use Symfony\Component\Intl\Intl;
 
 class AppExtension extends \Twig_Extension
 {
@@ -21,24 +22,36 @@ class AppExtension extends \Twig_Extension
     return array(
       new \Twig_SimpleFilter('collaborators', array($this, 'nameFilter')),
       new \Twig_SimpleFilter('toString', array($this, 'toStringFilter')),
+      new \Twig_SimpleFilter('projectList', array($this, 'projectListFilter')),
+      new \Twig_SimpleFilter('section', array($this,'sectionFilter')),
+      new \Twig_SimpleFilter('mother_tongue', array($this, 'motherTongueFilter')),
+      new \Twig_SimpleFilter('collaborator_label', array($this, 'collaboratorLabelFilter')),
+      new \Twig_SimpleFilter('project_label', array($this, 'projectLabelFilter')),
     );
   }
 
   public function nameFilter($data)
   {
-    $user = $this->doctrine->getRepository('AppBundle:User')->find($data['id']);
+    if(!is_numeric($data['id'])){
+      $name = $data['id'];
+      $name = str_replace(" ","_", $name);
+    } else{
+      $user = $this->doctrine->getRepository('AppBundle:User')->find($data['id']);
 
-    $name = $user->getUserName();
+      $name = $user->getUserName();
+    }
 
     $nameArray = explode(" ", $name);
     $choiceArray = explode(" ", $data['collaborated_before']);
 
     foreach($nameArray as $i){
-      print_r("Name : " . $i);
-      print_r('<br>');
+      print_r('</br>');
+      $i = str_replace("_", " ", $i);
+      print_r("Name : " . "<br /><span style='font: bold 14px lato;'>". $i ."</span>");
+      print_r('</br>');
       foreach($choiceArray as $j){
-        print_r("Collaborated Before : " . $j);
-        print_r('<br>');
+        print_r("Collaborated Before : " . "<br /><span style='font: bold 14px lato;'>". $j ."</span>");
+        print_r('</br>');
       }
     }
   }
@@ -46,9 +59,51 @@ class AppExtension extends \Twig_Extension
   public function toStringFilter($data)
   {
     $string = json_encode($data);
-    $replace = str_replace(array('[', '"', ']', 'Other'), ' ', $string);
+    $other = (strpos($string, 'Other'));
+    if ($other == null)
+    {
+      $replace = str_replace(array('[', ']', 'Other'), ' ', $string);
+    }
+    else {
+      $replace = str_replace(array('[', '"', ']', 'Other'), ' ', $string);
+
+    }
     $array = explode(",", $replace);
-    print_r(implode(",", $array));
+    return join(",", $array);
+  }
+
+  public function projectListFilter($data)
+  {
+    $index = str_replace(' ','_', $data);
+    print_r('<li><a href="#'. $index .'">'. $data .'</a></li>');
+  }
+
+  public function sectionFilter($data)
+  {
+    if(null === $data)
+    {
+      return '<section>';
+    }
+    else {
+      $data = str_replace(' ','_', $data);
+      print_r( '<section id="'. $data .'">');
+    }
+  }
+
+  public function motherTongueFilter($data)
+  {
+      $languages = Intl::getLanguageBundle()->getLanguageNames('en');
+      return($languages[$data]);
+  }
+
+  public function collaboratorLabelFilter($data)
+  {
+    return ('Collaborator #' . $data);
+  }
+
+  public function projectLabelFilter($data)
+  {
+    return ('Project #' . $data);
   }
 
   public function getName()

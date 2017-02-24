@@ -19,12 +19,15 @@ use Doctrine\ORM\EntityRepository;
 
 class ChoiceOtherProType extends AbstractType
 {
-
   public function buildForm(FormBuilderInterface $builder, array $options)
   {
     $builder
     ->add('name', EntityType::class, array(
       'class' => 'AppBundle:Project',
+      'placeholder' => '--Select--',
+      'attr' => array(
+        'style' => 'width:50%',
+      ),
       'choice_label' => 'name',
       'choice_value' => 'name',
       'label' => 'Project title',
@@ -34,22 +37,12 @@ class ChoiceOtherProType extends AbstractType
   },
     ))
     ->add('Others', TextType::class, array(
-      'required' => false,
+      'required' => true,
       'label' => false,
-    ))
-    ->addModelTransformer(new CallbackTransformer(
-      function($data)
-      {
-        return array('name' => $data, 'Others' => null);
-      },
-      function ($data)
-      {
-        if ('Other' === $data['name']) {
-          return $data['Others'];
-        }
-
-        return $data['name'];
-      }
+      'attr' => array(
+        'placeholder' => 'If others, please specify here',
+        'style' => 'width:50%;',
+      )
     ));
 
     $builder->get('name')->resetViewTransformers();

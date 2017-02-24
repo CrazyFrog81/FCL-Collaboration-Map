@@ -18,6 +18,10 @@ class ChoiceOtherNatType extends AbstractType
   {
     $builder->add('Choices', ChoiceType::class, array(
       'label' => false,
+      'placeholder' => '--Select--',
+      'attr' => array(
+        'style' => 'width:50%',
+      ),
       'choices' => array(
         'Australian' => 'Australian',
         'Chinese' => 'Chinese',
@@ -43,12 +47,19 @@ class ChoiceOtherNatType extends AbstractType
     )
     ))
     ->add('Others', TextType::class, array(
-      'required' => false,
+      'required' => true,
       'label' => false,
+      'attr' => array(
+        'style' => 'width:50%',
+      )
     ))
     ->addModelTransformer(new CallbackTransformer(
       function($data)
       {
+        if($data == null)
+        {
+          return array('Choices' => null, 'Others' => null);
+        }
         if (in_array($data,
         array(
           'Australian' => 'Australian',

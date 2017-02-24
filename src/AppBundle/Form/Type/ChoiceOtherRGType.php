@@ -35,18 +35,22 @@ class ChoiceOtherRGType extends AbstractType
       'Scenario 3.4' => 'Scenario 3.4',
       'Cooler Singapore' => 'Cooler Singapore',
       '3 for 2' => '3 for 2',
-      'Robotic tiling' => 'Robotic tiling',
+      'Robotic Tiling' => 'Robotic Tiling',
       'CIVAL' => 'CIVAL',
       'Other' => 'Other',
     )
     ))
     ->add('Others', TextType::class, array(
-      'required' => false,
+      'required' => true,
       'label' => false,
     ))
     ->addModelTransformer(new CallbackTransformer(
       function($data)
       {
+        if($data == null)
+        {
+          return array('Choices' => null, 'Others' => null);
+        }
         if (in_array($data,
         array(
         'Scenario 1.1' => 'Scenario 1.1',

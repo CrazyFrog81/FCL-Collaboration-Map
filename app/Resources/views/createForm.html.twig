@@ -2,29 +2,57 @@
 {% extends 'base.html.twig' %}
 {% form_theme form 'bootstrap_3_layout.html.twig' 'jquery.collection.html.twig' %}
 {% block body %}
-<div class="col-lg-2 col-sm-3">
-</br>
-{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-    {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}
-    <hr>
-    <a href="{{ path('fos_user_security_logout') }}">
-        {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
-    </a>
-    <hr>
+
+{{ form_start(form) }}
+    {{ form_errors(form) }}
+
+{% if (flow.getCurrentStepNumber() == 2) %}
+  <div class="col-lg-2 col-sm-3" style="position:relative; width:20%; top:-10px;">
 {% else %}
-    <br>
-    <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
-    <hr>
-    <a href="{{ path('fos_user_registration_register') }}">{{ 'layout.register'|trans({}, 'FOSUserBundle') }}</a>
-    <hr>
-    <a href="/resetting/request">Reset Password</a>
-    <hr>
+<div class="col-lg-2 col-sm-3" style="position:fixed; width:20%;">
 {% endif %}
-    Steps:
+<br>
     {% include '@CraueFormFlow/FormFlow/stepList.html.twig' %}
     <hr>
     <!-- Trigger the modal with a button -->
-<a data-toggle="modal" data-target="#myModal">Rationale of the project</a>
+<a data-toggle="modal" data-target="#myModal" style="font: bold 14px lato">Rationale of the project</a>
+    <hr>
+
+    {% if flow.getCurrentStepNumber() == 2 %}
+        <nav id="myScrollspy">
+          <ul class="projectList nav nav-pills nav-stacked" data-spy="affix" data-offset-top="275" style="overflow-y:scroll; height: 80%; font:12px bold lato;">
+          <h5 style="font: 14px bold lato;"> Existing Project: </h5>
+          {% for project in formData.projects %}
+            {% set projectList = project.name %}
+            {{ projectList | projectList }}
+          {% endfor %}
+          </ul>
+        </nav>
+    {% endif %}
+
+    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+    <div style="position:fixed; bottom:10%; left:3%; font-size:12px;">
+        {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}<br /></br>
+        <a class="btn btn-default" style="font-size:12px; font-weight:bold; color:black;" href="{{ path('fos_user_security_logout') }}">
+            {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+        </a>
+    </div>
+    {% else %}
+        <br>
+        <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+        <hr>
+        <a href="{{ path('fos_user_registration_register') }}">{{ 'layout.register'|trans({}, 'FOSUserBundle') }}</a>
+        <hr>
+        <a href="/resetting/request">Reset Password</a>
+        <hr>
+    {% endif %}
+
+</div>
+{% if flow.getCurrentStepNumber() == 2 %}
+  <div class="col-md-9 col-lg-10" style="background-color:#F8F9F9; border-left:thin solid black; width:80%; height:100%; top:-25px;">
+{% else%}
+  <div class="col-md-9 col-lg-10" style="background-color:#F8F9F9; border-left:thin solid black; width:80%; height:100%; left: 20% ; top:-25px;">
+{% endif %}
 
 <!-- Modal -->
 <div id="myModal" class="modal fade" role="dialog">
@@ -51,87 +79,88 @@
 
   </div>
 </div>
-    <hr>
-</div>
-<div class="col-md-9 col-lg-10" style="border-left:thin solid black; background-color:#F8F9F9; height:100%;">
-{{ form_start(form) }}
-    {{ form_errors(form) }}
 
     {% if flow.getCurrentStepNumber() == 1 %}
         <div>
-          <h3> 1.General Information</h3>
+          <h3 style="font-weight:bolder; font-size:18px;"><span class="number">1</span> Initial Information</h3>
           </br>
             {{ form_label(form.name)}}
-            {{ form_widget(form.name) }}
+            {{ form_widget(form.name, {'attr' : {'style' : 'width:50%;'} } ) }}
             <br>
             {{ form_label(form.research_group) }}
-            {{ form_widget(form.research_group.Choices) }}
+            {{ form_widget(form.research_group.Choices, {'attr' : {'style' : 'width:50%;'}} ) }}
             <br>
-            {{ form_widget(form.research_group.Others, {'attr' : {'placeholder' : 'Please specify your research group'} }) }}
+            {{ form_widget(form.research_group.Others, {'attr' : {'placeholder' : 'Please specify your research group', 'style' : 'width:50%;'} }) }}
             <br>
     {% endif %}
 
     {% if flow.getCurrentStepNumber() == 2 %}
-        <div>
-          <h3> 2.Collaboration Information</h3>
+    <h3 style="font-weight:bolder; font-size:18px;"><span class="number">2</span> Research Collaboration Information</h3>
+
           </br>
           <div class="projects" data-prototype-project="{{ form_widget(form.projects.vars.prototype)|e('html_attr') }}">
-          <h4> Project </h4> </br>
+          <body data-spy="scroll" data-target="#myScrollspy" data-offset="155" >
+          <h3 id="project_label_1" style="font-weight:bold; font-size:14px;"> Project #1 </h3> </br>
             {% for project in form.projects %}
-            <section>
-              {{ form_row(project.name) }} <br>
-              {{ form_row(project.start_date) }} <br>
-              {{ form_row(project.completion_date) }} <br>
+            {% set section= project.vars.value.name %}
+            {{ section | section }}
+              {{ form_row(project.name) }}
+              {{ form_row(project.start_date) }}
+              {{ form_row(project.completion_date) }}
               {{ form_label(project.working_time) }}
-              {{ form_widget(project.working_time) }} <br>
+              {{ form_widget(project.working_time) }} <br />
               {{ form_label(project.project_outcomes)}}
               {{ form_widget(project.project_outcomes.RadioChoices) }}
               {{ form_widget(project.project_outcomes.Others, {'attr' : {'placeholder' : 'If others, please specify here'}}) }}
 
-            <h4 class="collab_label"> Collaborator(s) </h4>
             {{ form_row(project.collaborators) }}
             </section>
               {% endfor %}
+              </body>
         </div>
     {% endif %}
 
     {% if flow.getCurrentStepNumber() == 3 %}
         <div>
-          <h3> 3.Background Information</h3>
+        <h3 style="font-weight:bolder; font-size:18px;"><span class="number">3</span> Background Information</h3>
           <br>
           <h4><i>Work related</i></h4>
           <br>
           {{ form_label(form.disciplinary_backgrounds) }}
-          <div style="column-count:2;">
+          <div style="column-count:2; width:60%">
             {{ form_widget(form.disciplinary_backgrounds.RadioChoices) }}
           </div>
           {{ form_widget(form.disciplinary_backgrounds.Others, {'attr' : {'placeholder' : 'If others, please specify here'}}) }}
             <br>
             {{ form_row(form.locations) }} <br>
             {{ form_row(form.start_date) }} <br>
-            {{ form_label(form.before_fcl) }}
-            <div style="float:right;">
+            {{ form_label(form.before_fcl) }} </br>
             (*Researcher may include: research assistant, research associate,<br> research fellows, research coordinator, PI and CoPI)
-            </div>
             {{ form_widget(form.before_fcl) }} <br>
             {{ form_row(form.academic_background) }}
-            <hr style="height:1px;border:none;color:#333;background-color:#333;" />
+            <hr />
             <h4><i>Personal</i></h4>
             </br>
-            {{ form_row(form.mother_tongues) }}
-            {{ form_row(form.gender) }}
+            {{ form_label(form.mother_tongues) }} </br>
+            {{ form_widget(form.mother_tongues) }}
+            </br></br>
+            {{ form_label(form.gender) }}
+            {{ form_widget(form.gender) }}
             {{ form_row(form.age) }}
             {{ form_label(form.nationality) }}
             {{ form_widget(form.nationality.Choices) }}
             <br>
             {{ form_widget(form.nationality.Others, {'attr' : {'placeholder' : 'Please specify your nationality'}}) }}
         </div>
+        
     {% endif %}
 
     {% if flow.getCurrentStepNumber() == 4 %}
         <div>
-          <h3> 4.Confirmation</h3>
-          <legend>{{ 'General Information' }}</legend>
+        <h3 style="font-weight:bolder; font-size:18px;"><span class="number">4</span> Confirmation </h3>
+        <br />
+          <span class="legend">{{ 'Initial Information' }}</span>
+          <p></p>
 					<dl>
 						<dt>{{ 'Name' | trans }}:</dt>
 						<dd>{{ formData.name }}</dd>
@@ -141,9 +170,14 @@
 
 					</dl>
 
-          <legend>{{ 'Collaboration Information' }}</legend>
+          <hr>
+
+          <span class="legend">{{ 'Research Collaboration Information' }}</span>
+          {% set project_label = 1 %}
           {% for project in formData.projects %}
-          <p><i> Project </i></p>
+          <p></p>
+          <p style="font-size:14px; font-weight:bold;"><i>{{ project_label | project_label }}</i></p>
+          {% set project_label = project_label + 1 %}
           <dl>
 						<dt>{{ 'Project title' | trans }}:</dt>
 						<dd>{{ project.name }}</dd>
@@ -159,21 +193,25 @@
             {% endfor %}
 					</dl>
 
-  {#        <p><i> Collaborator(s) </i></p>
           <dt>{{ 'Collaborator(s)' | trans }}:</dt>
+          {% set collaborator_label = 1 %}
           {% for collab in project.Collaborators %}
+          </br>
+           <i style="font-size:14px; font-weight:bold">{{ collaborator_label | collaborator_label }}</i>
+           {% set collaborator_label = collaborator_label + 1 %}
            {{ collab | collaborators }}
-          {% endfor %} #}
+          {% endfor %}
           <hr>
         {% endfor %}
 
-          <legend>{{ 'Background Information' }}</legend>
+          <span class="legend">{{ 'Background Information' }}</span>
+          <p></p>
           <p><i> Work related </i></p>
           <dl>
 
             <dt>{{ 'Disciplinary background(s)' | trans }}:</dt>
             {% for disc in formData.DisciplinaryBackgrounds %}
-              {{ disc | toString }}
+            <dd>  {{ disc | toString }} </dd>
             {% endfor %}
 
 
@@ -190,12 +228,12 @@
 
             <dt>{{ 'Highest Degree' | trans }}:</dt>
 						<dd>{{ formData.AcademicBackground }}</dd>
-            <hr>
+            <p></p>
             <p><i> Personal </i></p>
 
             <dt>{{ 'Mother Tongue(s)' | trans }}:</dt>
             {% for mother_tongue in formData.motherTongues%}
-						      <dd>{{ mother_tongue }}</dd>
+						      <dd>{{ mother_tongue | mother_tongue }}</dd>
             {% endfor %}
 
             <dt>{{ 'Gender' | trans }}:</dt>
@@ -212,6 +250,7 @@
     {% endif %}
 
     </br></br>
+    <div style="padding-left:35%" >
     {% include '@CraueFormFlow/FormFlow/buttons.html.twig' with {
         craue_formflow_button_label_finish: 'Submit Survey',
         craue_formflow_button_label_back: 'Back',
@@ -219,8 +258,11 @@
         craue_formflow_button_class_last: 'btn btn-primary',
         craue_formflow_button_class_back: 'btn btn-default',
     } %}
+    </div>
 </br></br></br></br></br></br></br></br></br></br></br></br>
-</br></br></br></br></br></br></br></br></br>
+</br></br></br></br></br></br></br></br></br></br></br></br>
+</br></br></br></br></br>
+
 </div>
 {{ form_end(form) }}
 {% endblock %}

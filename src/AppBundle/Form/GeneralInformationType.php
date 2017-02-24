@@ -21,7 +21,11 @@ class GeneralInformationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-      $builder->add('name')
+      $builder->add('name', TextType::class, array(
+        'attr' => array(
+        'placeholder' => 'Full name',
+      )
+      ))
               ->add('research_group', ChoiceOtherRGType::class);
     }
 

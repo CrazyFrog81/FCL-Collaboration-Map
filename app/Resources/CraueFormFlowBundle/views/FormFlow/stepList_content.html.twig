@@ -1,0 +1,52 @@
+{% use '@CraueFormFlow/FormFlow/stepList_blocks.html.twig' %}
+{% block stylesheets %}
+<style>
+body {
+	counter-reset: item;
+}
+ol {
+	list-style: none;
+}
+.stepLi {
+	counter-increment: item;
+}
+.stepLiNumber {
+	margin-right: 10px;
+	content: counter(item);
+	background: LightGray;
+	border-radius: 100%;
+	color: white;
+	width: 1.5em;
+	text-align: center;
+	display: inline-block;
+}
+.stepLi a:hover {
+	color: #3366BB;
+}
+.stepLi a {
+	color: LightGray;
+}
+</style>
+{% endblock %}
+<div style="font: bold 14px lato; color:LightGray;">
+{% set stepLiNumber = 0 %}
+{%- if flow.getStepLabels() is not empty -%}
+	<ol class="craue_formflow_steplist">
+		{% for stepLabel in flow.getStepLabels() %}
+		{% set stepLiNumber = stepLiNumber +1 %}
+			<li class="stepLi" {{ block('craue_flow_stepList_class') }}>
+				{%- if craue_isStepLinkable(flow, loop.index) -%}
+					<a href="{{ path(app.request.attributes.get('_route'), app.request.query.all
+							| merge(app.request.attributes.get('_route_params'))
+							| craue_addDynamicStepNavigationParameters(flow, loop.index)) }}">
+						{{- block('craue_flow_stepLabel') -}}
+					</a>
+				{%- else -%}
+					{{ block('craue_flow_stepLabel') }}
+				{%- endif -%}
+			</li>
+			<br />
+		{% endfor %}
+	</ol>
+{%- endif -%}
+</div>

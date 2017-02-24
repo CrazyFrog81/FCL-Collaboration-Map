@@ -31,12 +31,20 @@ class RadioOtherProjectType extends AbstractType
       'label' => false,
     ))
     ->add('Others', TextType::class, array(
-      'required' => false,
+      'required' => true,
       'label' => false,
+      'attr' => array(
+        'placeholder' => 'If others, please specify here',
+        'style' => 'width:50%',
+      )
     ))
     ->addModelTransformer(new CallbackTransformer(
       function($data)
       {
+        if(empty($data) == 1)
+        {
+          return $data;
+        }
         if (is_array($data[0])){
           return (array('RadioChoices' => $data[0], 'Others' => $data[1]));
         } else {

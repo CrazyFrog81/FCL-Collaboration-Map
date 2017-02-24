@@ -27,20 +27,32 @@ class ChoiceOtherCollabType extends AbstractType
     $builder
     ->add('id', EntityType::class, array(
       'label' => 'Name',
-      'class' => 'AppBundle:User',
-      'choice_label' => 'username',
+      'placeholder' => '--Select--',
+      'attr' => array(
+        'style' => 'width:35%',
+      ),
+      'class' => 'AppBundle:Individual',
+      'choice_label' => 'name',
       'query_builder' => function(EntityRepository $er) {
         return $er->createQueryBuilder('u')
-                  ->orderBy('u.username', 'ASC');
+                  ->orderBy('u.name', 'ASC');
         }
     ))
     ->add('Others', TextType::class, array(
-      'required' => false,
+      'required' => true,
       'label' => false,
+      'attr' => array(
+        'placeholder' => 'If others, please specify here',
+        'style' => 'width:50%',
+      )
     ))
     ->addModelTransformer(new CallbackTransformer(
       function($data)
       {
+        if($data == null)
+        {
+          return array('id' => null, 'Others'=> null);
+        }
         if (is_numeric($data))
         {
           return array('id' => $data, 'Others' => null);

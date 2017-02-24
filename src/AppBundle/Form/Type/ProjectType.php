@@ -20,10 +20,18 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use AppBundle\Form\Type\CollaboratorType;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Form\Type\ChoiceOtherProType;
-
+use Doctrine\Common\Persistence\ObjectManager;
+use AppBundle\Form\DataTransformer\ChoiceOtherProjectTransformer;
 
 class ProjectType extends AbstractType
 {
+  private $manager;
+
+   public function __construct(ObjectManager $manager)
+   {
+       $this->manager = $manager;
+   }
+
   public function buildForm(FormBuilderInterface $builder, array $options)
   {
     $builder
@@ -31,15 +39,20 @@ class ProjectType extends AbstractType
       'label' => false,
     ))
       ->add('start_date', DateType::class, array(
+        'placeholder' => array(
+          'year' => '--Year--', 'month' => '--Month--',
+        ),
         'days' => array(1),
         'years' => range(2015,2020),
         'label' => 'Starting date',
       ))
       ->add('completion_date', DateType::class, array(
-        'label' => 'Completion date',
+        'placeholder' => array(
+          'year' => '--Year--', 'month' => '--Month--',
+        ),
+        'label' => 'Projected completion date',
         'years' => range(2015,2020),
         'days' => array(1),
-        'empty_data' => array('year' => '----', 'months' => '----', 'day' => false),
       ))
       ->add('working_time', RangeType::class, array(
         'label' => 'Over the past six month, how much time on average you spent on this project?
@@ -47,6 +60,8 @@ class ProjectType extends AbstractType
         'attr' => array(
           'min' => 0,
           'max' => 100,
+          'style' => 'width:50%;',
+          'class' => 'range_widget',
         )
       ));
 
@@ -58,6 +73,10 @@ class ProjectType extends AbstractType
               'entry_type' => CollaboratorType::class,
               'entry_options' => array(
                 'label' => 'Collaborator',
+                'label_attr' => array(
+                  'style' => 'font-size:14px; font-weight:bold;',
+                  'class' => 'each_collab_label',
+                ),
               ),
               'allow_delete' => true,
               'allow_add' => true,
@@ -69,6 +88,9 @@ class ProjectType extends AbstractType
                 'class' => 'my-selector',
               )
             ));
+
+    $builder->get('name')->addModelTransformer(new ChoiceOtherProjectTransformer($this->manager));
+
           }
 
   public function configureOptions(OptionsResolver $resolver)

@@ -11,35 +11,27 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\Common\Persistence\ObjectManager;
-// use AppBundle\Form\DataTransformer\IssueToNumberTransformer;
 use AppBundle\Form\Type\ChoiceOtherCollabType;
 
 class CollaboratorType extends AbstractType
 {
-  private $manager;
-
-    public function __construct(ObjectManager $manager)
-    {
-        $this->manager = $manager;
-    }
 
   public function buildForm(FormBuilderInterface $builder, array $options)
   {
-    $builder->add('id', ChoiceOtherCollabType::class)
+    $builder->add('id', ChoiceOtherCollabType::class, array(
+      'label'=> false,
+    ))
            ->add('collaborated_before', ChoiceType::class, array(
              'choices' => array(
                'Yes' => 'Yes',
                'No' => 'No',
              ),
+             'label' => 'Have you collaborated with this person before this project?',
              'multiple' => false,
              'expanded' => true,
            ));
-
-
-  //  $builder->get('id')
-  //         ->addModelTransformer(new IssueToNumberTransformer($this->manager));
    }
+
 }
 
  ?>
