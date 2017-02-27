@@ -21,14 +21,14 @@
           font-size: 12px;
         }
         .affix{
-          top:100px;
+          top:120px;
           width: 17.3%;
         }
         :target:before {
           content:"";
           display:block;
-          height:150px; /* fixed header height*/
-          margin:-150px 0 0; /* negative fixed header height */
+          height:170px; /* fixed header height*/
+          margin:-170px 0 0; /* negative fixed header height */
           }
         .number{
           margin-right: 10px;
@@ -50,10 +50,11 @@
         }
         dt{
           font-size:10px;
+          color: #4A4A4A;
+          margin-top: 5px;
         }
         dd{
           font-size:14px;
-          font-weight: bold;
         }
         input[type="range"]{
           -webkit-appearance: none;
@@ -64,27 +65,34 @@
               linear,
               left top,
               right top,
-          )}
-    input[type='range']::-webkit-slider-thumb {
-            -webkit-appearance: none !important;
-            background-color: #5cb8d6;
-            border: 1px solid #5cb8d6;
-            height: 20px;
-            width: 20px;
+              )}
+        input[type='range']::-webkit-slider-thumb {
+                -webkit-appearance: none !important;
+                background-color: #5cb8d6;
+                border: 1px solid #5cb8d6;
+                height: 20px;
+                width: 20px;
+            }
+        .checkbox{
+          margin-top:1px;
+        }
+        .radio{
+          margin-top:1px;
         }
         </style>
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-        <header class="col-md-12 navbar-fixed-top navbar" style="background-color:white; border-bottom:thin solid black;">
-          <div style="font: italic bolder 20px lato;">
+        <header class="col-md-12 navbar-fixed-top navbar" style="background-color:white; border-bottom-color:#C8C8C8; font-family:lato;">
+          <div style="padding-left:10px;font: italic bolder 20px lato; padding-bottom:10px;">
           </br>
           Research Collaboration in FCL: </br>
           Data Collection Form </br>
         </div>
         <div style="float:right;">
-          <img src="{{ asset('images/fcl.jpg') }}" alt="FCL" style="height:43px; width:197px; position:absolute; top:10px; right:28px;">
-        <span style="padding-right:10px; font-size:12px;">
+          <img src="{{ asset('images/fcl.jpg') }}" alt="FCL" style="height:43px; width:197px; position:absolute; top:28px; right:30px;">
+        <span style="padding-right:17px; font-size:12px; font-weight:bold;">
           Developed by CIVAL
+          <p style="margin:0;"></p>
         </span>
         </div>
         </header>
@@ -195,6 +203,52 @@
             // For all the 'day' in dates are by default '1'
             // No need for user input
            $("[id$=_day]").hide();
+
+           $('[id$=_collaborated_before]').each(function(){
+             id = '#' + $(this).attr('id');
+             validateRadioChoices(id,2);
+           });
+
+            $('[id$=_id_Others]').each(function(){
+              id = '#' + $(this).attr('id');
+              validateTextbox(id,2);
+            });
+
+           $('[id$=_id_id]').each(function(){
+             id = '#' + $(this).attr('id');
+             validateDropdown(id,2);
+           });
+
+           $('[id$=_project_outcomes_Others]').each(function(){
+             id = '#' + $(this).attr('id');
+             validateTextbox(id,2);
+           });
+
+           $('[id$=_project_outcomes_RadioChoices]').each(function(){
+             id = '#' + $(this).attr('id');
+             validateCheckbox(id,2);
+           });
+
+           $('[id$=_completion_date]').each(function(){
+             id = '#' + $(this).attr('id');
+             validateDate(id,2);
+           });
+
+           $('[id$=_start_date]').each(function(){
+             id = '#' + $(this).attr('id');
+             validateDate(id,2);
+           });
+
+           $('[id$=_name_Others]').each(function(){
+             id = '#' + $(this).attr('id');
+             validateTextbox(id,2);
+           });
+
+           $('[id$=_name_name]').each(function(){
+             id = '#' + $(this).attr('id');
+             validateDropdown(id,2);
+           });
+
           }
 
         function addprojectFormDeleteLink($projectFormLi) {
@@ -252,6 +306,8 @@
 
         collectionOfCollaborators();
 
+        checkboxFunction();
+
         researchGroupFunction();
 
         nationalityFunction();
@@ -267,8 +323,6 @@
           var id = ($(this).attr('id'));
           rangeFunction(id);
         });
-
-        checkboxFunction();
 
         projectTitleFunction();
 
@@ -290,10 +344,309 @@
         $('li.stepLi').each(function(){
           if($(this).css('color') == 'rgb(0, 0, 0)'){
             $(this).find('span.stepLiNumber').css('background-color','black');
+            if($(this).find('span.stepLiNumber').text() == 1){
+              $('button').css('margin-left', '63%');
+            }
+            else{
+              $('button').css('margin-left', '');
+            }
           }
         });
 
+        validateTextbox('#general_information_research_group_Others', 1);
+        validateDropdown('#general_information_research_group_Choices',1);
+        validateTextbox('#general_information_name',1);
+
+         $('[id$=_collaborated_before]').each(function(){
+           id = '#' + $(this).attr('id');
+           validateRadioChoices(id,2);
+         });
+
+          $('[id$=_id_Others]').each(function(){
+            id = '#' + $(this).attr('id');
+            validateTextbox(id,2);
+          });
+
+         $('[id$=_id_id]').each(function(){
+           id = '#' + $(this).attr('id');
+           validateDropdown(id,2);
+         });
+
+         $('[id$=_project_outcomes_Others]').each(function(){
+           id = '#' + $(this).attr('id');
+           validateTextbox(id,2);
+         });
+
+         $('[id$=_project_outcomes_RadioChoices]').each(function(){
+           id = '#' + $(this).attr('id');
+           validateCheckbox(id,2);
+         });
+
+         $('[id$=_completion_date]').each(function(){
+           id = '#' + $(this).attr('id');
+           validateDate(id,2);
+         });
+
+         $('[id$=_start_date]').each(function(){
+           id = '#' + $(this).attr('id');
+           validateDate(id,2);
+         });
+
+         $('[id$=_name_Others]').each(function(){
+           id = '#' + $(this).attr('id');
+           validateTextbox(id,2);
+         });
+
+         $('[id$=_name_name]').each(function(){
+           id = '#' + $(this).attr('id');
+           validateDropdown(id,2);
+         });
+
+         validateTextbox('#background_information_nationality_Others', 3);
+         validateDropdown('#background_information_nationality_Choices', 3);
+         validateMotherTongue('#background_information_mother_tongues', 3);
+         validateRadioChoices('#background_information_age',3);
+         validateRadioChoices('#background_information_gender', 3);
+         validateRadioChoices('#background_information_academic_background',3);
+         validateRadioChoices('#background_information_before_fcl', 3);
+         validateDate('#background_information_start_date', 3);
+         validateTextbox('#background_information_disciplinary_backgrounds_Others', 3);
+         validateCheckbox('#background_information_locations', 3);
+         validateCheckbox('#background_information_disciplinary_backgrounds_RadioChoices', 3);
       });
+
+      function validateDropdown(id,step)
+      {
+        $('button[type=submit]').on('click',function(e){
+          if($(this).text() == 'Next Step'){
+            $('li.stepLi').each(function(){
+              if($(this).css('color') == 'rgb(0, 0, 0)'){
+                if($(this).find('span.stepLiNumber').text() == step){
+                  if(!($(id).val())){
+                    $(id).css('border-color','DarkRed');
+                    if($(id).next().attr('class') != 'help-block glyphicon glyphicon-exclamation-sign')
+                    {
+                      $(id).after('<div class="help-block glyphicon glyphicon-exclamation-sign" style="color:DarkRed;"><span style="font:bold italic 12px lato;">Please choose one</span></div>');
+                    }
+                    $('html, body').animate({
+                         scrollTop: $(id).offset().top - 200
+                     }, 700);
+                    e.preventDefault();
+                  }
+                }
+              }
+            });
+          }
+        });
+        $(id).on('input change', function(){
+          if($(id).val()){
+            $(id).css('border-color','');
+            if($(id).next().attr('class') == 'help-block glyphicon glyphicon-exclamation-sign'){
+              $(id).next().remove();
+            }
+          }
+        });
+      }
+
+      function validateMotherTongue(id,step)
+      {
+        $('button[type=submit]').on('click',function(e){
+          if($(this).text() == 'Next Step'){
+            $('li.stepLi').each(function(){
+              if($(this).css('color') == 'rgb(0, 0, 0)'){
+                if($(this).find('span.stepLiNumber').text() == step){
+                  if($(id).val() == null)
+                  {
+                    $('.select2-selection').css('border-color','DarkRed');
+                    if($('.select2').next().attr('class') != 'help-block glyphicon glyphicon-exclamation-sign')
+                    {
+                      $('.select2').after('<div class="help-block glyphicon glyphicon-exclamation-sign" style="color:DarkRed;"><span style="font:bold italic 12px lato;">Please choose one</span></div>');
+                    }
+                    $('html, body').animate({
+                         scrollTop: $(id).offset().top - 200
+                     }, 700);
+                    e.preventDefault();
+                  }
+                }
+              }
+            });
+          }
+        });
+        $(id).on('input change',function(){
+          if($(id).val() != null)
+          {
+            $('.select2-selection').css('border-color','');
+            if($('.select2').next().attr('class') == 'help-block glyphicon glyphicon-exclamation-sign'){
+              $('.select2').next().remove();
+            }
+          }
+        });
+      }
+
+      function validateRadioChoices(id,step)
+      {
+        $('button[type=submit]').on('click',function(e){
+          if($(this).text() == 'Next Step'){
+            $('li.stepLi').each(function(){
+              if($(this).css('color') == 'rgb(0, 0, 0)'){
+                if($(this).find('span.stepLiNumber').text() == step){
+                  var pass = 0;
+                  $(id + ' input[type=radio]').each(function(){
+                    if($(this).is(':checked')){
+                      pass++;
+                    }
+                  });
+                  if(pass == 0)
+                  {
+                    $(id).css('color','DarkRed');
+                    if($(id).next().attr('class') != 'help-block glyphicon glyphicon-exclamation-sign')
+                    {
+                      $(id).after('<div class="help-block glyphicon glyphicon-exclamation-sign" style="color:DarkRed;"><span style="font:bold italic 12px lato;">Please choose one</span></div>');
+                    }
+                    $('html, body').animate({
+                         scrollTop: $(id).offset().top - 200
+                     }, 700);
+                    e.preventDefault();
+                  }
+                }
+              }
+            });
+          }
+        });
+        $(id).on('input change',function(){
+          $(id).css('color','black');
+          if($(id).next().attr('class') == 'help-block glyphicon glyphicon-exclamation-sign'){
+            $(id).next().remove();
+          }
+        });
+      }
+
+      function validateDate(id,step){
+        $('button[type=submit]').on('click',function(e){
+          if($(this).text() == 'Next Step'){
+            $('li.stepLi').each(function(){
+              if($(this).css('color') == 'rgb(0, 0, 0)'){
+                if($(this).find('span.stepLiNumber').text() == step){
+                  if(!($(id + '_year').val()))
+                  {
+                    $(id+'_year').css('border-color','DarkRed');
+                    if($(id).next().attr('class') != 'help-block glyphicon glyphicon-exclamation-sign')
+                    {
+                      $(id).after('<div class="help-block glyphicon glyphicon-exclamation-sign" style="color:DarkRed;"><span style="font:bold italic 12px lato;">Please fill in the field</span></div>');
+                    }
+                    $('html, body').animate({
+                         scrollTop: $(id).offset().top - 200
+                     }, 700);
+                    e.preventDefault();
+                  }
+                  if(!($(id + '_month').val()))
+                  {
+                    $(id+'_month').css('border-color', 'DarkRed');
+                    if($(id).next().attr('class') != 'help-block glyphicon glyphicon-exclamation-sign')
+                    {
+                      $(id).after('<div class="help-block glyphicon glyphicon-exclamation-sign" style="color:DarkRed;"><span style="font:bold italic 12px lato;">Please fill in the field</span></div>');
+                    }
+                    $('html, body').animate({
+                         scrollTop: $(id).offset().top - 200
+                     }, 700);
+                    e.preventDefault();
+                  }
+                }
+              }
+            });
+          }
+        });
+
+        $(id + '_year').on('input change',function(){
+          $(this).css('border-color','');
+          if($(id).next().attr('class') == 'help-block glyphicon glyphicon-exclamation-sign'){
+            $(id).next().remove();
+          }
+        });
+
+        $(id + '_month').on('input change',function(){
+          $(this).css('border-color','');
+          if($(id).next().attr('class') == 'help-block glyphicon glyphicon-exclamation-sign'){
+            $(id).next().remove();
+          }
+        });
+      }
+
+      function validateTextbox(id, step){
+        $('button[type=submit]').on('click',function(e){
+          if($(id).attr('disabled') == 'disabled'){
+            return null;
+          }
+          if($(this).text() == 'Next Step'){
+            $('li.stepLi').each(function(){
+              if($(this).css('color') == 'rgb(0, 0, 0)'){
+                if($(this).find('span.stepLiNumber').text() == step){
+                  if(!($(id).val())){
+                    $('html, body').animate({
+                         scrollTop: $(id).offset().top - 200
+                     }, 700);
+                    e.preventDefault();
+                    $(id).css('border-color','DarkRed');
+                    if($(id).next().attr('class') != 'help-block glyphicon glyphicon-exclamation-sign'){
+                    {
+                      $(id).after('<div class="help-block glyphicon glyphicon-exclamation-sign" style="color:DarkRed;"><span style="font:bold italic 12px lato;">Please fill in the field</span></div>');
+                    }
+                  }
+                }
+              }
+            }
+            });
+          }
+        });
+        $(id).on('input change',function(){
+          if(($(id).val())){
+            if($(id).next().attr('class') == 'help-block glyphicon glyphicon-exclamation-sign'){
+              $(id).css('border-color','');
+              $(id).next().remove();
+            }
+          }
+        });
+      }
+
+      function validateCheckbox(id, step){
+        $('button[type=submit]').on('click',function(e){
+          if($(this).text() == 'Next Step'){
+            $('li.stepLi').each(function(){
+              if($(this).css('color') == 'rgb(0, 0, 0)'){
+                if($(this).find('span.stepLiNumber').text() == step){
+                  var pass = 0;
+                  $( id + ' input[type=checkbox]').each(function(){
+                    if($(this).is(':checked')){
+                      pass++;
+                    }
+                  });
+                  if(pass == 0){
+                    $(id).addClass('has-error');
+                    if($(id).find('.help-block').hasClass('help-block') == false)
+                    {
+                      $(id).append('<div class="help-block glyphicon glyphicon-exclamation-sign"><span style="font:bold italic 12px lato;">Choose at least one checkbox</span></div>');
+                    }
+                    $('html, body').animate({
+                         scrollTop: $(id).offset().top - 200
+                     }, 700);
+                    e.preventDefault();
+                  }
+                }
+              }
+            });
+          }
+        });
+
+        $(id + ' input[type=checkbox]').on('input change',function(){
+          $(id + ' input[type=checkbox]').each(function(){
+            if($(this).is(':checked')){
+              $(id).removeClass('has-error');
+              $(id).find('.help-block').remove();
+            }
+        });
+      });
+
+      }
 
       function toCamelCaseFunction(id)
       {
@@ -328,7 +681,7 @@
                     + ')'
                     );
         $("#range_label" + id).remove();
-        $("#" + id).after('<div id="range_label'+ id + '"><br><input readonly="readonly" style="width:60px; background:white" class="form-control" type="text" id="value' + id + '"></input></div>' );
+        $("#" + id).after('<div id="range_label'+ id + '"><br><input readonly="readonly" style="width:60px; background-color:white" class="form-control" type="text" id="value' + id + '"></input></div>' );
         var x = document.getElementById(id).value;
         $("#value" + id).val(x + '%');
       }
@@ -347,6 +700,20 @@
           remove: '<a href="#" class="collection-remove"></br><i class="fa fa-minus-circle" style="color:orange;"><span style="color:black; font: italic 12px lato;"> Remove this person</span></br></i></a><hr style="width:85%; margin-left:0px;">',
           // Hide and disable 'Others' textbox accordingly
           after_add: function(collection,element){
+            $('[id$=_id_id]').each(function(){
+              id = '#' + $(this).attr('id');
+              validateDropdown(id,2);
+            });
+
+            $('[id$=_id_Others]').each(function(){
+              id = '#' + $(this).attr('id');
+              validateTextbox(id,2);
+            });
+
+            $('[id$=_collaborated_before]').each(function(){
+              id = '#' + $(this).attr('id');
+              validateRadioChoices(id,2);
+            });
             collaboratorsFunction();
             $('.add_collaborator').removeAttr('style');
             $(collection).unwrap();
@@ -386,7 +753,6 @@
         function checkboxFunction()
         {
           $("input[type=checkbox]").each(function(){
-            //additional of adding the 'Collaborator(s) label'
             $('.hr_label').remove();
             $('[id$=_project_outcomes_Others]').after("<span class='hr_label'><hr></span>");
             var id =($(this).attr('id'));
@@ -410,6 +776,10 @@
                 $('#' + other_id).removeAttr("disabled");
               }else{
                 $('#' + other_id).attr("disabled", "disabled");
+                if($('#' + other_id).next().attr('class') == 'help-block glyphicon glyphicon-exclamation-sign'){
+                  $('#' + other_id).css('border-color','');
+                  $('#' + other_id).next().remove();
+                }
               }
             }
           });
@@ -440,6 +810,10 @@
            } else{
              $(idOther).hide();
              $(idOther).attr("disabled", "disabled");
+             if($(idOther).next().attr('class') == 'help-block glyphicon glyphicon-exclamation-sign'){
+               $(idOther).css('border-color','');
+               $(idOther).next().remove();
+             }
            }
          });
         }
@@ -461,6 +835,10 @@
           }else{
             $('#general_information_research_group_Others').attr("disabled","disabled");
             $('#general_information_research_group_Others').hide();
+            if($('#general_information_research_group_Others').next().attr('class') == 'help-block glyphicon glyphicon-exclamation-sign'){
+              $('#general_information_research_group_Others').css('border-color','');
+              $('#general_information_research_group_Others').next().remove();
+            }
           }
           });
         }
@@ -484,6 +862,10 @@
           }else{
             $('#background_information_nationality_Others').attr("disabled","disabled");
             $('#background_information_nationality_Others').hide();
+            if($('#background_information_nationality_Others').next().attr('class') == 'help-block glyphicon glyphicon-exclamation-sign'){
+              $('#background_information_nationality_Others').css('border-color','');
+              $('#background_information_nationality_Others').next().remove();
+            }
           }
           });
         }
@@ -500,6 +882,10 @@
           $('#background_information_disciplinary_backgrounds_Others').removeAttr("disabled");
       }else {
         $('#background_information_disciplinary_backgrounds_Others').attr("disabled","disabled");
+        if($('#background_information_disciplinary_backgrounds_Others').next().attr('class') == 'help-block glyphicon glyphicon-exclamation-sign'){
+          $('#background_information_disciplinary_backgrounds_Others').css('border-color','');
+          $('#background_information_disciplinary_backgrounds_Others').next().remove();
+        }
       }});
         }
 
@@ -531,6 +917,10 @@
             else {
               $(idOther).hide();
               $(idOther).attr('disabled','disabled');
+              if($(idOther).next().attr('class') == 'help-block glyphicon glyphicon-exclamation-sign'){
+                $(idOther).css('border-color','');
+                $(idOther).next().remove();
+              }
             }
         });
         }

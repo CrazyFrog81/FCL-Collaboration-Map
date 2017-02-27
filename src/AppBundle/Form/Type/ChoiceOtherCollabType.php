@@ -43,7 +43,7 @@ class ChoiceOtherCollabType extends AbstractType
       'label' => false,
       'attr' => array(
         'placeholder' => 'If others, please specify here',
-        'style' => 'width:50%',
+        'style' => 'width:35%',
       )
     ))
     ->addModelTransformer(new CallbackTransformer(

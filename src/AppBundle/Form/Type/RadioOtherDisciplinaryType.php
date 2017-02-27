@@ -20,6 +20,8 @@ class RadioOtherDisciplinaryType extends AbstractType
     $builder->add('RadioChoices', ChoiceType::class, array(
       'multiple' => true,
       'expanded' => true,
+      'required' => true,
+      'empty_data' => null,
       'choices' => array(
         'Architecture' => 'Architecture',
         'Biology' => 'Biology',
@@ -28,7 +30,7 @@ class RadioOtherDisciplinaryType extends AbstractType
         'Ecology' => 'Ecology',
         'Economics' => 'Economics',
         'Engineering' => 'Engineering',
-        'Graphic designer' => 'Graphic designer',
+        'Graphic design' => 'Graphic design',
         'Landscape architecture' => 'Landscape architecture',
         'Law' => 'Law',
         'Literature' => 'Literature',

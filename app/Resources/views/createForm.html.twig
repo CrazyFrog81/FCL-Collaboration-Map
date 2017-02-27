@@ -4,12 +4,12 @@
 {% block body %}
 
 {{ form_start(form) }}
-    {{ form_errors(form) }}
+{{ form_errors(form) }}
 
 {% if (flow.getCurrentStepNumber() == 2) %}
-  <div class="col-lg-2 col-sm-3" style="position:relative; width:20%; top:-10px;">
+  <div class="col-lg-2 col-sm-3" style="position:relative; width:20%; top: 8px;">
 {% else %}
-<div class="col-lg-2 col-sm-3" style="position:fixed; width:20%;">
+<div class="col-lg-2 col-sm-3" style="position:fixed; width:20%; top:120px;">
 {% endif %}
 <br>
     {% include '@CraueFormFlow/FormFlow/stepList.html.twig' %}
@@ -20,8 +20,8 @@
 
     {% if flow.getCurrentStepNumber() == 2 %}
         <nav id="myScrollspy">
-          <ul class="projectList nav nav-pills nav-stacked" data-spy="affix" data-offset-top="275" style="overflow-y:scroll; height: 80%; font:12px bold lato;">
-          <h5 style="font: 14px bold lato;"> Existing Project: </h5>
+          <ul class="projectList nav nav-pills nav-stacked" data-spy="affix" data-offset-top="295" style="overflow-y:scroll; height: 80%; font:12px bold lato;">
+          <h5 style="font-size:14px; font-weight: bold; font-family: lato;"> Existing Project: </h5>
           {% for project in formData.projects %}
             {% set projectList = project.name %}
             {{ projectList | projectList }}
@@ -31,7 +31,7 @@
     {% endif %}
 
     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-    <div style="position:fixed; bottom:10%; left:3%; font-size:12px;">
+    <div style="position:fixed; bottom:10%; left:30px; font-size:12px;">
         {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}<br /></br>
         <a class="btn btn-default" style="font-size:12px; font-weight:bold; color:black;" href="{{ path('fos_user_security_logout') }}">
             {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
@@ -49,9 +49,11 @@
 
 </div>
 {% if flow.getCurrentStepNumber() == 2 %}
-  <div class="col-md-9 col-lg-10" style="background-color:#F8F9F9; border-left:thin solid black; width:80%; height:100%; top:-25px;">
+  <div class="col-md-9 col-lg-10" style="background-color:#F8F9F9; border-left:1px solid #C8C8C8; width:80%; height:100%; top:5px;">
+{% elseif flow.getCurrentStepNumber() == 1 %}
+<div class="col-md-9 col-lg-10" style="background-color:#F8F9F9; border-left:1px solid #C8C8C8; width:80%; height:100vh; left: 20% ; top:5px;">
 {% else%}
-  <div class="col-md-9 col-lg-10" style="background-color:#F8F9F9; border-left:thin solid black; width:80%; height:100%; left: 20% ; top:-25px;">
+  <div class="col-md-9 col-lg-10" style="background-color:#F8F9F9; border-left:1px solid #C8C8C8; width:80%; height:100%; left: 20% ; top:5px;">
 {% endif %}
 
 <!-- Modal -->
@@ -81,7 +83,6 @@
 </div>
 
     {% if flow.getCurrentStepNumber() == 1 %}
-        <div>
           <h3 style="font-weight:bolder; font-size:18px;"><span class="number">1</span> Initial Information</h3>
           </br>
             {{ form_label(form.name)}}
@@ -96,11 +97,11 @@
 
     {% if flow.getCurrentStepNumber() == 2 %}
     <h3 style="font-weight:bolder; font-size:18px;"><span class="number">2</span> Research Collaboration Information</h3>
-
-          </br>
           <div class="projects" data-prototype-project="{{ form_widget(form.projects.vars.prototype)|e('html_attr') }}">
-          <body data-spy="scroll" data-target="#myScrollspy" data-offset="155" >
-          <h3 id="project_label_1" style="font-weight:bold; font-size:14px;"> Project #1 </h3> </br>
+          <body data-spy="scroll" data-target="#myScrollspy" data-offset="180" >
+
+          <h3 id="project_label_1" style="font-weight:bold; font-size:14px; padding-top:8px;"> Project #1 </h3>
+          <br>
             {% for project in form.projects %}
             {% set section= project.vars.value.name %}
             {{ section | section }}
@@ -123,8 +124,7 @@
     {% if flow.getCurrentStepNumber() == 3 %}
         <div>
         <h3 style="font-weight:bolder; font-size:18px;"><span class="number">3</span> Background Information</h3>
-          <br>
-          <h4><i>Work related</i></h4>
+          <h4 style="font-size:14px; font-weight:bold; font-family:lato; padding-top:18px;">Work related</h4>
           <br>
           {{ form_label(form.disciplinary_backgrounds) }}
           <div style="column-count:2; width:60%">
@@ -132,15 +132,15 @@
           </div>
           {{ form_widget(form.disciplinary_backgrounds.Others, {'attr' : {'placeholder' : 'If others, please specify here'}}) }}
             <br>
-            {{ form_row(form.locations) }} <br>
-            {{ form_row(form.start_date) }} <br>
+            {{ form_row(form.locations) }}
+            {{ form_row(form.start_date) }}
             {{ form_label(form.before_fcl) }} </br>
             (*Researcher may include: research assistant, research associate,<br> research fellows, research coordinator, PI and CoPI)
-            {{ form_widget(form.before_fcl) }} <br>
+            {{ form_widget(form.before_fcl) }}
             {{ form_row(form.academic_background) }}
             <hr />
-            <h4><i>Personal</i></h4>
-            </br>
+            <h4 style="font-size:14px; font-weight:bold; font-family:lato;">Personal</h4>
+            <br>
             {{ form_label(form.mother_tongues) }} </br>
             {{ form_widget(form.mother_tongues) }}
             </br></br>
@@ -152,7 +152,7 @@
             <br>
             {{ form_widget(form.nationality.Others, {'attr' : {'placeholder' : 'Please specify your nationality'}}) }}
         </div>
-        
+
     {% endif %}
 
     {% if flow.getCurrentStepNumber() == 4 %}
@@ -176,7 +176,7 @@
           {% set project_label = 1 %}
           {% for project in formData.projects %}
           <p></p>
-          <p style="font-size:14px; font-weight:bold;"><i>{{ project_label | project_label }}</i></p>
+          <p style="font-size:14px; font-weight:bold;">{{ project_label | project_label }}</p>
           {% set project_label = project_label + 1 %}
           <dl>
 						<dt>{{ 'Project title' | trans }}:</dt>
@@ -191,22 +191,21 @@
             {% for project_outcome in project.projectOutcomes %}
             <dd> {{ project_outcome | toString }} </dd>
             {% endfor %}
-					</dl>
 
-          <dt>{{ 'Collaborator(s)' | trans }}:</dt>
+            <p></p>
           {% set collaborator_label = 1 %}
           {% for collab in project.Collaborators %}
-          </br>
-           <i style="font-size:14px; font-weight:bold">{{ collaborator_label | collaborator_label }}</i>
+           <span style="font-size:14px; font-weight:bold">{{ collaborator_label | collaborator_label }}</span>
            {% set collaborator_label = collaborator_label + 1 %}
            {{ collab | collaborators }}
           {% endfor %}
           <hr>
+          </dl>
         {% endfor %}
 
           <span class="legend">{{ 'Background Information' }}</span>
           <p></p>
-          <p><i> Work related </i></p>
+          <p style="font-size:14px; font-weight:bold"> Work related </p>
           <dl>
 
             <dt>{{ 'Disciplinary background(s)' | trans }}:</dt>
@@ -229,7 +228,7 @@
             <dt>{{ 'Highest Degree' | trans }}:</dt>
 						<dd>{{ formData.AcademicBackground }}</dd>
             <p></p>
-            <p><i> Personal </i></p>
+            <p style="font-size:14px; font-weight:bold;"> Personal </p>
 
             <dt>{{ 'Mother Tongue(s)' | trans }}:</dt>
             {% for mother_tongue in formData.motherTongues%}
@@ -259,9 +258,9 @@
         craue_formflow_button_class_back: 'btn btn-default',
     } %}
     </div>
+
 </br></br></br></br></br></br></br></br></br></br></br></br>
-</br></br></br></br></br></br></br></br></br></br></br></br>
-</br></br></br></br></br>
+</br></br></br></br></br></br>
 
 </div>
 {{ form_end(form) }}

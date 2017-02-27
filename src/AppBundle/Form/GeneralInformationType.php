@@ -16,12 +16,15 @@ use AppBundle\Form\Type\ChoiceOtherRGType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
 
 class GeneralInformationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
       $builder->add('name', TextType::class, array(
+        'required' => true,
         'attr' => array(
         'placeholder' => 'Full name',
       )
@@ -35,6 +38,10 @@ class GeneralInformationType extends AbstractType
       $resolver->setDefaults(array(
         'data_class' => 'AppBundle\Entity\Individual'
       ));
+    }
+
+    public function getName(){
+      return null;
     }
 }
 

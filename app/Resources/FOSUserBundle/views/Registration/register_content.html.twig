@@ -1,20 +1,28 @@
-
-
 {% trans_default_domain 'FOSUserBundle' %}
 
 {% block content %}
 
 {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register form-register'}}) }}
     <h2 class="form-register-heading" style="font-family:lato;">Registration</h2>
-    {{ form_widget(form.email, { 'attr' : {'class': 'form-control', 'placeholder' : 'Email address'}} ) }}
-    {{ form_widget(form.username, { 'attr' : {'class': 'form-control', 'placeholder' : 'Username' }} ) }}
-    {{ form_widget(form.plainPassword.first, { 'attr' : {'class': 'form-control', 'placeholder' : 'Password' }} ) }}
-    {{ form_widget(form.plainPassword.second, { 'attr' : {'class': 'form-control', 'placeholder' : 'Repeat password' }} ) }}
+      {{form_label(form.email) }}
+      {{form_widget(form.email )}}
+      {{form_errors(form.email)}}
+
+      {{form_label(form.username) }}
+      {{form_widget(form.username )}}
+      {{form_errors(form.username)}}
+
+      {{form_label(form.plainPassword.first) }}
+      {{form_widget(form.plainPassword.first )}}
+      {{form_label(form.plainPassword.second) }}
+      {{form_widget(form.plainPassword.second )}}
+      {{form_errors(form.plainPassword.first)}}
+      {{form_errors(form.plainPassword.second)}}
+
     <div>
         <input type="submit"
                class="btn btn-lg btn-primary btn-block button"
                id="_submit"
-               name="_submit"
                value="{{ 'registration.submit'|trans }}" />
     </div>
 {{ form_end(form) }}
@@ -71,6 +79,40 @@
             border-top-left-radius: 0;
             border-top-right-radius: 0;
         }
+
+        li {
+        line-height: 1em;
+        list-style :none;
+        }
+
+        .alert{
+          width: 115%;
+          margin-left: -15%;
+        }
     </style>
 
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+  document.getElementById('fos_user_registration_form_email').className = 'form-control';
+  document.getElementById('fos_user_registration_form_email').placeholder = 'Email';
+  document.getElementById('fos_user_registration_form_username').className = 'form-control';
+  document.getElementById('fos_user_registration_form_username').placeholder = 'Username';
+  document.getElementById('fos_user_registration_form_plainPassword_first').className = 'form-control';
+  document.getElementById('fos_user_registration_form_plainPassword_first').placeholder = 'Password';
+  document.getElementById('fos_user_registration_form_plainPassword_second').className = 'form-control';
+  document.getElementById('fos_user_registration_form_plainPassword_second').placeholder = 'Repeat Password';
+  var collection = document.getElementsByTagName('li');
+  for(var i = 0; i < collection.length ; i++)
+  {
+    if(collection[i].innerHTML == 'The email is already used.'){
+      collection[i].parentNode.removeChild(collection[i]);
+    }
+    if(collection[i].innerHTML == 'The username is already used.'){
+      collection[i].parentNode.removeChild(collection[i]);
+    }
+    collection[i].className = 'alert alert-danger';
+  }
+</script>
 {% endblock %}

@@ -27,6 +27,9 @@ class BackgroundInformationType extends AbstractType
       $builder
         ->add('disciplinary_backgrounds', RadioOtherDisciplinaryType::class, array(
             'label' => 'What is (are) your disciplinary background(s)?',
+            'attr' => array(
+              'class' => 'mul_disc',
+            ),
         ))
 
         ->add('locations', ChoiceType::class, array(

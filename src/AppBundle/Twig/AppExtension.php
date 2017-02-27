@@ -50,8 +50,8 @@ class AppExtension extends \Twig_Extension
       print_r("Name : " . "<br /><span style='font: bold 14px lato;'>". $i ."</span>");
       print_r('</br>');
       foreach($choiceArray as $j){
-        print_r("Collaborated Before : " . "<br /><span style='font: bold 14px lato;'>". $j ."</span>");
-        print_r('</br>');
+        print_r("<div style='margin-top:5px'>Collaborated Before : " . "<br /><span style='font: bold 14px lato;'>". $j ."</span></div>");
+        print_r('<p></p>');
       }
     }
   }
@@ -75,7 +75,7 @@ class AppExtension extends \Twig_Extension
   public function projectListFilter($data)
   {
     $index = str_replace(' ','_', $data);
-    print_r('<li><a href="#'. $index .'">'. $data .'</a></li>');
+    print_r('<li style="font-size:12px;font-family:lato;font-weight:bold;"><a href="#'. $index .'">'. $data .'</a></li>');
   }
 
   public function sectionFilter($data)

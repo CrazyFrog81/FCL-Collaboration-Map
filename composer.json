@@ -31,7 +31,8 @@
         "craue/formflow-bundle": "~3.0@dev",
         "symfony/serializer": "^3.2",
         "symfony/property-access": "^3.2",
-        "jms/serializer-bundle": "^1.1"
+        "jms/serializer-bundle": "^1.1",
+        "friendsofsymfony/user-bundle": "~2.0@dev"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

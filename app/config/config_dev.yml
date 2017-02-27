@@ -35,6 +35,5 @@ twig:
 swiftmailer:
 #    disable_delivery: true
     transport: gmail
-    username: username
+    username: sisisalia
     password: password
-    delivery_address: ygraafeu@sharklasers.com

@@ -7,25 +7,31 @@
         <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato" />
         <title>{% block title %}Data Collection Form{% endblock %}</title>
         {% block stylesheets %}
+        <style>
+        label{
+          display:none !important;
+        }
+        </style>
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-        <header class="col-md-12" style="border-bottom:thin solid black;">
-          <div style="font: italic bold 20px lato;">
+        <header class="col-md-12 navbar-fixed-top navbar" style="background-color:white; border-bottom-color:#C8C8C8; font-family:lato;">
+          <div style="padding-left:10px;font: italic bolder 20px lato; padding-bottom:10px;">
           </br>
           Research Collaboration in FCL: </br>
           Data Collection Form </br>
         </div>
         <div style="float:right;">
-          <img src="{{ asset('images/fcl.jpg') }}" alt="FCL" style="height:43px; width:197px; position:absolute; top:10px; right:28px;">
-        <span style="padding-right:10px; font-size:12px;">
+          <img src="{{ asset('images/fcl.jpg') }}" alt="FCL" style="height:43px; width:197px; position:absolute; top:28px; right:30px;">
+        <span style="padding-right:17px; font-size:12px; font-weight:bold;">
           Developed by CIVAL
+          <p style="margin:0;"></p>
         </span>
         </div>
         </header>
     </head>
-<body style="font-family:lato;">
+<body style="font-family:lato; padding-top:120px;">
 {% block content %}
-  <div class="col-lg-2 col-sm-3">
+  <div class="col-lg-2 col-sm-3" style="margin-left:10px;">
       {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
       <br>
           {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}
@@ -55,11 +61,13 @@
       {% endfor %}
   {% endif %}
 
-  <div class="col-md-9 col-lg-10" style="font-family:lato;border-left:thin solid black; background-color:#F8F9F9; height:100vh;">
+  <div class="col-md-9 col-lg-10" style="font-family:lato;border-left:thin solid black; background-color:#F8F9F9; height:100vh; width:82%;">
       {% block fos_user_content %}
       {% endblock fos_user_content %}
   </div>
 
 {% endblock %}
+
+
 </body>
 </html>

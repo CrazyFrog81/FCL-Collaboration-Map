@@ -13,6 +13,7 @@ use AppBundle\Form\Type\CollaboratorCustomType;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Form\Type\CollaboratorType;
 use FOS\UserBundle\Entity\UserManager;
+use Symfony\Component\HttpFoundation\Response;
 
 class FormController extends Controller
 {
@@ -36,6 +37,7 @@ public function createFormAction() {
 
     // form of the current step
     $form = $flow->createForm();
+
     if ($flow->isValid($form)) {
         $flow->saveCurrentStepData($form);
 
@@ -79,7 +81,7 @@ public function createFormAction() {
     /**
     * @Route("/edit", name="edit")
     */
-    public function editFormAction() {
+    public function editFormAction(Request $request) {
       $userId = $this->getUser()->getId();
 
       $individual = $this->getDoctrine()->getRepository('AppBundle:Individual')->find($userId);
@@ -95,6 +97,7 @@ public function createFormAction() {
 
 
       $form = $flow->createForm();
+
       if ($flow->isValid($form)) {
           $flow->saveCurrentStepData($form);
 
