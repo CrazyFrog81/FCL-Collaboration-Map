@@ -31,11 +31,11 @@ class ChoiceOtherCollabType extends AbstractType
       'attr' => array(
         'style' => 'width:35%',
       ),
-      'class' => 'AppBundle:Individual',
-      'choice_label' => 'name',
+      'class' => 'AppBundle:User',
+      'choice_label' => 'username',
       'query_builder' => function(EntityRepository $er) {
         return $er->createQueryBuilder('u')
-                  ->orderBy('u.name', 'ASC');
+                  ->orderBy('u.username', 'ASC');
         }
     ))
     ->add('Others', TextType::class, array(
