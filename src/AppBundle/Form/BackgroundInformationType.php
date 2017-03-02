@@ -6,19 +6,12 @@ namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use AppBundle\Entity\Individual;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\LanguageType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use AppBundle\Form\Type\RadioOtherDisciplinaryType;
 use AppBundle\Form\Type\ChoiceOtherNatType;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\CallbackTransformer;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class BackgroundInformationType extends AbstractType
 {
@@ -38,14 +31,16 @@ class BackgroundInformationType extends AbstractType
           'multiple' => true,
           'expanded' => true,
           'choices' => array(
+            'EPFL' => 'EPFL',
+            'ETH Zurich' => 'ETH Zurich',
             'FCL level 6' => 'FCL level 6',
             'FCL level 15' => 'FCL level 15',
-            'Other location' => 'Other location',
-            'ETH Zurich' => 'ETH Zurich',
-            'EPFL' => 'EPFL',
+            'FHNW' => 'FHNW',
+            'NTU' => 'NTU',
             'NUS' => 'NUS',
-            'SUTD' => 'SUTD',
             'SMU' => 'SMU',
+            'SUTD' => 'SUTD',
+            'Other location' => 'Other location',
           ),
         ))
         ->add('start_date', BirthdayType::class, array(
@@ -118,5 +113,3 @@ class BackgroundInformationType extends AbstractType
       ));
     }
 }
-
- ?>

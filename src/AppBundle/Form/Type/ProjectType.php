@@ -10,15 +10,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\RangeType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use AppBundle\Form\Type\RadioOtherProjectType;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\CallbackTransformer;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use AppBundle\Form\Type\CollaboratorType;
-use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Form\Type\ChoiceOtherProType;
 use Doctrine\Common\Persistence\ObjectManager;
 use AppBundle\Form\DataTransformer\ChoiceOtherProjectTransformer;
@@ -46,13 +40,16 @@ class ProjectType extends AbstractType
         'years' => range(2015,2020),
         'label' => 'Starting date',
       ))
-      ->add('completion_date', DateType::class, array(
-        'placeholder' => array(
-          'year' => '--Year--', 'month' => '--Month--',
+      ->add('project_duration', ChoiceType::class, array(
+        'choices' => array(
+          'Less than 6 months' => '< 6 months',
+          '6 - 12 months' => '6 - 12 months',
+          '12 months - 2 years' => '12 months - 2 years',
+          'More than 2 years' => '> 2 years',
         ),
-        'label' => 'Projected completion date',
-        'years' => range(2015,2020),
-        'days' => array(1),
+        'expanded' => true,
+        'multiple' => false,
+        'label' => 'Completion date',
       ))
       ->add('working_time', RangeType::class, array(
         'label' => 'Over the past six month, how much time on average you spent on this project?
@@ -100,4 +97,3 @@ class ProjectType extends AbstractType
     ));
   }
 }
- ?>

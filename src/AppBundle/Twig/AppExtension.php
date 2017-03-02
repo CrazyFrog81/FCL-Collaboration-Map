@@ -111,5 +111,3 @@ class AppExtension extends \Twig_Extension
     return 'app_extension';
   }
 }
-
- ?>

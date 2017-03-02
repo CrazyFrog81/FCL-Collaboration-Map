@@ -6,12 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\CallbackTransformer;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 class RadioOtherDisciplinaryType extends AbstractType
 {
@@ -24,6 +20,7 @@ class RadioOtherDisciplinaryType extends AbstractType
       'empty_data' => null,
       'choices' => array(
         'Architecture' => 'Architecture',
+        'Art' => 'Art',
         'Biology' => 'Biology',
         'Chemistry' => 'Chemistry',
         'Computer science' => 'Computer science',
@@ -31,6 +28,7 @@ class RadioOtherDisciplinaryType extends AbstractType
         'Economics' => 'Economics',
         'Engineering' => 'Engineering',
         'Graphic design' => 'Graphic design',
+        'History' => 'History',
         'Landscape architecture' => 'Landscape architecture',
         'Law' => 'Law',
         'Literature' => 'Literature',

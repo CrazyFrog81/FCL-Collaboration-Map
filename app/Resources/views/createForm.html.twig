@@ -1,22 +1,26 @@
 {# in AppBundle/Resources/views/createForm.html.twig #}
+
 {% extends 'base.html.twig' %}
+
 {% form_theme form 'bootstrap_3_layout.html.twig' 'jquery.collection.html.twig' %}
+
 {% block body %}
 
 {{ form_start(form) }}
 {{ form_errors(form) }}
 
 {% if (flow.getCurrentStepNumber() == 2) %}
-  <div class="col-lg-2 col-sm-3" style="position:relative; width:20%; top: 8px;">
+  <div class="col-lg-2 col-sm-3 changeSidebar" style="position:relative; width:20%; top: -8px;">
 {% else %}
-<div class="col-lg-2 col-sm-3" style="position:fixed; width:20%; top:120px;">
+  <div class="col-lg-2 col-sm-3" style="position:fixed; width:20%; top:120px;">
 {% endif %}
+
 <br>
     {% include '@CraueFormFlow/FormFlow/stepList.html.twig' %}
-    <hr>
+<hr>
     <!-- Trigger the modal with a button -->
-<a data-toggle="modal" data-target="#myModal" style="font: bold 14px lato">Rationale of the project</a>
-    <hr>
+      <a data-toggle="modal" data-target="#myModal" style="font: bold 14px lato">Rationale of the project</a>
+<hr>
 
     {% if flow.getCurrentStepNumber() == 2 %}
         <nav id="myScrollspy">
@@ -49,7 +53,7 @@
 
 </div>
 {% if flow.getCurrentStepNumber() == 2 %}
-  <div class="col-md-9 col-lg-10" style="background-color:#F8F9F9; border-left:1px solid #C8C8C8; width:80%; height:100%; top:5px;">
+  <div class="col-md-9 col-lg-10 changeTop" style="background-color:#F8F9F9; border-left:1px solid #C8C8C8; width:80%; height:100vh; top:-10px;">
 {% elseif flow.getCurrentStepNumber() == 1 %}
 <div class="col-md-9 col-lg-10" style="background-color:#F8F9F9; border-left:1px solid #C8C8C8; width:80%; height:100vh; left: 20% ; top:5px;">
 {% else%}
@@ -107,7 +111,7 @@
             {{ section | section }}
               {{ form_row(project.name) }}
               {{ form_row(project.start_date) }}
-              {{ form_row(project.completion_date) }}
+              {{ form_row(project.project_duration) }}
               {{ form_label(project.working_time) }}
               {{ form_widget(project.working_time) }} <br />
               {{ form_label(project.project_outcomes)}}
@@ -183,8 +187,8 @@
 						<dd>{{ project.name }}</dd>
             <dt>{{ 'Starting date' | trans }}:</dt>
             <dd>{{ project.startDate|date('Y-m-d') }}</dd>
-            <dt>{{ 'Completion date' | trans }}:</dt>
-            <dd>{{ project.completionDate|date('Y-m-d') }}</dd>
+            <dt>{{ 'Project duration' | trans }}:</dt>
+            <dd>{{ project.projectDuration }}</dd>
             <dt>{{ 'Average time working for the project' | trans }}:</dt>
             <dd>{{ project.workingTime }}%</dd>
             <dt>{{ 'Project outcome(s)' | trans }}:</dt>

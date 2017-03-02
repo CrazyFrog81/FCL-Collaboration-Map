@@ -8,10 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use AppBundle\Entity\Individual;
-use AppBundle\Entity\Project;
-use AppBundle\Form\Type\CollaboratorCustomType;
 use Doctrine\Common\Collections\ArrayCollection;
-use AppBundle\Form\Type\CollaboratorType;
 use FOS\UserBundle\Entity\UserManager;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -95,7 +92,6 @@ public function createFormAction() {
       $flow = $this->get('form.flow.createForm'); // must match the flow's service id
       $flow->bind($individual);
 
-
       $form = $flow->createForm();
 
       if ($flow->isValid($form)) {
@@ -151,5 +147,3 @@ public function createFormAction() {
       return $this->render('success.html.twig');
     }
 }
-
- ?>

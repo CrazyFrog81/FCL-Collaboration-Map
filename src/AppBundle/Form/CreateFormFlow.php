@@ -32,5 +32,3 @@ class CreateFormFlow extends FormFlow {
     }
 
 }
-
- ?>

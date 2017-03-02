@@ -6,8 +6,6 @@ namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use AppBundle\Entity\Individual;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use AppBundle\Form\Type\ProjectType;
@@ -37,5 +35,3 @@ class CollaborationInformationType extends AbstractType
       ));
     }
 }
-
- ?>

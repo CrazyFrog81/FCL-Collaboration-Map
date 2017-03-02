@@ -8,8 +8,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\CallbackTransformer;
 
 class ChoiceOtherNatType extends AbstractType
@@ -23,9 +21,14 @@ class ChoiceOtherNatType extends AbstractType
         'style' => 'width:50%',
       ),
       'choices' => array(
+        'American' => 'American',
         'Australian' => 'Australian',
+        'Belgian' => 'Belgian',
+        'British' => 'British',
+        'Canadian' => 'Canadian',
         'Chinese' => 'Chinese',
         'Colombian' => 'Colombian',
+        'Czech' => 'Czech',
         'Dutch' => 'Dutch',
         'English' => 'English',
         'French' => 'French',
@@ -37,12 +40,15 @@ class ChoiceOtherNatType extends AbstractType
         'Japanese' => 'Japanese',
         'Mexican' => 'Mexican',
         'New Zealander' => 'New Zealander',
+        'Portuguese' => 'Portuguese',
         'Russian' => 'Russian',
         'Serbian' => 'Serbian',
         'Singaporean' => 'Singaporean',
+        'South African' => 'South African',
         'Spanish' => 'Spanish',
         'Swiss' => 'Swiss',
         'Taiwanese' => 'Taiwanese',
+        'Turkish' => 'Turkish',
         'Other' => 'Other',
     )
     ))
@@ -62,7 +68,12 @@ class ChoiceOtherNatType extends AbstractType
         }
         if (in_array($data,
         array(
+          'American' => 'American',
           'Australian' => 'Australian',
+          'Belgian' => 'Belgian',
+          'British' => 'British',
+          'Canadian' => 'Canadian',
+          'Czech' => 'Czech',
           'Chinese' => 'Chinese',
           'Colombian' => 'Colombian',
           'Dutch' => 'Dutch',
@@ -76,12 +87,15 @@ class ChoiceOtherNatType extends AbstractType
           'Japanese' => 'Japanese',
           'Mexican' => 'Mexican',
           'New Zealander' => 'New Zealander',
+          'Portuguese' => 'Portuguese',
           'Russian' => 'Russian',
           'Serbian' => 'Serbian',
           'Singaporean' => 'Singaporean',
+          'South African' => 'South African',
           'Spanish' => 'Spanish',
           'Swiss' => 'Swiss',
           'Taiwanese' => 'Taiwanese',
+          'Turkish' => 'Turkish',
         )
         , true)){
           return array('Choices' => $data, 'Others' => null);
@@ -110,6 +124,3 @@ class ChoiceOtherNatType extends AbstractType
     return FormType::class;
   }
 }
-
-
- ?>

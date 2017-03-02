@@ -8,8 +8,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\CallbackTransformer;
 
 class ChoiceOtherRGType extends AbstractType
@@ -21,14 +19,17 @@ class ChoiceOtherRGType extends AbstractType
       'placeholder' => '-- Select --',
       'by_reference' => false,
       'choices'=>array(
+      'Scenario 1 Coordination' => 'Scenario 1 Coordination',
       'Scenario 1.1' => 'Scenario 1.1',
       'Scenario 1.2' => 'Scenario 1.2',
       'Scenario 1.3' => 'Scenario 1.3',
       'Scenario 1.4' => 'Scenario 1.4',
+      'Scenario 2 Coordination' => 'Scenario 2 Coordination',
       'Scenario 2.1' => 'Scenario 2.1',
       'Scenario 2.2' => 'Scenario 2.2',
       'Scenario 2.3' => 'Scenario 2.3',
       'Scenario 2.4' => 'Scenario 2.4',
+      'Scenario 3 Coordination' => 'Scenario 3 Coordination',
       'Scenario 3.1' => 'Scenario 3.1',
       'Scenario 3.2' => 'Scenario 3.2',
       'Scenario 3.3' => 'Scenario 3.3',
@@ -97,7 +98,3 @@ class ChoiceOtherRGType extends AbstractType
     return FormType::class;
   }
 }
-
-
-
- ?>

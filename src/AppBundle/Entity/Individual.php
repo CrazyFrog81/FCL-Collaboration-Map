@@ -4,7 +4,6 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\User;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity

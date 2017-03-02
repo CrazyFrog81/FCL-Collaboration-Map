@@ -29,9 +29,9 @@ class Project
   protected $start_date;
 
   /**
-  * @ORM\Column(type="date")
+  * @ORM\Column(type="string")
   */
-  protected $completion_date;
+  protected $project_duration;
 
   /**
   * @ORM\Column(type="integer")
@@ -90,27 +90,27 @@ class Project
     }
 
     /**
-     * Set completionDate
+     * Set projectDuration
      *
-     * @param string $completionDate
+     * @param string $projectDuration
      *
      * @return Project
      */
-    public function setCompletionDate($completionDate)
+    public function setProjectDuration($project_duration)
     {
-        $this->completion_date = $completionDate;
+        $this->project_duration = $project_duration;
 
         return $this;
     }
 
     /**
-     * Get completionDate
+     * Get projectDuration
      *
      * @return string
      */
-    public function getCompletionDate()
+    public function getProjectDuration()
     {
-        return $this->completion_date;
+        return $this->project_duration;
     }
 
     /**

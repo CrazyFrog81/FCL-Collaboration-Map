@@ -99,6 +99,7 @@
     </head>
     <body class="col-md-12">
         {% block body %}{% endblock %}
+
         {% block javascripts %}
         <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
         <script src="{{ asset('js/main.js') }}"></script>
@@ -117,7 +118,7 @@
         // Collection holder for the project collection
         var $collectionHolder;
 
-        var existing_project_count=0;
+        var existing_project_count = 0;
 
         // To produce project number in the form
         var project_index = 2;
@@ -204,6 +205,14 @@
             // No need for user input
            $("[id$=_day]").hide();
 
+           // Changing the style of second page of the form
+           if($('[id^=collaboration_information_projects_]').attr('id') == null){
+              $('.changeTop').css('height', '100vh');
+            }else{
+              $('.changeTop').css('height', '100%');
+            }
+
+           // Validation of projects after added
            $('[id$=_collaborated_before]').each(function(){
              id = '#' + $(this).attr('id');
              validateRadioChoices(id,2);
@@ -229,9 +238,9 @@
              validateCheckbox(id,2);
            });
 
-           $('[id$=_completion_date]').each(function(){
+           $('[id$=_project_duration]').each(function(){
              id = '#' + $(this).attr('id');
-             validateDate(id,2);
+             validateRadioChoices(id,2);
            });
 
            $('[id$=_start_date]').each(function(){
@@ -290,13 +299,18 @@
                 }
                 $('#project_label_' + delete_text_index).text(result);
 
-
-
                 // Remove project list which is deleted
                 $('li.active').remove();
 
                 // Remove one project form
                 $projectFormLi.remove();
+
+                // Changing the style of second page of the form
+                if($('[id^=collaboration_information_projects_]').attr('id') == null){
+                   $('.changeTop').css('height', '100vh');
+                 }else{
+                   $('.changeTop').css('height', '100%');
+                 }
             });
         }
 
@@ -341,6 +355,8 @@
           existing_project_count++;
         });
 
+        // due to first page only have next button, the position was a bit weird
+        // hence this code is to align the first page button
         $('li.stepLi').each(function(){
           if($(this).css('color') == 'rgb(0, 0, 0)'){
             $(this).find('span.stepLiNumber').css('background-color','black');
@@ -353,6 +369,15 @@
           }
         });
 
+        // Somehow the alignment of page is off after added projects
+        // Hence dynamically change the styling accordingly
+        if($('[id^=collaboration_information_projects_]').attr('id') != null){
+          $('.changeTop').css('top', '5px');
+          $('.changeTop').css('height','100%');
+          $('.changeSidebar').css('top', '8px');
+        }
+
+        // validation where pass down id and step's number in the form
         validateTextbox('#general_information_research_group_Others', 1);
         validateDropdown('#general_information_research_group_Choices',1);
         validateTextbox('#general_information_name',1);
@@ -382,9 +407,9 @@
            validateCheckbox(id,2);
          });
 
-         $('[id$=_completion_date]').each(function(){
+         $('[id$=_project_duration]').each(function(){
            id = '#' + $(this).attr('id');
-           validateDate(id,2);
+           validateRadioChoices(id,2);
          });
 
          $('[id$=_start_date]').each(function(){
@@ -671,6 +696,27 @@
 
       }
 
+      function projectTitleOthers(id){
+        $(id).on('keyup', function(){
+          var text = $(this).val();
+          if (text){
+            for(var i = 0; i < text.length; i++)
+            {
+              if(i == 0){
+                var result = text[i].toUpperCase();
+              }
+              else if(text[i - 1] == ' ')
+              {
+                result = result + text[i].toUpperCase();
+              }else{
+                result = result + text[i].toLowerCase();
+              }
+            }
+          }
+          $(this).val(result);
+        });
+      }
+
       function rangeFunction(id){
         var val = ($('#' + id).val() - 0) / (100 - 0);
 
@@ -756,9 +802,9 @@
             $('.hr_label').remove();
             $('[id$=_project_outcomes_Others]').after("<span class='hr_label'><hr></span>");
             var id =($(this).attr('id'));
-            if(id.substr(id.length - 1) == '6')
+            if(id.substr(id.length - 1) == '5')
             {
-              var other_id = id.replace("RadioChoices_6", "Others");
+              var other_id = id.replace("RadioChoices_5", "Others");
               if($('#' + id).is(':checked')){
                 $('#' + other_id).removeAttr("disabled");
               }else{
@@ -769,9 +815,9 @@
 
           $('input[type=checkbox]').on('input change',function(){
             var id =($(this).attr('id'));
-            if(id.substr(id.length - 1) == '6')
+            if(id.substr(id.length - 1) == '5')
             {
-              var other_id = id.replace("RadioChoices_6", "Others");
+              var other_id = id.replace("RadioChoices_5", "Others");
               if($('#' + id).is(':checked')){
                 $('#' + other_id).removeAttr("disabled");
               }else{
@@ -791,7 +837,7 @@
             var id = '#' + $(this).attr('id');
             var idOther = id.replace(/name$/,'') + 'Others';
             if($(id).val() === 'Other'){
-              toCamelCaseFunction(idOther);
+              projectTitleOthers(idOther);
               $(idOther).show();
               $(idOther).removeAttr("disabled");
             } else{
@@ -804,7 +850,7 @@
            var id = '#' + $(this).attr('id');
            var idOther = id.replace(/name$/,'') + 'Others';
            if($(id).val() === 'Other'){
-             toCamelCaseFunction(idOther);
+             projectTitleOthers(idOther);
              $(idOther).show();
              $(idOther).removeAttr("disabled");
            } else{
@@ -871,14 +917,14 @@
         }
 
         function disciplinaryBackgroundFunction(){
-          if ($('#background_information_disciplinary_backgrounds_RadioChoices_15').is(':checked')){
+          if ($('#background_information_disciplinary_backgrounds_RadioChoices_17').is(':checked')){
             $('#background_information_disciplinary_backgrounds_Others').removeAttr("disabled");
         }else {
           $('#background_information_disciplinary_backgrounds_Others').attr("disabled","disabled");
         }
 
         $('#background_information_disciplinary_backgrounds_RadioChoices').on("change",function(){
-        if ($('#background_information_disciplinary_backgrounds_RadioChoices_15').is(':checked')){
+        if ($('#background_information_disciplinary_backgrounds_RadioChoices_17').is(':checked')){
           $('#background_information_disciplinary_backgrounds_Others').removeAttr("disabled");
       }else {
         $('#background_information_disciplinary_backgrounds_Others').attr("disabled","disabled");
