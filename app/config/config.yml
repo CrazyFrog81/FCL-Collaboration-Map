@@ -76,5 +76,5 @@ fos_user:
     firewall_name: main
     user_class: AppBundle\Entity\User
     from_email:
-        address:        sisisalia@gmail.com
+        address:        #email@gmail.com
         sender_name:    FCL - Collaboration Map
