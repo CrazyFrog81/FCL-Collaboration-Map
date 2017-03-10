@@ -56,7 +56,7 @@ class ProjectType extends AbstractType
         'label' => 'Over the past six month, how much time on average you spent on this project?
         Answer percentage of your working time',
         'attr' => array(
-          'style' => 'width:60px; background-color:white;',
+          'style' => 'width:70px; background-color:white;',
           'id' => 'rangeinput',
           'class' => 'workingTimeTextbox',
           'readonly' => "readonly",
