@@ -35,5 +35,5 @@ twig:
 swiftmailer:
 #    disable_delivery: true
     transport: gmail
-    username: #username
-    password: #password
+    username: sisisalia
+    password: 90779297
