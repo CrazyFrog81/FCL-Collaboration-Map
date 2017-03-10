@@ -6,6 +6,8 @@
         <link rel="stylesheet" href="{{ asset('css/form-flow.css') }}" />
         <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
         <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/7.0.2/css/bootstrap-slider.min.css">
+
         <title>{% block title %}Data Collection Form{% endblock %}</title>
         {% block stylesheets %}
         <style>
@@ -54,30 +56,30 @@
           margin-top: 5px;
         }
         dd{
-          font-size:14px;
+          font-size:12px;
+          font-weight: normal;
         }
-        input[type="range"]{
-          -webkit-appearance: none;
-          -moz-apperance: none;
-          height: 0px;
-          width: 0px;
-          background-image: -webkit-gradient(
-              linear,
-              left top,
-              right top,
-              )}
-        input[type='range']::-webkit-slider-thumb {
-                -webkit-appearance: none !important;
-                background-color: #5cb8d6;
-                border: 1px solid #5cb8d6;
-                height: 20px;
-                width: 20px;
-            }
+        [id^=ex] .slider-selection {
+            	background: #BABABA;
+        }
         .checkbox{
           margin-top:1px;
         }
+        .slider-handle{
+        padding-top:25px;
+        }
         .radio{
           margin-top:1px;
+        }
+        ::-webkit-scrollbar {
+            display: none;
+          }
+        table,th,td{
+          border : 1px solid black;
+          text-align: center;
+          padding: 3px;
+          font-size: 12px;
+          font-weight: normal;
         }
         </style>
         {% endblock %}
@@ -107,6 +109,10 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
         <script src="https://use.fontawesome.com/3c81317088.js"></script>
         <script src="{{ asset('js/jquery.collection.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.7.2/bootstrap-slider.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.7.2/bootstrap-slider.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.7.2/css/bootstrap-slider.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/7.0.2/css/bootstrap-slider.min.css">
         <script type="text/javascript">
 
         // Allow multiple selection, select2 plugin
@@ -117,6 +123,8 @@
 
         // Collection holder for the project collection
         var $collectionHolder;
+
+        var sliderId = 0;
 
         var existing_project_count = 0;
 
@@ -173,7 +181,7 @@
               var number = project_index - 1;
 
               // Adding project list at the side bar
-              $('ul.projectList').append('<li><a href="#projectIndex'+ index +'">Project ' + number +'</a></li>');
+              $('ul.projectList').append('<li><a class="overflowPart" style="font : bold 12px lato"; href="#projectIndex'+ index +'">Project ' + number +'</a></li>');
 
               $newLinkLi.before($newFormLi);
 
@@ -183,16 +191,16 @@
              // Hide and disabled 'Others' textbox accordingly
              collectionOfCollaborators();
 
-             // Update value of the range slider
-             $('input[type=range]').on('input change',function(){
-               var id = ($(this).attr('id'));
-               rangeFunction(id);
-              });
+             rangeFunction();
 
-            // Upload value of the range slider
-            $("input[type=range]").each(function(){
-              var id = ($(this).attr('id'));
-              rangeFunction(id);
+            $('[id$=_id_id]').select2({
+              placeholder: '--Type to Search--',
+              allowClear: true,
+              'language': {
+                'noResults': function(){
+                  return 'No results found, use "Other" instead';
+                }
+              },
             });
 
             // Hide and disabled 'Others' textbox accordingly
@@ -224,8 +232,8 @@
             });
 
            $('[id$=_id_id]').each(function(){
-             id = '#' + $(this).attr('id');
-             validateDropdown(id,2);
+             id = $(this).attr('id');
+             validateSelect2(id,2);
            });
 
            $('[id$=_project_outcomes_Others]').each(function(){
@@ -316,6 +324,11 @@
 
       jQuery(document).ready(function() {
 
+        var pageURL = $(location).attr("href");
+        if(pageURL == 'http://localhost:8000/' && $('.number').text() == '1' ){
+          $('#myModal').modal('show');
+        }
+
         /* All ----Function() are to hide and disable 'Others' textbox accordingly */
 
         collectionOfCollaborators();
@@ -328,15 +341,7 @@
 
         disciplinaryBackgroundFunction();
 
-        $('input[type=range]').on('input change',function(){
-          var id = ($(this).attr('id'));
-          rangeFunction(id);
-        });
-
-        $("input[type=range]").each(function(){
-          var id = ($(this).attr('id'));
-          rangeFunction(id);
-        });
+        rangeFunction();
 
         projectTitleFunction();
 
@@ -377,6 +382,22 @@
           $('.changeSidebar').css('top', '8px');
         }
 
+        $('[id$=_id_id]').select2({
+          placeholder: '--Type to Search--',
+          allowClear: true,
+          'language': {
+            'noResults': function(){
+              return 'No results found, use "Other" instead';
+            }
+          },
+        });
+
+        $('label').each(function(){
+          if($(this).text() == 'Name'){
+              $(this).after('<br class="breakHere">');
+          }
+        });
+
         // validation where pass down id and step's number in the form
         validateTextbox('#general_information_research_group_Others', 1);
         validateDropdown('#general_information_research_group_Choices',1);
@@ -393,8 +414,8 @@
           });
 
          $('[id$=_id_id]').each(function(){
-           id = '#' + $(this).attr('id');
-           validateDropdown(id,2);
+           id = $(this).attr('id');
+           validateSelect2(id,2);
          });
 
          $('[id$=_project_outcomes_Others]').each(function(){
@@ -429,7 +450,7 @@
 
          validateTextbox('#background_information_nationality_Others', 3);
          validateDropdown('#background_information_nationality_Choices', 3);
-         validateMotherTongue('#background_information_mother_tongues', 3);
+         validateMotherTongues('#background_information_mother_tongues', 3);
          validateRadioChoices('#background_information_age',3);
          validateRadioChoices('#background_information_gender', 3);
          validateRadioChoices('#background_information_academic_background',3);
@@ -473,14 +494,14 @@
         });
       }
 
-      function validateMotherTongue(id,step)
+      function validateMotherTongues(id,step)
       {
         $('button[type=submit]').on('click',function(e){
           if($(this).text() == 'Next Step'){
             $('li.stepLi').each(function(){
               if($(this).css('color') == 'rgb(0, 0, 0)'){
                 if($(this).find('span.stepLiNumber').text() == step){
-                  if($(id).val() == null)
+                  if($(id).text() == null)
                   {
                     $('.select2-selection').css('border-color','DarkRed');
                     if($('.select2').next().attr('class') != 'help-block glyphicon glyphicon-exclamation-sign')
@@ -503,6 +524,41 @@
             $('.select2-selection').css('border-color','');
             if($('.select2').next().attr('class') == 'help-block glyphicon glyphicon-exclamation-sign'){
               $('.select2').next().remove();
+            }
+          }
+        });
+      }
+
+      function validateSelect2(id,step)
+      {
+        $('button[type=submit]').on('click',function(e){
+          if($(this).text() == 'Next Step'){
+            $('li.stepLi').each(function(){
+              if($(this).css('color') == 'rgb(0, 0, 0)'){
+                if($(this).find('span.stepLiNumber').text() == step){
+                  if(!($.isNumeric($('#' + id).val())))
+                  {
+                    $('[aria-labelledby="select2-'+ id + '-container"]').css('border-color','DarkRed');
+                    if($('[aria-labelledby="select2-'+ id + '-container"]').next().attr('class') != 'help-block glyphicon glyphicon-exclamation-sign')
+                    {
+                      $('[aria-labelledby="select2-'+ id + '-container"]').after('<div class="help-block glyphicon glyphicon-exclamation-sign" style="color:DarkRed;"><span style="font:bold italic 12px lato;">Please choose one</span></div>');
+                    }
+                    $('html, body').animate({
+                         scrollTop: $('#' + id).offset().top - 200
+                     }, 700);
+                    e.preventDefault();
+                  }
+                }
+              }
+            });
+          }
+        });
+        $('#' + id).on('input change',function(){
+          if($('#' + id).val() != null)
+          {
+            $('[aria-labelledby="select2-'+ id + '-container"]').css('border-color','');
+            if($('[aria-labelledby="select2-'+ id + '-container"]').next().attr('class') == 'help-block glyphicon glyphicon-exclamation-sign'){
+              $('[aria-labelledby="select2-'+ id + '-container"]').next().remove();
             }
           }
         });
@@ -717,20 +773,33 @@
         });
       }
 
-      function rangeFunction(id){
-        var val = ($('#' + id).val() - 0) / (100 - 0);
-
-        $('#' +id).css('background-image',
-                    '-webkit-gradient(linear, left top, right top, '
-                    + 'color-stop(' + val + ', #808080), '
-                    + 'color-stop(' + val + ', #FFFFFF)'
-                    + ')'
-                    );
-        $("#range_label" + id).remove();
-        $("#" + id).after('<div id="range_label'+ id + '"><br><input readonly="readonly" style="width:60px; background-color:white" class="form-control" type="text" id="value' + id + '"></input></div>' );
-        var x = document.getElementById(id).value;
-        $("#value" + id).val(x + '%');
-      }
+      function rangeFunction(){
+      $('.container').remove();
+      $('[id$=_working_time]').each(function(){
+        var id = '#' + $(this).attr('id');
+        $(this).before('<div class="container" style="margin-left:-10px;"><p></p><input id="ex'+ sliderId +'" style="width:50%; overflow:hidden;" data-slider-tooltip="hide" data-slider-id="ex'+sliderId+'Slider" type="text" data-slider-handle="square" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value = "50"/><p></p></div>');
+         $('#ex' + sliderId).slider({
+           formatter: function(value) {
+             return 'Current value: ' + value;
+           }
+         });
+         if(!($(id).val()))
+         {
+           $(id).val('50 %');
+         }else{
+           var value = parseInt($(id).val());
+           $('#ex'+ sliderId + 'Slider').find('.slider-track').find('.slider-selection').attr('style', 'width:'+ value + '%');
+           $('#ex'+ sliderId + 'Slider').find('.slider-handle').attr('style', 'left:'+ value + '%');
+         }
+         $('#ex' + sliderId).on('slideStop',function(slideEvt){
+           $(id).val(slideEvt.value + ' %');
+         });
+         $('#ex' + sliderId).on('slide',function(slideEvt){
+           $(id).val(slideEvt.value + ' %');
+         });
+         sliderId++;
+      });
+    }
 
       function collectionOfCollaborators(){
         $('.each_collab_label').before('<hr class="style">');
@@ -746,9 +815,27 @@
           remove: '<a href="#" class="collection-remove"></br><i class="fa fa-minus-circle" style="color:orange;"><span style="color:black; font: italic 12px lato;"> Remove this person</span></br></i></a><hr style="width:85%; margin-left:0px;">',
           // Hide and disable 'Others' textbox accordingly
           after_add: function(collection,element){
+            $('.breakHere').remove();
+
+            $('label').each(function(){
+              if($(this).text() == 'Name'){
+                  $(this).after('<br class="breakHere">');
+              }
+            });
+
+            $('[id$=_id_id]').select2({
+              placeholder: '--Type to Search--',
+              allowClear: true,
+              'language': {
+                'noResults': function(){
+                  return 'No results found, use "Other" instead';
+                }
+              },
+            });
+
             $('[id$=_id_id]').each(function(){
-              id = '#' + $(this).attr('id');
-              validateDropdown(id,2);
+              id = $(this).attr('id');
+              validateSelect2(id,2);
             });
 
             $('[id$=_id_Others]').each(function(){
@@ -802,7 +889,7 @@
             $('.hr_label').remove();
             $('[id$=_project_outcomes_Others]').after("<span class='hr_label'><hr></span>");
             var id =($(this).attr('id'));
-            if(id.substr(id.length - 1) == '5')
+            if($('#' + id).val() == 'Other' && id.substr(id.length - 1) == '5')
             {
               var other_id = id.replace("RadioChoices_5", "Others");
               if($('#' + id).is(':checked')){
@@ -815,7 +902,7 @@
 
           $('input[type=checkbox]').on('input change',function(){
             var id =($(this).attr('id'));
-            if(id.substr(id.length - 1) == '5')
+            if($('#' + id).val() == 'Other' && id.substr(id.length - 1) == '5')
             {
               var other_id = id.replace("RadioChoices_5", "Others");
               if($('#' + id).is(':checked')){

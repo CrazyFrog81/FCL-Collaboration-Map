@@ -9,6 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\RangeType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use AppBundle\Form\Type\RadioOtherProjectType;
@@ -49,21 +50,21 @@ class ProjectType extends AbstractType
         ),
         'expanded' => true,
         'multiple' => false,
-        'label' => 'Completion date',
+        'label' => 'Expected project duration',
       ))
-      ->add('working_time', RangeType::class, array(
+      ->add('working_time', TextType::class, array(
         'label' => 'Over the past six month, how much time on average you spent on this project?
         Answer percentage of your working time',
         'attr' => array(
-          'min' => 0,
-          'max' => 100,
-          'style' => 'width:50%;',
-          'class' => 'range_widget',
+          'style' => 'width:60px; background-color:white;',
+          'id' => 'rangeinput',
+          'class' => 'workingTimeTextbox',
+          'readonly' => "readonly",
         )
       ));
 
     $builder->add('project_outcomes', RadioOtherProjectType::class, array(
-      'label' => 'What are the expected outcomes from this presentation?',
+      'label' => 'What are the expected outcomes from this project?',
     ));
 
     $builder->add('collaborators', CollectionType::class, array(

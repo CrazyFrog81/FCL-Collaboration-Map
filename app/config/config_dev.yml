@@ -36,4 +36,4 @@ swiftmailer:
 #    disable_delivery: true
     transport: gmail
     username: sisisalia
-    password: password
+    password: 90779297

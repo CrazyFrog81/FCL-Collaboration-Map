@@ -24,7 +24,6 @@ class ChoiceOtherCollabType extends AbstractType
     $builder
     ->add('id', EntityType::class, array(
       'label' => 'Name',
-      'placeholder' => '--Select--',
       'attr' => array(
         'style' => 'width:35%',
       ),

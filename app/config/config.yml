@@ -77,4 +77,4 @@ fos_user:
     user_class: AppBundle\Entity\User
     from_email:
         address:        sisisalia@gmail.com
-        sender_name:    demo
+        sender_name:    FCL - Collaboration Map

@@ -29,6 +29,8 @@ public function createFormAction() {
     $formData = new Individual(); // Your form data class. Has to be an object, won't work properly with an array.
     $formData->setId($this->getUser());
 
+    $formData->setName($this->getUser()->getUsername());
+
     $flow = $this->get('form.flow.createForm'); // must match the flow's service id
     $flow->bind($formData);
 
@@ -104,8 +106,17 @@ public function createFormAction() {
               // flow finished
               $em = $this->getDoctrine()->getManager();
 
+              // delete the projects record in database
+              $oldprojects = $em->getRepository('AppBundle:Project')->findByIndividual($userId);
+              foreach($oldprojects as $oldproject){
+                $em->remove($oldproject);
+              }
+
+              $em->persist($individual);
+
               $data = array();
               $projects = $individual->getProjects();
+
               foreach($projects as $project)
               {
                 $collaborators = $project->getCollaborators();
@@ -120,7 +131,7 @@ public function createFormAction() {
 
               $flow->reset(); // remove step data from the session
 
-              return $this->redirect($this->generateUrl('sucess')); // redirect when done
+              return $this->redirect($this->generateUrl('success')); // redirect when done
           }
       }
       return $this->render('createForm.html.twig', array(
@@ -132,7 +143,7 @@ public function createFormAction() {
     }
 
     /**
-    * @Route("/success", name="sucess")
+    * @Route("/success", name="success")
     */
     public function successFormAction()
     {

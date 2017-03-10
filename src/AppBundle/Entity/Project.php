@@ -34,7 +34,7 @@ class Project
   protected $project_duration;
 
   /**
-  * @ORM\Column(type="integer")
+  * @ORM\Column(type="string")
   */
   protected $working_time;
 

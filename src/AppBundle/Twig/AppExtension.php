@@ -41,19 +41,36 @@ class AppExtension extends \Twig_Extension
       $name = $user->getUserName();
     }
 
-    $nameArray = explode(" ", $name);
-    $choiceArray = explode(" ", $data['collaborated_before']);
+    $count = 0;
 
-    foreach($nameArray as $i){
-      print_r('</br>');
-      $i = str_replace("_", " ", $i);
-      print_r("Name : " . "<br /><span style='font: bold 14px lato;'>". $i ."</span>");
-      print_r('</br>');
-      foreach($choiceArray as $j){
-        print_r("<div style='margin-top:5px'>Collaborated Before : " . "<br /><span style='font: bold 14px lato;'>". $j ."</span></div>");
-        print_r('<p></p>');
+    foreach($data as $i){
+      if($count/2  == 0)
+      {
+        // print_r('<tr>');
+        // print_r('<td>' . $count . 1 . '</td>');
+        print_r('<td>'. $name . '</td>');
       }
+      if($count/2 != 0)
+      {
+        print_r('<td>'. $i .'</td>');
+        print_r('</tr>');
+      }
+      $count++;
     }
+
+    // foreach($data as $i){
+    //   if($count/2  == 0)
+    //   {
+    //     print_r('<br>');
+    //     print_r("Name : " . "<br /><span style='font: 12px lato;'>". $name ."</span>");
+    //   }
+    //   if($count/2 != 0)
+    //   {
+    //     print_r("<div style='margin-top:5px'>Collaborated Before : " . "<br /><span style='font:12px lato;'>". $i ."</span></div>");
+    //     print_r('<br>');
+    //   }
+    //   $count++;
+    // }
   }
 
   public function toStringFilter($data)
@@ -98,7 +115,7 @@ class AppExtension extends \Twig_Extension
 
   public function collaboratorLabelFilter($data)
   {
-    return ('Collaborator #' . $data);
+    return ($data);
   }
 
   public function projectLabelFilter($data)

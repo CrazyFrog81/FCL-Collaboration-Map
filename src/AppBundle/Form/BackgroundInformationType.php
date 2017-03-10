@@ -65,9 +65,9 @@ class BackgroundInformationType extends AbstractType
         ))
         ->add('academic_background', ChoiceType::class, array(
           'choices' => array(
-            'Bachelor Degree' => 'bachelor',
-            'Master Degree' => 'master',
-            'PhD Degree' => 'phD',
+            'Bachelor Degree' => 'Bachelor',
+            'Master Degree' => 'Master',
+            'PhD Degree' => 'PhD',
           ),
           'expanded' => true,
           'multiple' => false,
@@ -85,8 +85,8 @@ class BackgroundInformationType extends AbstractType
             ))
         ->add('gender', ChoiceType::class, array(
           'choices' => array(
-            'Female' => 'female',
-            'Male' => 'male',
+            'Female' => 'Female',
+            'Male' => 'Male',
           ),
           'expanded' => true,
           'multiple' => false,
