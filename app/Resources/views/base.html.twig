@@ -536,7 +536,7 @@
             $('li.stepLi').each(function(){
               if($(this).css('color') == 'rgb(0, 0, 0)'){
                 if($(this).find('span.stepLiNumber').text() == step){
-                  if(!($.isNumeric($('#' + id).val())))
+                  if(!($.isNumeric($('#' + id).val())) && ($('#' + id).val() != 'Other'))
                   {
                     $('[aria-labelledby="select2-'+ id + '-container"]').css('border-color','DarkRed');
                     if($('[aria-labelledby="select2-'+ id + '-container"]').next().attr('class') != 'help-block glyphicon glyphicon-exclamation-sign')
