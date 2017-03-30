@@ -104,6 +104,9 @@
           <div class="projects" data-prototype-project="{{ form_widget(form.projects.vars.prototype)|e('html_attr') }}">
           <body data-spy="scroll" data-target="#myScrollspy" data-offset="180" >
 
+          <p style="width: 50%; text-align: justify;">Add and describe the research collaboration(s) you are currently working on. Research collaboration may include:  co-authoring a publication, preparing a joint grant application, piloting a case study, expert consultation and data sharing.
+          </p><p>Note: If you cannot find the name of the project, please click “other” and add it manually.</p>
+
           <h3 id="project_label_1" style="font-weight:bold; font-size:14px; padding-top:8px;"> Project #1 </h3>
           <br>
             {% for project in form.projects %}
