@@ -1,6 +1,7 @@
 <?php
 
-// src/AppBundle/Form/DataTransformer/IssueToNumberTransformer.php
+// Read http://symfony.com/doc/current/form/data_transformers.html for more information about data transformer
+
 namespace AppBundle\Form\DataTransformer;
 
 use AppBundle\Entity\Project;
@@ -17,19 +18,7 @@ class ChoiceOtherProjectTransformer implements DataTransformerInterface
         $this->manager = $manager;
     }
 
-    // Data is in term of Object
-    // Hence if in 'name' is 'Other' return data to 'Others' textbox
-    // If not the return to 'name'
-    public function reverseTransform($data)
-    {
-          if('Other' == $data['name']){
-            return $data['Others'];
-          } else {
-            return $data['name'];
-          }
-    }
-
-    // Data received is in term of string
+    // $data received is in term of string
     // Hence find the project object by name
     // If there is no such project return to 'Others'
     // If there is then return to 'name'
@@ -49,5 +38,17 @@ class ChoiceOtherProjectTransformer implements DataTransformerInterface
         }else {
           return array('name' => $data, 'Others' => null);
         }
+    }
+
+    // $data is in term of Object
+    // Hence if in $data['name'] is 'Other' return $data to 'Others' textbox
+    // If not the return to 'name'
+    public function reverseTransform($data)
+    {
+          if('Other' == $data['name']){
+            return $data['Others'];
+          } else {
+            return $data['name'];
+          }
     }
 }

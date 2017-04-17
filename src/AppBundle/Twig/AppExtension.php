@@ -25,11 +25,14 @@ class AppExtension extends \Twig_Extension
       new \Twig_SimpleFilter('projectList', array($this, 'projectListFilter')),
       new \Twig_SimpleFilter('section', array($this,'sectionFilter')),
       new \Twig_SimpleFilter('mother_tongue', array($this, 'motherTongueFilter')),
-      new \Twig_SimpleFilter('collaborator_label', array($this, 'collaboratorLabelFilter')),
       new \Twig_SimpleFilter('project_label', array($this, 'projectLabelFilter')),
     );
   }
 
+  /*
+  * $data received is 'id' attribute
+  * hence access database to get the name of the collaborator to show at 'Confirmation' page
+  */
   public function nameFilter($data)
   {
     if(!is_numeric($data['id'])){
@@ -46,8 +49,6 @@ class AppExtension extends \Twig_Extension
     foreach($data as $i){
       if($count/2  == 0)
       {
-        // print_r('<tr>');
-        // print_r('<td>' . $count . 1 . '</td>');
         print_r('<td>'. $name . '</td>');
       }
       if($count/2 != 0)
@@ -57,22 +58,9 @@ class AppExtension extends \Twig_Extension
       }
       $count++;
     }
-
-    // foreach($data as $i){
-    //   if($count/2  == 0)
-    //   {
-    //     print_r('<br>');
-    //     print_r("Name : " . "<br /><span style='font: 12px lato;'>". $name ."</span>");
-    //   }
-    //   if($count/2 != 0)
-    //   {
-    //     print_r("<div style='margin-top:5px'>Collaborated Before : " . "<br /><span style='font:12px lato;'>". $i ."</span></div>");
-    //     print_r('<br>');
-    //   }
-    //   $count++;
-    // }
   }
 
+  /* Turning an array of data into string on 'Confirmation' page */
   public function toStringFilter($data)
   {
     $string = json_encode($data);
@@ -89,12 +77,17 @@ class AppExtension extends \Twig_Extension
     return join(",", $array);
   }
 
+  /* Changing 'Project 1' to project name submitted by the User at the 'Collaboration Information' page */
   public function projectListFilter($data)
   {
     $index = str_replace(' ','_', $data);
     print_r('<li style="font-size:12px;font-family:lato;font-weight:bold;"><a href="#'. $index .'">'. $data .'</a></li>');
   }
 
+  /*
+  * Naming project 'id' according to project name submitted by the user at the 'Collaboration Information' page
+  * Used in javascript
+  */
   public function sectionFilter($data)
   {
     if(null === $data)
@@ -107,17 +100,15 @@ class AppExtension extends \Twig_Extension
     }
   }
 
+  /* Translate encoded language at 'Confirmation' page*/
   public function motherTongueFilter($data)
   {
       $languages = Intl::getLanguageBundle()->getLanguageNames('en');
       return($languages[$data]);
   }
 
-  public function collaboratorLabelFilter($data)
-  {
-    return ($data);
-  }
-
+  /* Increment the numbers of the projects at 'Confirmation' page */
+  /* Project #1, Project #2 */
   public function projectLabelFilter($data)
   {
     return ('Project #' . $data);

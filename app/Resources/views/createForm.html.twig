@@ -9,230 +9,242 @@
 {{ form_start(form) }}
 {{ form_errors(form) }}
 
+{# Changing sidebar css due to difference of sidebar in second step and the rest of the step #}
 {% if (flow.getCurrentStepNumber() == 2) %}
   <div class="col-lg-2 col-sm-3 changeSidebar" style="position:relative; width:20%; top: -8px;">
 {% else %}
   <div class="col-lg-2 col-sm-3" style="position:fixed; width:20%; top:120px;">
 {% endif %}
 
-<br>
-    {% include '@CraueFormFlow/FormFlow/stepList.html.twig' %}
-<hr>
-    <!-- Trigger the modal with a button -->
-      <a data-toggle="modal" data-target="#myModal" style="font: bold 14px lato">Rationale of the project</a>
-<hr>
+    <br>
 
+    {# Includes the step list at the side bar #}
+    {% include '@CraueFormFlow/FormFlow/stepList.html.twig' %}
+
+    <hr>
+
+    {# Trigger the modal with a button #}
+    <a class="link" data-toggle="modal" data-target="#myModal">Rationale of the project</a>
+    <hr>
+    {# Scrollspy only activate on second step #}
     {% if flow.getCurrentStepNumber() == 2 %}
-        <nav id="myScrollspy">
-          <ul class="projectList nav nav-pills nav-stacked" data-spy="affix" data-offset-top="295" style="overflow:scroll; height: 60%; font:12px bold lato;">
-          <h5 style="font-size:14px; font-weight: bold; font-family: lato;"> Existing Project: </h5>
+      <nav id="myScrollspy">
+        <ul class="projectList nav nav-pills nav-stacked" data-spy="affix" data-offset-top="295">
+          <h5 id="existing_project"> Existing Project: </h5>
           {% for project in formData.projects %}
             {% set projectList = project.name %}
             {{ projectList | projectList }}
           {% endfor %}
-          </ul>
-        </nav>
+        </ul>
+      </nav>
     {% endif %}
 
     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-    <div style="position:fixed; bottom:10%; left:30px; font-size:12px;">
+      <div class="logout_status_position">
         {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}<br /></br>
-        <a class="btn btn-default" style="font-size:12px; font-weight:bold; color:black;" href="{{ path('fos_user_security_logout') }}">
-            {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+        <a class="btn btn-default logout" href="{{ path('fos_user_security_logout') }}">
+          {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
         </a>
-    </div>
+      </div>
     {% else %}
-        <br>
-        <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
-        <hr>
-        <a href="{{ path('fos_user_registration_register') }}">{{ 'layout.register'|trans({}, 'FOSUserBundle') }}</a>
-        <hr>
-        <a href="/resetting/request">Reset Password</a>
-        <hr>
+      <br>
+      <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+      <hr>
+      <a href="{{ path('fos_user_registration_register') }}">{{ 'layout.register'|trans({}, 'FOSUserBundle') }}</a>
+      <hr>
+      <a href="/resetting/request">Reset Password</a>
+      <hr>
     {% endif %}
 
-</div>
+  </div>
+
+{# Change style depending on which steps due to different steps have different length of form #}
 {% if flow.getCurrentStepNumber() == 2 %}
   <div class="col-md-9 col-lg-10 changeTop" style="background-color:#F8F9F9; border-left:1px solid #C8C8C8; width:80%; height:100vh; top:-10px;">
 {% elseif flow.getCurrentStepNumber() == 1 %}
-<div class="col-md-9 col-lg-10" style="background-color:#F8F9F9; border-left:1px solid #C8C8C8; width:80%; height:100vh; left: 20% ; top:5px;">
+  <div class="col-md-9 col-lg-10" style="background-color:#F8F9F9; border-left:1px solid #C8C8C8; width:80%; height:100vh; left: 20% ; top:5px;">
 {% else%}
   <div class="col-md-9 col-lg-10" style="background-color:#F8F9F9; border-left:1px solid #C8C8C8; width:80%; height:100%; left: 20% ; top:5px;">
 {% endif %}
 
-<!-- Modal -->
-<div id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Rationale of the project</h4>
-      </div>
-      <div class="modal-body" style="background-color:#F8F9F9;">
-        <div>
-        This on-line form is a part of a longitudinal research project called "Research Collaboration in FCL".</br> </br>
-        The objective is to study the pattern of research collaboration among researchers in a multi-disciplinary research institute such as FCL. You are invited to fill in this form every six months. The result will be treated as confidential. All names will be presented as anonymous in the final research output.</br></br>
-        Research Collaboration is defined as a collaboration between <u>two or more social entity</u>, where there is a <u>common shared goal</u> and <u>reciprocity</u> of actions/contributions across the collaboration timeline. </br></br>
-        Research collaboration may include co-authoring a publication, preparing a joint grant application, piloting a case study, expert consultation and data sharing. 	</br></br>
+    {# Modal #}
+    <div id="myModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+      {# Modal content #}
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Rationale of the project</h4>
+          </div>
+          <div class="modal-body">
+            <div>
+              This on-line form is a part of a longitudinal research project called "Research Collaboration in FCL".</br> </br>
+              The objective is to study the pattern of research collaboration among researchers in a multi-disciplinary research institute such as FCL. You are invited to fill in this form every six months. The result will be treated as confidential. All names will be presented as anonymous in the final research output.</br></br>
+              Research Collaboration is defined as a collaboration between <u>two or more social entity</u>, where there is a <u>common shared goal</u> and <u>reciprocity</u> of actions/contributions across the collaboration timeline. </br></br>
+              Research collaboration may include co-authoring a publication, preparing a joint grant application, piloting a case study, expert consultation and data sharing. 	</br></br>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
 
-  </div>
-</div>
-
     {% if flow.getCurrentStepNumber() == 1 %}
-          <h3 style="font-weight:bolder; font-size:18px;"><span class="number">1</span> Initial Information</h3>
-          </br>
-            {{ form_label(form.name)}}
-            {{ form_widget(form.name, {'attr' : {'style' : 'width:50%;'} } ) }}
-            <br>
-            {{ form_label(form.research_group) }}
-            {{ form_widget(form.research_group.Choices, {'attr' : {'style' : 'width:50%;'}} ) }}
-            <br>
-            {{ form_widget(form.research_group.Others, {'attr' : {'placeholder' : 'Please specify your research group', 'style' : 'width:50%;'} }) }}
-            <br>
+      <h3 class="form-step-title"><span class="number">1</span> Initial Information</h3>
+      </br>
+      {{ form_label(form.name)}}
+      {{ form_widget(form.name, {'attr' : {'style' : 'width:50%;'} } ) }}
+      <br>
+      {{ form_label(form.research_group) }}
+      {{ form_widget(form.research_group.Choices, {'attr' : {'style' : 'width:50%;'}} ) }}
+      <br>
+      {{ form_widget(form.research_group.Others, {'attr' : {'placeholder' : 'Please specify your research group', 'style' : 'width:50%;'} }) }}
+      <br>
     {% endif %}
 
     {% if flow.getCurrentStepNumber() == 2 %}
-    <h3 style="font-weight:bolder; font-size:18px;"><span class="number">2</span> Research Collaboration Information</h3>
-          <div class="projects" data-prototype-project="{{ form_widget(form.projects.vars.prototype)|e('html_attr') }}">
-          <body data-spy="scroll" data-target="#myScrollspy" data-offset="180" >
+      <h3 class="form-step-title"><span class="number">2</span> Research Collaboration Information</h3>
 
-          <p style="width: 50%; text-align: justify;">Add and describe the research collaboration(s) you are currently working on. Research collaboration may include:  co-authoring a publication, preparing a joint grant application, piloting a case study, expert consultation and data sharing.
+      <div class="projects" data-prototype-project="{{ form_widget(form.projects.vars.prototype)|e('html_attr') }}">
+        <body data-spy="scroll" data-target="#myScrollspy" data-offset="180" >
+
+          <p id="collaboration-description">Add and describe the research collaboration(s) you are currently working on. Research collaboration may include:  co-authoring a publication, preparing a joint grant application, piloting a case study, expert consultation and data sharing.
           </p><p>Note: If you cannot find the name of the project, please click “other” and add it manually.</p>
 
-          <h3 id="project_label_1" style="font-weight:bold; font-size:14px; padding-top:8px;"> Project #1 </h3>
+          <h3 id="project_label_1"> Project #1 </h3>
           <br>
-            {% for project in form.projects %}
+          {% for project in form.projects %}
             {% set section= project.vars.value.name %}
             {{ section | section }}
-              {{ form_row(project.name) }}
-              {{ form_row(project.start_date) }}
-              {{ form_row(project.project_duration) }}
-              {{ form_label(project.working_time) }}
-              {{ form_widget(project.working_time) }} <br />
-              {{ form_label(project.project_outcomes)}}
-              {{ form_widget(project.project_outcomes.RadioChoices) }}
-              {{ form_widget(project.project_outcomes.Others, {'attr' : {'placeholder' : 'If others, please specify here'}}) }}
-
+            {{ form_row(project.name) }}
+            {{ form_row(project.start_date) }}
+            {{ form_row(project.project_duration) }}
+            {{ form_label(project.working_time) }}
+            {{ form_widget(project.working_time) }} <br />
+            {{ form_label(project.project_outcomes)}}
+            {{ form_widget(project.project_outcomes.RadioChoices) }}
+            {{ form_widget(project.project_outcomes.Others, {'attr' : {'placeholder' : 'If others, please specify here'}}) }}
             {{ form_row(project.collaborators) }}
             </section>
-              {% endfor %}
-              </body>
-        </div>
+          {% endfor %}
+        </body>
+      </div>
     {% endif %}
 
     {% if flow.getCurrentStepNumber() == 3 %}
-        <div>
-        <h3 style="font-weight:bolder; font-size:18px;"><span class="number">3</span> Background Information</h3>
-          <h4 style="font-size:14px; font-weight:bold; font-family:lato; padding-top:18px;">Work related</h4>
-          <br>
-          {{ form_label(form.disciplinary_backgrounds) }}
-          <div style="column-count:2; width:60%">
-            {{ form_widget(form.disciplinary_backgrounds.RadioChoices) }}
-          </div>
-          {{ form_widget(form.disciplinary_backgrounds.Others, {'attr' : {'placeholder' : 'If others, please specify here'}}) }}
-            <br>
-            {{ form_row(form.locations) }}
-            {{ form_row(form.start_date) }}
-            {{ form_label(form.before_fcl) }} </br>
-            (*Researcher may include: research assistant, research associate,<br> research fellows, research coordinator, PI and CoPI)
-            {{ form_widget(form.before_fcl) }}
-            {{ form_row(form.academic_background) }}
-            <hr />
-            <h4 style="font-size:14px; font-weight:bold; font-family:lato;">Personal</h4>
-            <br>
-            {{ form_label(form.mother_tongues) }} </br>
-            {{ form_widget(form.mother_tongues) }}
-            </br></br>
-            {{ form_label(form.gender) }}
-            {{ form_widget(form.gender) }}
-            {{ form_row(form.age) }}
-            {{ form_label(form.nationality) }}
-            {{ form_widget(form.nationality.Choices) }}
-            <br>
-            {{ form_widget(form.nationality.Others, {'attr' : {'placeholder' : 'Please specify your nationality'}}) }}
-        </div>
+      <div>
+        <h3 class="form-step-title"><span class="number">3</span> Background Information</h3>
 
+        <h4 class="sub-heading">Work related</h4>
+        <br>
+        {{ form_label(form.disciplinary_backgrounds) }}
+        <div id="disciplinary-checkbox">
+          {{ form_widget(form.disciplinary_backgrounds.RadioChoices) }}
+        </div>
+        {{ form_widget(form.disciplinary_backgrounds.Others, {'attr' : {'placeholder' : 'If others, please specify here'}}) }}
+        <br>
+        {{ form_row(form.locations) }}
+        {{ form_row(form.start_date) }}
+        {{ form_label(form.before_fcl) }} </br>
+        (*Researcher may include: research assistant, research associate,<br> research fellows, research coordinator, PI and CoPI)
+        {{ form_widget(form.before_fcl) }}
+        {{ form_row(form.academic_background) }}
+        <hr />
+
+        <h4 class="sub-heading">Personal</h4>
+        <br>
+        {{ form_label(form.mother_tongues) }} </br>
+        {{ form_widget(form.mother_tongues) }}
+        </br></br>
+        {{ form_label(form.gender) }}
+        {{ form_widget(form.gender) }}
+        {{ form_row(form.age) }}
+        {{ form_label(form.nationality) }}
+        {{ form_widget(form.nationality.Choices) }}
+        <br>
+        {{ form_widget(form.nationality.Others, {'attr' : {'placeholder' : 'Please specify your nationality'}}) }}
+      </div>
     {% endif %}
 
     {% if flow.getCurrentStepNumber() == 4 %}
-        <div>
-        <h3 style="font-weight:bolder; font-size:18px;"><span class="number">4</span> Confirmation </h3>
+      <div>
+        <h3 class="form-step-title"><span class="number">4</span> Confirmation </h3>
         <br />
-          <span class="legend" style="font-weight:bold;">{{ 'Initial Information' }}</span>
-          <p></p>
-					<dl>
-						<dt>{{ 'Name' | trans }}:</dt>
-						<dd>{{ formData.name }}</dd>
+
+        <span class="legend">{{ 'Initial Information' }}</span>
+        <p></p>
+				<dl>
+				    <dt>{{ 'Name' | trans }}:</dt>
+				    <dd>{{ formData.name }}</dd>
 
             <dt>{{ 'Research Group' | trans }}:</dt>
-						<dd>{{ formData.researchGroup }}</dd>
+				    <dd>{{ formData.researchGroup }}</dd>
+        </dl>
 
-					</dl>
+        <hr>
 
-          <hr>
-
-          <span class="legend">{{ 'Research Collaboration Information' }}</span>
-          {% set project_label = 1 %}
-          {% for project in formData.projects %}
+        <span class="legend">{{ 'Research Collaboration Information' }}</span>
+        {% set project_label = 1 %}
+        {% for project in formData.projects %}
           <p></p>
-          <p style="font-size:14px; font-style:italic; font-weight:bold;">{{ project_label | project_label }}</p>
+          <p class="sub-legend">{{ project_label | project_label }}</p>
           {% set project_label = project_label + 1 %}
           <dl>
+
 						<dt>{{ 'Project title' | trans }}:</dt>
 						<dd>{{ project.name }}</dd>
+
             <dt>{{ 'Starting date' | trans }}:</dt>
             <dd>{{ project.startDate|date('Y-m-d') }}</dd>
+
             <dt>{{ 'Expected project duration' | trans }}:</dt>
             <dd>{{ project.projectDuration }}</dd>
+
             <dt>{{ 'Average time working for the project' | trans }}:</dt>
             <dd>{{ project.workingTime }}%</dd>
+
             <dt>{{ 'Project outcome(s)' | trans }}:</dt>
             {% for project_outcome in project.projectOutcomes %}
-            <dd> {{ project_outcome | toString }} </dd>
+              <dd> {{ project_outcome | toString }} </dd>
             {% endfor %}
 
             <p></p>
-          {% set collaborator_label = 1 %}
-          <p style="font-size:14px; font-style:italic; font-weight:bold;"> Collaborator(s): </p>
-          <table>
-          <tr style="width:100%;">
-            <th> Number </th>
-            <th> Name </th>
-            <th> Collaborated before </th>
-          </tr>
-          {% for collab in project.Collaborators %}
-          <tr>
-          <td>{{ collaborator_label | collaborator_label }}</td>
-           {% set collaborator_label = collaborator_label + 1 %}
-           {{ collab | collaborators }}
-          {% endfor %}
-          </table>
-          <hr>
+            {% set collaborator_label = 1 %}
+            <p class="sub-legend"> Collaborator(s): </p>
+            <table>
+              <tr>
+                <th> Number </th>
+                <th> Name </th>
+                <th> Collaborated before </th>
+              </tr>
+              {% for collab in project.Collaborators %}
+              <tr>
+                <td>{{ collaborator_label }}</td>
+                {% set collaborator_label = collaborator_label + 1 %}
+                {{ collab | collaborators }}
+              {% endfor %}
+            </table>
+            <hr>
+
           </dl>
         {% endfor %}
 
-          <span class="legend">{{ 'Background Information' }}</span>
-          <p></p>
-          <p style="font-size:14px; font-weight:bold; font-style:italic;"> Work related </p>
-          <dl>
+        <span class="legend">{{ 'Background Information' }}</span>
+        <p></p>
+        <p class="sub-legend"> Work related </p>
+        <dl>
 
             <dt>{{ 'Disciplinary background(s)' | trans }}:</dt>
             {% for disc in formData.DisciplinaryBackgrounds %}
-            <dd>  {{ disc | toString }} </dd>
+              <dd>  {{ disc | toString }} </dd>
             {% endfor %}
 
 
             <dt>{{ 'Working Location' | trans }}:</dt>
             {% for location in formData.Locations %}
-            <dd>{{ location }}</dd>
+              <dd>{{ location }}</dd>
             {% endfor %}
 
             <dt>{{ 'Start to work in/with FCL' | trans }}:</dt>
@@ -243,12 +255,14 @@
 
             <dt>{{ 'Highest Degree' | trans }}:</dt>
 						<dd>{{ formData.AcademicBackground }}</dd>
+
             <hr>
-            <p style="font-size:14px; font-weight:bold; font-style:italic;"> Personal </p>
+
+            <p class="sub-legend"> Personal </p>
 
             <dt>{{ 'Mother Tongue(s)' | trans }}:</dt>
             {% for mother_tongue in formData.motherTongues%}
-						      <dd>{{ mother_tongue | mother_tongue }}</dd>
+						  <dd>{{ mother_tongue | mother_tongue }}</dd>
             {% endfor %}
 
             <dt>{{ 'Gender' | trans }}:</dt>
@@ -265,7 +279,8 @@
     {% endif %}
 
     </br></br>
-    <div style="padding-left:35%" >
+    <div id="button-position">
+    {# Buttons style and name of the button #}
     {% include '@CraueFormFlow/FormFlow/buttons.html.twig' with {
         craue_formflow_button_label_finish: 'Submit Survey',
         craue_formflow_button_label_back: 'Back',

@@ -1,6 +1,8 @@
+# Route to main controller
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation
 
+# Route to FOSUserBundle controller (login, register, reset password)
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"

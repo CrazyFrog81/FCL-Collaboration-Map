@@ -87,7 +87,7 @@ class ProjectType extends AbstractType
               )
             ));
 
-    $builder->get('name')->addModelTransformer(new ChoiceOtherProjectTransformer($this->manager));
+            $builder->get('name')->addModelTransformer(new ChoiceOtherProjectTransformer($this->manager));
 
           }
 

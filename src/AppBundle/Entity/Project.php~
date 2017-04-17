@@ -4,16 +4,10 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-use AppBundle\Entity\Collaborator;
-use JMS\Serializer\SerializerBuilder;
-use JMS\Serializer\Annotation\ExclusionPolicy;
-use JMS\Serializer\Annotation\Expose;
-use JMS\Serializer\Annotation as JMS;
 
 /**
 * @ORM\Entity
 * @ORM\Table(name="project")
-* @ExclusionPolicy("all")
 */
 class Project
 {
@@ -21,7 +15,6 @@ class Project
   * @ORM\Id
   * @ORM\Column(type="integer")
   * @ORM\GeneratedValue(strategy="AUTO")
-  * @Expose
   */
   protected $id;
 
@@ -36,12 +29,12 @@ class Project
   protected $start_date;
 
   /**
-  * @ORM\Column(type="date")
+  * @ORM\Column(type="string")
   */
-  protected $completion_date;
+  protected $project_duration;
 
   /**
-  * @ORM\Column(type="integer")
+  * @ORM\Column(type="string")
   */
   protected $working_time;
 
@@ -59,10 +52,8 @@ class Project
 
   /**
   * @ORM\Column(type="json_array")
-  * @JMS\Type("ArrayCollection<AppBundle\Entity\Collaborator>")
   */
   protected $collaborators;
-
 
     /**
      * Get id
@@ -99,27 +90,27 @@ class Project
     }
 
     /**
-     * Set completionDate
+     * Set projectDuration
      *
-     * @param string $completionDate
+     * @param string $projectDuration
      *
      * @return Project
      */
-    public function setCompletionDate($completionDate)
+    public function setProjectDuration($project_duration)
     {
-        $this->completion_date = $completionDate;
+        $this->project_duration = $project_duration;
 
         return $this;
     }
 
     /**
-     * Get completionDate
+     * Get projectDuration
      *
      * @return string
      */
-    public function getCompletionDate()
+    public function getProjectDuration()
     {
-        return $this->completion_date;
+        return $this->project_duration;
     }
 
     /**
@@ -229,82 +220,25 @@ class Project
     {
         return $this->start_date;
     }
-    //
-    // /**
-    //  * Add collaborator
-    //  *
-    //  * @param \AppBundle\Entity\Collaborator $collaborator
-    //  *
-    //  * @return Project
-    //  */
-    // public function addCollaborator(\AppBundle\Entity\Collaborator $collaborator)
-    // {
-    //   $this->collaborators->add($collaborator);
-    // }
-    //
-    // /**
-    //  * Remove collaborator
-    //  *
-    //  * @param \AppBundle\Entity\Collaborator $collaborator
-    //  */
-    // public function removeCollaborator(\AppBundle\Entity\Collaborator $collaborator)
-    // {
-    //     $this->collaborators->removeElement($collaborator);
-    // }
-    //
-    // /**
-    //  * Get collaborator
-    //  *
-    //  * @return \Doctrine\Common\Collections\Collection
-    //  */
-    // public function getCollaborators()
-    // {
-    //     return $this->collaborators;
-    // }
-
 
     /**
-     * Set collaborators
+     * Get beforeFcl
      *
-     * @param array $collaborators
-     * @return Project
+     * @return string
      */
-    public function setCollaborators($collaborators)
+    public function getBeforeFcl()
     {
-      // var_dump($collaborators->toArray());
-      $this->collaborators = $collaborators ;
-      var_dump($this->collaborators == $collaborators);
-      // var_dump($this->collaborators[0]);
-      // // print_r($this->collaborators);
-      // // return $this->collaborators;
-      //   $serializer = SerializerBuilder::create()->build();
-      //
-      //   $this->collaborators = $serializer->serialize($collaborators, 'json');
-      //
-        return $this->collaborators;
+        return $this->before_fcl;
     }
 
-    /**
-     * Get collaborators
-     * @return array
-     */
+    public function setCollaborators($collaborators)
+    {
+      $this->collaborators = $collaborators;
+      return $this;
+    }
+
     public function getCollaborators()
     {
-      return ($this->collaborators);
-      // $data = $this->manager->getRepository('AppBundle:Collaborator')->find($data->getId());
-      // //here seems to have some bugs
-      // if(count(json_decode($this->collaborators)) == 0) {
-      //   return null;
-      // }
-      // else {
-      //   $serializer = SerializerBuilder::create()->build();
-      //
-      //   $object = $serializer->deserialize($this->collaborators, 'ArrayCollection<AppBundle\Entity\Collaborator>', 'json');
-      //   // $em = $this->getDoctrine()->getManager();
-      //   // $data = $em->getRepository('AppBundle:Collaborator')->findOneBy($data->getId());
-      //   $data = new \Doctrine\Common\Collections\ArrayCollection($object);
-      //   var_dump($data);
-      //   return $data;
-      // }
+      return $this->collaborators;
     }
 }

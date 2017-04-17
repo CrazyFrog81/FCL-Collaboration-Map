@@ -53,6 +53,7 @@ class ResettingController extends Controller
         $username = $request->request->get('username');
 
         /** @var $user UserInterface */
+        // findUserByEmail or findUserbyUsername or findUserByUsernameOrEmail
         $user = $this->get('fos_user.user_manager')->findUserByEmail($username);
         /** @var $dispatcher EventDispatcherInterface */
         $dispatcher = $this->get('event_dispatcher');
