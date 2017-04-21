@@ -18,10 +18,7 @@ class ChoiceOtherProjectTransformer implements DataTransformerInterface
         $this->manager = $manager;
     }
 
-    // $data received is in term of string
-    // Hence find the project object by name
-    // If there is no such project return to 'Others'
-    // If there is then return to 'name'
+    // convert 'Project' object into 'name' string
     public function transform($data)
     {
         if (!$data) {
@@ -40,9 +37,7 @@ class ChoiceOtherProjectTransformer implements DataTransformerInterface
         }
     }
 
-    // $data is in term of Object
-    // Hence if in $data['name'] is 'Other' return $data to 'Others' textbox
-    // If not the return to 'name'
+    // reconvert 'name' string into 'Project' object
     public function reverseTransform($data)
     {
           if('Other' == $data['name']){
