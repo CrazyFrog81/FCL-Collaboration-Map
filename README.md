@@ -7,7 +7,7 @@ This project includes sub-projects:
 2. Collaboration Network (https://github.com/sisisalia/FCL-Collaboration-Network-Map)
 
 # Collaboration Form
-This sub-project is a web application to collect information of FCL researchers by using Symfony.
+This sub-project is a web application to collect information of FCL researchers. This sub-project is implemented by using Symfony.
 
 ## Getting Started
 
